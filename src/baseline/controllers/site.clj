@@ -1,9 +1,7 @@
 (ns baseline.controllers.site)
 
 (defn index [session]
-  ;(common/render "Hello World")
-  (str "Hello.  Your session is: " session
-       "</br><a href=\"/test\">Test Shoreleave</a>"))
+  (slurp "resources/public/html/shopping-list.html"))
 
 (defn test-shoreleave []
   (slurp "resources/public/html/test.html"))
