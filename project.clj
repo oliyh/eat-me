@@ -19,6 +19,7 @@
                  [crypto-random "1.1.0"]
                  [amalloy/ring-gzip-middleware "0.1.2" :exclusions [org.clojure/clojure]]
                  [hiccup "1.0.2" :exclusions [org.clojure/clojure]]
+                 [hiccups "0.2.0"]
                  [domina "1.0.1"]]
   :dev-dependencies [[lein-marginalia "0.7.1"]]
   :plugins [[lein-ring "0.8.3" :exclusions [org.clojure/clojure]]

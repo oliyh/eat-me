@@ -6,7 +6,8 @@
             [shoreleave.pubsubs.protocols :as pubsub]
             [shoreleave.pubsubs.publishable :as pcore]
             [domina :as d]
-            [clojure.browser.event :as event])
+            [clojure.browser.event :as event]
+            [eatme.client.render :as render])
   (:require-macros [shoreleave.remotes.macros :as srm]))
 
 (def query-args (common/query-args-map))
@@ -45,11 +46,19 @@
 (event/listen add-item-button "click" #(item-added %))
 
 (defn add-item-to-list [item]
-  (d/append! items-list (str "<span>" (:item-name item) "</span><br/>")))
+  (d/append! items-list (render/shopping-list-item item)))
+
+(defn focus-item-input [& args]
+  (.-focus item-name-field))
+
+(defn clear-item-input [& args]
+  (d/set-value! item-name-field ""))
 
 (defn log-to-console [o]
   (js/console.log "event: " o))
 
 (pubsub/subscribe bus item-added add-item-to-list)
 (pubsub/subscribe bus item-added log-to-console)
+(pubsub/subscribe bus item-added focus-item-input)
+(pubsub/subscribe bus item-added clear-item-input)
 
