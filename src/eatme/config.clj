@@ -1,4 +1,4 @@
-(ns baseline.config
+(ns eatme.config
   (:require [shoreleave.server-helpers :refer [safe-read]]))
 
 (defn read-config

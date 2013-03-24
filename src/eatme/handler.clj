@@ -1,7 +1,7 @@
-(ns baseline.handler 
+(ns eatme.handler 
   (:require [compojure.handler :as handler]
-            [baseline.routes :as routes]
-            [baseline.config :refer [config]]
+            [eatme.routes :as routes]
+            [eatme.config :refer [config]]
             [ring.middleware.gzip]
             [ring.middleware.file-info]
             [ring.middleware.anti-forgery]
@@ -10,10 +10,10 @@
             [hiccup.middleware]))
 
 (defn init []
-  (println "The baseline app is starting"))
+  (println "The eatme app is starting"))
 
 (defn destroy []
-  (println "The baseline app has been shut down"))
+  (println "The eatme app has been shut down"))
 
 (def app routes/all-routes)
 
@@ -22,7 +22,7 @@
     (shoreleave.middleware.rpc/wrap-rpc)
     (ring.middleware.anti-forgery/wrap-anti-forgery)
     (ring.middleware.gzip/wrap-gzip)
-    (handler/site {:session {:cookie-name "baseline"
+    (handler/site {:session {:cookie-name "eatme"
                              :store (cookie-store {:key (config :session-secret)})
                              ;:store (cookie-store)
                              :cookie-attrs {:max-age (config :session-max-age-seconds)

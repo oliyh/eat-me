@@ -1,4 +1,4 @@
-(ns baseline.controllers.site)
+(ns eatme.controllers.site)
 
 (defn index [session]
   (slurp "resources/public/html/shopping-list.html"))

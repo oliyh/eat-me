@@ -1,4 +1,4 @@
-(ns baseline.routes
+(ns eatme.routes
   (:require [compojure.core :as c-core :refer [defroutes
                                                GET POST PUT DELETE
                                                HEAD OPTIONS PATCH
@@ -6,13 +6,13 @@
             [compojure.route :as c-route]
             [shoreleave.middleware.rpc :refer [remote-ns]]
             ;; Controllers
-            [baseline.controllers.site :as cont-site]
+            [eatme.controllers.site :as cont-site]
             ;; Public APIs
-            [baseline.controllers.api]))
+            [eatme.controllers.api]))
 
 ;; Remote APIs exposed
 ;; -------------------
-(remote-ns 'baseline.controllers.api :as "api")
+(remote-ns 'eatme.controllers.api :as "api")
 
 ;; Controller routes, ROA oriented
 ;; -------------------------------

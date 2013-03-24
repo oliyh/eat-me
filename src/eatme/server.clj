@@ -1,6 +1,6 @@
-(ns baseline.server
-  (:require [baseline.config :refer [config]]
-            [baseline.handler :as handler]
+(ns eatme.server
+  (:require [eatme.config :refer [config]]
+            [eatme.handler :as handler]
             [ring.server.standalone :as ring-server]))
 
 ;; You'll want to do something like: `(defonce server (start-server))`
@@ -9,7 +9,7 @@
   "used for starting the server in development mode from REPL"
   [& [port]]
   (let [port (or (and port (Integer/parseInt port))
-                 (Integer. (get (System/getenv) "PORT" (config :baseline-port)))
+                 (Integer. (get (System/getenv) "PORT" (config :eatme-port)))
                  8080)
         server (ring-server/serve (handler/get-handler #'handler/app) 
                                  {:port port 

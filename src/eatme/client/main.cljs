@@ -1,4 +1,4 @@
-(ns baseline.client.main
+(ns eatme.client.main
   (:require [shoreleave.common :as common]
             [shoreleave.browser.history :as history]
             [shoreleave.remotes.http-rpc]
@@ -18,7 +18,7 @@
 ;Where process-search is the main action to take when processing the page/url
 
 ;; ### Browser REPL
-;; If you add a `repl` as a query-string arg, even on the live Baseline,
+;; If you add a `repl` as a query-string arg, even on the live site,
 ;; You can remotely interact with the site from the local REPL
 ;; Visit: `http://127.0.0.1:8080/test?repl=yes#q=something+else`
 (common/toggle-brepl query-args :repl)

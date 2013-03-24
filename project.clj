@@ -1,8 +1,6 @@
-(defproject shoreleave-baseline "0.3.0"
-  :description "A baseline application to get started with a Compojure+Shoreleave"
-  :url "https://github.com/shoreleave/shoreleave-baseline"
-  :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+(defproject eatme "0.0.1-SNAPSHOT"
+  :description "Eat what you buy and buy what you eat. An application built on Compojure and Shoreleave"
+  :url "https://github.com/oliyh/eat-me"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/tools.reader "0.7.0"]
                  [compojure "1.1.5" :exclusions [org.clojure/clojure]]
@@ -25,12 +23,12 @@
   :dev-dependencies [[lein-marginalia "0.7.1"]]
   :plugins [[lein-ring "0.8.3" :exclusions [org.clojure/clojure]]
             [lein-cljsbuild "0.3.0"]]
-  :ring {:handler baseline.handler/war-handler
-         :init baseline.handler/init
-         :destroy baseline.handler/destroy}
+  :ring {:handler eatme.handler/war-handler
+         :init eatme.handler/init
+         :destroy eatme.handler/destroy}
    :cljsbuild {:builds [{:source-paths ["src"],
                          :compiler {:output-dir "resources/build/cljs",
-                                    :output-to "resources/public/js/baseline.js",
+                                    :output-to "resources/public/js/eatme.js",
                                     ;:externs  ["externs/jquery.js"],
                                     :optimizations :simple,;:advanced ;:whitespace
                                     :pretty-print true}}]}
@@ -39,7 +37,7 @@
   
   :warn-on-reflection false
   ;:run-aliases {}
-  :main baseline.server
+  :main eatme.server
 
   ; Different JVM options for performance
   ;:jvm-opts ["-Xmx1g"]
