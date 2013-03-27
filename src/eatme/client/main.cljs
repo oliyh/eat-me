@@ -40,10 +40,15 @@
 (def add-item-button (d/by-id "add-item-button"))
 (def item-name-field (d/by-id "item-name"))
 (def items-list (d/by-id "items"))
-
+  
 (def item-added (pubsub/publishize (fn [e] {:item-name (d/value item-name-field)}) bus))
 
+(defn on-enter [e f]
+  (js/console.log "keyup: " e)
+  (when (= 13 (.-keyCode e)) (item-added e)))
+
 (event/listen add-item-button "click" #(item-added %))
+(event/listen item-name-field "keyup" #(on-enter % item-added))
 
 (defn add-item-to-list [item]
   (d/append! items-list (render/shopping-list-item item)))
