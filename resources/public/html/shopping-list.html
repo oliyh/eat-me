@@ -7,8 +7,7 @@
 	<thead>
 	  <tr>
 	    <th>Item</th>
-	    <th>Quantity</th>
-	    <th>&nbsp;</th>
+	  </tr>
 	</thead>
 	<tbody id="items">
 	</tbody>
@@ -17,7 +16,9 @@
     <div id="add-item-form">
       <form class="form-search" onsubmit="return false">
 	<input type="text" id="item-name" name="item-name"
-	       placeholder="Enter item name" />
+	       placeholder="Enter item name"/>
+	<input type="text" id="item-qty" name="item-qty"
+	       value="1"/>
 	<input type="button" id="add-item-button" value="Add item" />
       </form>
     </div>

@@ -36,14 +36,20 @@
 ;;    :on-success (js/alert "You should never see this")
 ;;    :on-error (js/alert "Remotes correctly handle error conditions"))
 
+(defn to-int [s]
+  (js/parseInt s))
+
 (def ^{:private true} bus (pbus/bus))
 
 
 (def add-item-button (d/by-id "add-item-button"))
 (def item-name-field (d/by-id "item-name"))
+(def item-qty-field (d/by-id "item-qty"))
 (def items-list (d/by-id "items"))
   
-(def item-added (pubsub/publishize (fn [e] {:item-name (d/value item-name-field)}) bus))
+(def item-added (pubsub/publishize
+                 (fn [e] {:item-name (d/value item-name-field)
+                          :qty (to-int (d/value item-qty-field))}) bus))
 
 (def item-deleted (pubsub/publishize (fn [e] {:item e}) bus))
 
@@ -54,8 +60,17 @@
 (defn on-enter [e f]
   (when (= 13 (:keyCode e)) (item-added e)))
 
+
+;; // todo - pressing the + button should increment the qty
+;;(defn on-plus [e f]
+;;  (js/console.log "plus: " (:keyCode e)))
+
+;;(event/listen! item-name-field :keypress #(on-plus % ))
+
 (event/listen! add-item-button :click #(item-added %))
 (event/listen! item-name-field :keypress #(on-enter % item-added))
+(event/listen! item-qty-field :keypress #(on-enter % item-added))
+
 
 (defn add-item-to-list [item]
   (d/append! items-list (render/shopping-list-item item))
@@ -75,7 +90,7 @@
 
 (defn change-quantity [{:keys [item direction]}]
   (let [qty (-> item (x/xpath "../input"))
-        new-value (adjust-quantity direction (js/parseInt (d/value qty)))]
+        new-value (adjust-quantity direction (to-int (d/value qty)))]
     (if (< 0 new-value)
       (d/set-value! qty new-value)
       (item-deleted item))))
@@ -84,7 +99,8 @@
   (.focus item-name-field))
 
 (defn clear-item-input [& args]
-  (d/set-value! item-name-field ""))
+  (d/set-value! item-name-field "")
+  (d/set-value! item-qty-field 1))
 
 (defn log-to-console [o]
   (js/console.log "event: " o))
