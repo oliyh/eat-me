@@ -7,6 +7,7 @@
             [shoreleave.pubsubs.publishable :as pcore]
             [domina :as d]
             [domina.events :as event]
+            [domina.css :as css]
             [eatme.client.render :as render])
   (:require-macros [shoreleave.remotes.macros :as srm]))
 
@@ -43,6 +44,8 @@
   
 (def item-added (pubsub/publishize (fn [e] {:item-name (d/value item-name-field)}) bus))
 
+(def item-deleted (pubsub/publishize (fn [e] {:item (event/target e)}) bus))
+
 (defn on-enter [e f]
   (when (= 13 (:keyCode e)) (item-added e)))
 
@@ -50,7 +53,12 @@
 (event/listen! item-name-field :keypress #(on-enter % item-added))
 
 (defn add-item-to-list [item]
-  (d/append! items-list (render/shopping-list-item item)))
+  (d/append! items-list (render/shopping-list-item item))
+  (event/listen! (css/sel items-list "button") :click #(item-deleted %)))
+
+(defn remove-item-from-list [item]
+  ;; (:item item) is actually the delete button that was clicked
+  (d/detach! (-> item :item .-parentNode .-parentNode)))
 
 (defn focus-item-input [& args]
   (.focus item-name-field))
@@ -66,3 +74,7 @@
 (pubsub/subscribe bus item-added focus-item-input)
 (pubsub/subscribe bus item-added clear-item-input)
 
+(pubsub/subscribe bus item-deleted log-to-console)
+(pubsub/subscribe bus item-deleted remove-item-from-list)
+
+(focus-item-input)
