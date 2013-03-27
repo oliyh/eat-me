@@ -5,7 +5,7 @@
    [hiccups.core :as hiccups]))
 
 (hiccups/defhtml shopping-list-item [{:keys [item-name]}]
-  [:div
+  [:div {:rel item-name}
    [:label {:for "name"} item-name]
    [:input {:type "text" :name item-name :value 1}]
    [:button {:rel "increment"} "+"]

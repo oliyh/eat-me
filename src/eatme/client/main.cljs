@@ -45,11 +45,11 @@
   
 (def item-added (pubsub/publishize (fn [e] {:item-name (d/value item-name-field)}) bus))
 
-(def item-deleted (pubsub/publishize (fn [e] {:item (event/target e)}) bus))
+(def item-deleted (pubsub/publishize (fn [e] {:item e}) bus))
 
 (def quantity-changed (pubsub/publishize
                        (fn [direction e] {:direction direction
-                                          :item (event/target e)}) bus))
+                                          :item e}) bus))
 
 (defn on-enter [e f]
   (when (= 13 (:keyCode e)) (item-added e)))
@@ -59,9 +59,10 @@
 
 (defn add-item-to-list [item]
   (d/append! items-list (render/shopping-list-item item))
-  (event/listen! (css/sel items-list "button[rel=delete-item]") :click #(item-deleted %))
-  (event/listen! (css/sel items-list "button[rel=increment]") :click #(quantity-changed :inc %))
-  (event/listen! (css/sel items-list "button[rel=decrement]") :click #(quantity-changed :dec %)))
+  (let [new-item (css/sel items-list (str "div[rel=" (:item-name item) "]"))]
+    (event/listen! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %)))
+    (event/listen! (css/sel new-item "button[rel=increment]") :click #(quantity-changed :inc (event/target %)))
+    (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec (event/target %)))))
 
 (defn remove-item-from-list [item]
   ;; (:item item) is actually the delete button that was clicked
@@ -73,8 +74,11 @@
     :dec (dec value)))
 
 (defn change-quantity [{:keys [item direction]}]
-  (let [qty (-> item (x/xpath "../input"))]
-    (d/set-value! qty (adjust-quantity direction (js/parseInt (d/value qty))))))
+  (let [qty (-> item (x/xpath "../input"))
+        new-value (adjust-quantity direction (js/parseInt (d/value qty)))]
+    (if (< 0 new-value)
+      (d/set-value! qty new-value)
+      (item-deleted item))))
 
 (defn focus-item-input [& args]
   (.focus item-name-field))
