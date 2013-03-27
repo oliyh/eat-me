@@ -44,3 +44,6 @@ Gemfile.lock
 /autodoc
 /docs
 
+# Project specific
+/out
+/repl/out

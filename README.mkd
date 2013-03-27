@@ -11,3 +11,33 @@ Eat what you buy and buy what you eat
 
 Open a browser and visit http://localhost:8080
 
+###The Browser Repl (brepl)
+
+    lein trampoline cljsbuild repl-listen
+
+Visit http://localhost:8080/brepl.html
+
+    ClojureScript:cljs.user> (js/alert "Hello from bREPL!")
+
+
+###Compiling the brepl
+
+Get ClojureScript (a good version)
+
+    git clone https://github.com/clojure/clojurescript.git
+    cd clojurescript
+    git checkout r1450 # this one definitely works, try others at your own risk
+    
+*Make sure you set proxy settings before running the next command or it will fail silently and nothing else will work*
+
+    ./script/bootstrap
+
+Add ClojureScript to your path for convenience
+
+    export CLOJURESCRIPT_HOME=$PWD
+    export PATH=$CLOJURESCRIPT_HOME/bin:$PATH
+
+Compile the brepl ClojureScript file (return to this project's directory)
+
+    cd repl
+    cljsc brepl.cljs '{:optimizations :simple, :output-to "../resources/public/js/brepl.js"}'
