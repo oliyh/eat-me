@@ -6,7 +6,7 @@
             [shoreleave.pubsubs.protocols :as pubsub]
             [shoreleave.pubsubs.publishable :as pcore]
             [domina :as d]
-            [clojure.browser.event :as event]
+            [domina.events :as event]
             [eatme.client.render :as render])
   (:require-macros [shoreleave.remotes.macros :as srm]))
 
@@ -44,10 +44,10 @@
 (def item-added (pubsub/publishize (fn [e] {:item-name (d/value item-name-field)}) bus))
 
 (defn on-enter [e f]
-  (when (= 13 (.-keyCode e)) (item-added e)))
+  (when (= 13 (:keyCode e)) (item-added e)))
 
-(event/listen add-item-button "click" #(item-added %))
-(event/listen item-name-field "keyup" #(on-enter % item-added))
+(event/listen! add-item-button :click #(item-added %))
+(event/listen! item-name-field :keypress #(on-enter % item-added))
 
 (defn add-item-to-list [item]
   (d/append! items-list (render/shopping-list-item item)))
