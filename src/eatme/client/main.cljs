@@ -53,7 +53,7 @@
   (d/append! items-list (render/shopping-list-item item)))
 
 (defn focus-item-input [& args]
-  (.-focus item-name-field))
+  (.focus item-name-field))
 
 (defn clear-item-input [& args]
   (d/set-value! item-name-field ""))
