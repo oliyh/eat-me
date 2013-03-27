@@ -8,6 +8,7 @@
             [domina :as d]
             [domina.events :as event]
             [domina.css :as css]
+            [domina.xpath :as x]
             [eatme.client.render :as render])
   (:require-macros [shoreleave.remotes.macros :as srm]))
 
@@ -46,6 +47,10 @@
 
 (def item-deleted (pubsub/publishize (fn [e] {:item (event/target e)}) bus))
 
+(def quantity-changed (pubsub/publishize
+                       (fn [direction e] {:direction direction
+                                          :item (event/target e)}) bus))
+
 (defn on-enter [e f]
   (when (= 13 (:keyCode e)) (item-added e)))
 
@@ -54,11 +59,22 @@
 
 (defn add-item-to-list [item]
   (d/append! items-list (render/shopping-list-item item))
-  (event/listen! (css/sel items-list "button") :click #(item-deleted %)))
+  (event/listen! (css/sel items-list "button[rel=delete-item]") :click #(item-deleted %))
+  (event/listen! (css/sel items-list "button[rel=increment]") :click #(quantity-changed :inc %))
+  (event/listen! (css/sel items-list "button[rel=decrement]") :click #(quantity-changed :dec %)))
 
 (defn remove-item-from-list [item]
   ;; (:item item) is actually the delete button that was clicked
-  (d/detach! (-> item :item .-parentNode .-parentNode)))
+  (d/detach! (-> item :item .-parentNode)))
+
+(defn adjust-quantity [direction value]
+  (condp = direction
+    :inc (inc value)
+    :dec (dec value)))
+
+(defn change-quantity [{:keys [item direction]}]
+  (let [qty (-> item (x/xpath "../input"))]
+    (d/set-value! qty (adjust-quantity direction (js/parseInt (d/value qty))))))
 
 (defn focus-item-input [& args]
   (.focus item-name-field))
@@ -76,5 +92,7 @@
 
 (pubsub/subscribe bus item-deleted log-to-console)
 (pubsub/subscribe bus item-deleted remove-item-from-list)
+
+(pubsub/subscribe bus quantity-changed change-quantity)
 
 (focus-item-input)
