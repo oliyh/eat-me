@@ -59,6 +59,8 @@
                           :remove-on-zero? remove-on-zero?
                           :item e}) bus))
 
+(def completed-item (pubsub/publishize (fn [e] {:item e}) bus))
+
 (defn on-enter [e f]
   (when (= 13 (:keyCode e)) (event/prevent-default e) (f)))
 
@@ -84,7 +86,13 @@
   (let [new-item (css/sel items-list (str "div[rel=" (:item-name item) "]"))]
     (event/listen! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %)))
     (event/listen! (css/sel new-item "button[rel=increment]") :click #(quantity-changed :inc true (event/target %)))
-    (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec true (event/target %)))))
+    (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec true (event/target %)))
+    (event/listen! (css/sel new-item "button[rel=complete]") :click #(completed-item (event/target %)))
+    ))
+
+(defn item-completed [{:keys [item]}]
+  (d/add-class! (x/xpath item "../button[@rel='complete']") "btn-success")
+  (d/append! items-list (d/detach! (x/xpath item ".."))))
 
 (defn remove-item-from-list [item]
   ;; (:item item) is actually the delete button that was clicked
@@ -122,5 +130,7 @@
 (pubsub/subscribe bus item-deleted remove-item-from-list)
 
 (pubsub/subscribe bus quantity-changed change-quantity)
+
+(pubsub/subscribe bus completed-item item-completed)
 
 (focus-item-input)
