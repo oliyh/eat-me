@@ -9,6 +9,6 @@
    [:td [:span item-name]]
    [:td
     [:input {:type "text" :name item-name :value (or qty 1) :rel "qty" :size 1}]
-    [:button {:rel "increment"} "+"]
-    [:button {:rel "decrement"} "-"]
-    [:button {:rel "delete-item"} "Delete"]]])
+    [:button.btn {:rel "increment"} [:i.icon-plus-sign]]
+    [:button.btn {:rel "decrement"} [:i.icon-minus-sign]]
+    [:button.btn.btn-danger {:rel "delete-item"} [:i.icon-remove-sign]]]])
