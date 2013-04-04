@@ -6,26 +6,17 @@
   <body>
     <h1>Shopping List</h1>
     <script src="../js/eatme.js" async="async"></script>
-    <div>
-      <table>
-	<thead>
-	  <tr>
-	    <th>Item</th>
-	    <th>&nbsp;</th>
-	  </tr>
-	</thead>
-	<tbody id="items">
-	</tbody>
-      </table>
+    <div id="items">
     </div>
-    <div id="add-item-form">
-      <form class="form-search">
-	<input type="text" id="item-name" name="item-name"
-	       placeholder="Enter item name"/>
-	<input type="text" id="item-qty" name="item-qty" rel="qty"
+    <div id="add-item-form" class="controls controls-row">
+
+	  <input class="span4" type="text" id="item-name" name="item-name"
+		 placeholder="Enter item name"/>
+	  <input class="span1" type="text" id="item-qty" name="item-qty" rel="qty"
 	       value="1" size="1"/>
-	<input type="button" class="btn btn-primary" id="add-item-button" value="Add item" />
-      </form>
+	  <input type="button" class="btn btn-primary"
+		 id="add-item-button" value="Add item" />
+
     </div>
   </body>
 </html>

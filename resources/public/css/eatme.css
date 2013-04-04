@@ -1,3 +1,4 @@
-#items span {
-    width: 20%;
+#item-name {
+    margin-left: 20px;
+    width: 300px;
 }

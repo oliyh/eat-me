@@ -81,14 +81,14 @@
 
 (defn add-item-to-list [item]
   (d/append! items-list (render/shopping-list-item item))
-  (let [new-item (css/sel items-list (str "tr[rel=" (:item-name item) "]"))]
+  (let [new-item (css/sel items-list (str "div[rel=" (:item-name item) "]"))]
     (event/listen! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %)))
     (event/listen! (css/sel new-item "button[rel=increment]") :click #(quantity-changed :inc true (event/target %)))
     (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec true (event/target %)))))
 
 (defn remove-item-from-list [item]
   ;; (:item item) is actually the delete button that was clicked
-  (d/detach! (-> item :item .-parentNode .-parentNode)))
+  (d/detach! (-> item :item .-parentNode)))
 
 (defn adjust-quantity [direction value]
   (condp = direction
