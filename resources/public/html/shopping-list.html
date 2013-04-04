@@ -1,4 +1,7 @@
 <html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="../css/eatme.css"/>
+  </head>
   <body>
     <h1>Shopping List</h1>
     <script src="../js/eatme.js" async="async"></script>
@@ -7,6 +10,7 @@
 	<thead>
 	  <tr>
 	    <th>Item</th>
+	    <th>&nbsp;</th>
 	  </tr>
 	</thead>
 	<tbody id="items">
@@ -18,7 +22,7 @@
 	<input type="text" id="item-name" name="item-name"
 	       placeholder="Enter item name"/>
 	<input type="text" id="item-qty" name="item-qty" rel="qty"
-	       value="1"/>
+	       value="1" size="1"/>
 	<input type="button" id="add-item-button" value="Add item" />
       </form>
     </div>
