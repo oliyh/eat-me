@@ -46,26 +46,33 @@
 (def item-name-field (d/by-id "item-name"))
 (def item-qty-field (d/by-id "item-qty"))
 (def items-list (d/by-id "items"))
-  
+
 (def item-added (pubsub/publishize
-                 (fn [e] {:item-name (d/value item-name-field)
-                          :qty (to-int (d/value item-qty-field))}) bus))
+                 (fn [] {:item-name (d/value item-name-field)
+                         :qty (to-int (d/value item-qty-field))}) bus))
 
 (def item-deleted (pubsub/publishize (fn [e] {:item e}) bus))
 
 (def quantity-changed (pubsub/publishize
-                       (fn [direction e] {:direction direction
-                                          :item e}) bus))
+                       (fn [direction remove-on-zero? e]
+                         {:direction direction
+                          :remove-on-zero? remove-on-zero?
+                          :item e}) bus))
 
 (defn on-enter [e f]
-  (when (= 13 (:keyCode e)) (item-added e)))
+  (when (= 13 (:keyCode e)) (f)))
 
+(defn on-plus [e f]
+  (when (= 43 (:charCode e)) (f)))
 
-;; // todo - pressing the + button should increment the qty
-;;(defn on-plus [e f]
-;;  (js/console.log "plus: " (:keyCode e)))
+(defn on-minus [e f]
+  (when (= 45 (:charCode e)) (f)))
 
-;;(event/listen! item-name-field :keypress #(on-plus % ))
+(event/listen! item-name-field :keypress
+               #(on-plus % (partial quantity-changed :inc false item-name-field)))
+
+(event/listen! item-name-field :keypress
+               #(on-minus % (partial quantity-changed :dec false item-name-field)))
 
 (event/listen! add-item-button :click #(item-added %))
 (event/listen! item-name-field :keypress #(on-enter % item-added))
@@ -76,8 +83,8 @@
   (d/append! items-list (render/shopping-list-item item))
   (let [new-item (css/sel items-list (str "div[rel=" (:item-name item) "]"))]
     (event/listen! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %)))
-    (event/listen! (css/sel new-item "button[rel=increment]") :click #(quantity-changed :inc (event/target %)))
-    (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec (event/target %)))))
+    (event/listen! (css/sel new-item "button[rel=increment]") :click #(quantity-changed :inc true (event/target %)))
+    (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec true (event/target %)))))
 
 (defn remove-item-from-list [item]
   ;; (:item item) is actually the delete button that was clicked
@@ -88,12 +95,13 @@
     :inc (inc value)
     :dec (dec value)))
 
-(defn change-quantity [{:keys [item direction]}]
-  (let [qty (-> item (x/xpath "../input"))
+(defn change-quantity [{:keys [item direction remove-on-zero?]}]
+  (let [qty (-> item (x/xpath "../input[@rel='qty']"))
         new-value (adjust-quantity direction (to-int (d/value qty)))]
     (if (< 0 new-value)
       (d/set-value! qty new-value)
-      (item-deleted item))))
+      (when remove-on-zero?
+        (item-deleted item)))))
 
 (defn focus-item-input [& args]
   (.focus item-name-field))
