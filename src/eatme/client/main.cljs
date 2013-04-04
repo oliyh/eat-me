@@ -60,13 +60,13 @@
                           :item e}) bus))
 
 (defn on-enter [e f]
-  (when (= 13 (:keyCode e)) (f)))
+  (when (= 13 (:keyCode e)) (event/prevent-default e) (f)))
 
 (defn on-plus [e f]
-  (when (= 43 (:charCode e)) (f)))
+  (when (= 43 (:charCode e)) (event/prevent-default e) (f)))
 
 (defn on-minus [e f]
-  (when (= 45 (:charCode e)) (f)))
+  (when (= 45 (:charCode e)) (event/prevent-default e) (f)))
 
 (event/listen! item-name-field :keypress
                #(on-plus % (partial quantity-changed :inc false item-name-field)))
