@@ -1,5 +1,7 @@
 (ns eatme.controllers.api)
 
+(def basket-store (atom {}))
+
 (defn ping-the-api [pingback]
   (str "You have hit the API with: " pingback))
 
