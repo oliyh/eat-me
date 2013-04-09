@@ -9,7 +9,8 @@
             [domina.events :as event]
             [domina.css :as css]
             [domina.xpath :as x]
-            [eatme.client.render :as render])
+            [eatme.client.render :as render]
+            [clojure.string :as string])
   (:require-macros [shoreleave.remotes.macros :as srm]))
 
 (def query-args (common/query-args-map))
@@ -36,10 +37,9 @@
 ;;    :on-success (js/alert "You should never see this")
 ;;    :on-error (js/alert "Remotes correctly handle error conditions"))
 
-(defn load-basket []
-  (js/alert (goog.Uri. (.-href (.-location js/window)))))
-
-
+(defn- basket-id []
+  (when-let [matches (re-matches #".*/#([1-9]*)" (.-href (.-location js/window)))]
+    (last matches)))
 
 (defn to-int [s]
   (js/parseInt s))
@@ -53,8 +53,8 @@
 (def completed-items-list (d/by-id "completed-items"))
 
 (def item-added (pubsub/publishize
-                 (fn [] {:item-name (d/value item-name-field)
-                         :qty (to-int (d/value item-qty-field))}) bus))
+                 (fn [item-name qty] {:item-name item-name
+                                      :qty qty}) bus))
 
 (def item-deleted (pubsub/publishize (fn [e] {:item e}) bus))
 
@@ -81,7 +81,7 @@
 (event/listen! item-name-field :keypress
                #(on-minus % (partial quantity-changed :dec false item-name-field)))
 
-(event/listen! add-item-button :click #(item-added %))
+(event/listen! add-item-button :click #(item-added (d/value item-name-field) (to-int (d/value item-qty-field))))
 (event/listen! item-name-field :keypress #(on-enter % item-added))
 (event/listen! item-qty-field :keypress #(on-enter % item-added))
 
@@ -125,6 +125,14 @@
 
 (defn log-to-console [o]
   (js/console.log "event: " o))
+
+(defn load-basket []
+  (when-let [basket-id (basket-id)]
+    (srm/rpc
+     (api/load-basket basket-id) [items]
+     :on-success (doseq [item items]
+                   (item-added (:item-name item) (:qty item)))
+     :on-error (js/alert (str "Error loading basket: " basket-id)))))
 
 (pubsub/subscribe bus item-added add-item-to-list)
 (pubsub/subscribe bus item-added log-to-console)
