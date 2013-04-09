@@ -36,11 +36,15 @@
 ;;    :on-success (js/alert "You should never see this")
 ;;    :on-error (js/alert "Remotes correctly handle error conditions"))
 
+(defn load-basket []
+  (js/alert (goog.Uri. (.-href (.-location js/window)))))
+
+
+
 (defn to-int [s]
   (js/parseInt s))
 
 (def ^{:private true} bus (pbus/bus))
-
 
 (def add-item-button (d/by-id "add-item-button"))
 (def item-name-field (d/by-id "item-name"))
@@ -134,4 +138,5 @@
 
 (pubsub/subscribe bus completed-item item-completed)
 
+(load-basket)
 (focus-item-input)
