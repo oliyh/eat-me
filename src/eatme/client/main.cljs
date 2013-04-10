@@ -45,7 +45,8 @@
 (def add-item-button (d/by-id "add-item-button"))
 (def item-name-field (d/by-id "item-name"))
 (def item-qty-field (d/by-id "item-qty"))
-(def items-list (d/by-id "items"))
+(def items-list (d/by-id "items-to-get"))
+(def completed-items-list (d/by-id "completed-items"))
 
 (def item-added (pubsub/publishize
                  (fn [] {:item-name (d/value item-name-field)
@@ -84,15 +85,15 @@
 (defn add-item-to-list [item]
   (d/append! items-list (render/shopping-list-item item))
   (let [new-item (css/sel items-list (str "div[rel=" (:item-name item) "]"))]
-    (event/listen! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %)))
+    (event/listen-once! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %)))
     (event/listen! (css/sel new-item "button[rel=increment]") :click #(quantity-changed :inc true (event/target %)))
     (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec true (event/target %)))
-    (event/listen! (css/sel new-item "button[rel=complete]") :click #(completed-item (event/target %)))
+    (event/listen-once! (css/sel new-item "button[rel=complete]") :click #(completed-item (event/target %)))
     ))
 
 (defn item-completed [{:keys [item]}]
-  (d/add-class! (x/xpath item "../button[@rel='complete']") "btn-success")
-  (d/append! items-list (d/detach! (x/xpath item ".."))))
+  (d/add-class! item "btn-success")
+  (d/append! completed-items-list (d/detach! (x/xpath item ".."))))
 
 (defn remove-item-from-list [item]
   ;; (:item item) is actually the delete button that was clicked
