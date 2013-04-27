@@ -69,7 +69,7 @@
    (map
     (fn [input] {:item-name (d/attr input "name")
                  :qty (d/value input)})
-    (d/nodes (x/xpath items-list "div/input[@rel='qty']")))})
+    (d/nodes (x/xpath items-list "div/*/input[@rel='qty']")))})
 
 (defn save-basket []
     (srm/rpc
