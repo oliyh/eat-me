@@ -37,9 +37,11 @@
 ;;    :on-success (js/alert "You should never see this")
 ;;    :on-error (js/alert "Remotes correctly handle error conditions"))
 
-(defn- basket-id []
-  (when-let [matches (re-matches #".*/#([1-9]*)" (.-href (.-location js/window)))]
-    (last matches)))
+(defn- basket-id
+  ([] (when-let [matches (re-matches #".*/#([1-9]*)"
+                                     (.-href (.-location js/window)))]
+        (last matches)))
+  ([id] (.assign (.-location js/window) (str "#" id))))
 
 (defn to-int [s]
   (js/parseInt s))
@@ -64,7 +66,7 @@
 (defn save-basket []
     (srm/rpc
      (api/save-basket (serialise-basket)) [response]
-     :on-success (js/alert (str "Basket saved! Id: " (:id response)))
+     :on-success (do (js/alert (str "Basket saved! Id: " (:id response))) (basket-id (:id response)))
      :on-error (js/alert (str "Error saving basket"))))
 
 
