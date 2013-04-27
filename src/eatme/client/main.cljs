@@ -55,6 +55,14 @@
 (def items-list (d/by-id "items-to-get"))
 (def completed-items-list (d/by-id "completed-items"))
 
+(defn set-basket-unsaved! []
+  (-> (x/xpath save-basket-button "i")
+      (d/add-class! "icon-white")))
+
+(defn set-basket-saved! []
+  (-> (x/xpath save-basket-button "i")
+      (d/remove-class! "icon-white")))
+
 (defn serialise-basket []
   {:id (basket-id)
    :items   
@@ -66,7 +74,7 @@
 (defn save-basket []
     (srm/rpc
      (api/save-basket (serialise-basket)) [response]
-     :on-success (do (js/alert (str "Basket saved! Id: " (:id response))) (basket-id (:id response)))
+     :on-success (do (js/alert (str "Basket saved! Id: " (:id response))) (basket-id (:id response)) (set-basket-saved!))
      :on-error (js/alert (str "Error saving basket"))))
 
 
@@ -154,14 +162,17 @@
      :on-error (js/alert (str "Error loading basket: " basket-id)))))
 
 (pubsub/subscribe bus item-added add-item-to-list)
+(pubsub/subscribe bus item-added set-basket-unsaved!)
 (pubsub/subscribe bus item-added log-to-console)
 (pubsub/subscribe bus item-added focus-item-input)
 (pubsub/subscribe bus item-added clear-item-input)
 
 (pubsub/subscribe bus item-deleted log-to-console)
 (pubsub/subscribe bus item-deleted remove-item-from-list)
+(pubsub/subscribe bus item-deleted set-basket-unsaved!)
 
 (pubsub/subscribe bus quantity-changed change-quantity)
+(pubsub/subscribe bus quantity-changed set-basket-unsaved!)
 
 (pubsub/subscribe bus completed-item item-completed)
 
