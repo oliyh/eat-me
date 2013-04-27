@@ -46,15 +46,31 @@
 
 (def ^{:private true} bus (pbus/bus))
 
+(def save-basket-button (d/by-id "save-basket-button"))
 (def add-item-button (d/by-id "add-item-button"))
 (def item-name-field (d/by-id "item-name"))
 (def item-qty-field (d/by-id "item-qty"))
 (def items-list (d/by-id "items-to-get"))
 (def completed-items-list (d/by-id "completed-items"))
 
+(defn serialise-basket []
+  {:id (basket-id)
+   :items   
+   (map
+    (fn [input] {:item-name (d/attr input "name")
+                 :qty (d/value input)})
+    (d/nodes (x/xpath items-list "div/input[@rel='qty']")))})
+
+(defn save-basket []
+    (srm/rpc
+     (api/save-basket (serialise-basket)) [response]
+     :on-success (js/alert (str "Basket saved! Id: " (:id response)))
+     :on-error (js/alert (str "Error saving basket"))))
+
+
 (def item-added (pubsub/publishize
-                 (fn [item-name qty] {:item-name item-name
-                                      :qty qty}) bus))
+                 (fn [] {:item-name (d/value item-name-field)
+                         :qty (to-int (d/value item-qty-field))}) bus))
 
 (def item-deleted (pubsub/publishize (fn [e] {:item e}) bus))
 
@@ -81,9 +97,10 @@
 (event/listen! item-name-field :keypress
                #(on-minus % (partial quantity-changed :dec false item-name-field)))
 
-(event/listen! add-item-button :click #(item-added (d/value item-name-field) (to-int (d/value item-qty-field))))
+(event/listen! add-item-button :click #(item-added))
 (event/listen! item-name-field :keypress #(on-enter % item-added))
 (event/listen! item-qty-field :keypress #(on-enter % item-added))
+(event/listen! save-basket-button :click #(save-basket))
 
 
 (defn add-item-to-list [item]
@@ -131,7 +148,7 @@
     (srm/rpc
      (api/load-basket basket-id) [items]
      :on-success (doseq [item items]
-                   (item-added (:item-name item) (:qty item)))
+                   (add-item-to-list item))
      :on-error (js/alert (str "Error loading basket: " basket-id)))))
 
 (pubsub/subscribe bus item-added add-item-to-list)

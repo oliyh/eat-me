@@ -15,7 +15,7 @@ Open a browser and visit http://localhost:8080
 
     lein trampoline cljsbuild repl-listen
 
-Visit http://localhost:8080/brepl.html
+Visit `http://localhost:8080/?repl=yes` or `http://localhost:8080/brepl.html`
 
     ClojureScript:cljs.user> (js/alert "Hello from bREPL!")
 
