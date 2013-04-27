@@ -57,11 +57,11 @@
 
 (defn set-basket-unsaved! []
   (-> (x/xpath save-basket-button "i")
-      (d/add-class! "icon-white")))
+      (d/remove-class! "icon-white")))
 
 (defn set-basket-saved! []
   (-> (x/xpath save-basket-button "i")
-      (d/remove-class! "icon-white")))
+      (d/add-class! "icon-white")))
 
 (defn serialise-basket []
   {:id (basket-id)

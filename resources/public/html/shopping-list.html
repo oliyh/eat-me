@@ -8,22 +8,22 @@
   </head>
   <body>
     <script src="../js/eatme.js" async="async" type="text/javascript"></script>
-    <div>
-      <button class="btn btn-primary" id="save-basket-button">
-	<i class="icon-hdd"></i>Save Basket</button>
-    </div>
     <h2>My list</h2>
     <div id="items-to-get">
     </div>
-    <div id="add-item-form" class="controls controls-row">
-
+    <div id="add-item-form" class="row controls-row">
+      <div class="span4 offset1">
 	  <input class="span4" type="text" id="item-name" name="item-name"
 		 placeholder="Enter item name"/>
-	  <input class="span1" type="text" id="item-qty" name="item-qty" rel="qty"
-	       value="1" size="1"/>
-	  <input type="button" class="btn btn-primary"
-		 id="add-item-button" value="Add item" />
-
+      </div>
+      <div class="span4">
+	  <input class="input-small span1" type="text" id="item-qty" name="item-qty" rel="qty" value="1" size="1"/>
+	  <button class="btn btn-primary" id="add-item-button">Add item</button>
+      </div>
+      <div class="span2">
+	<button class="btn btn-primary" id="save-basket-button">
+	  <i class="icon-hdd icon-white"></i>&nbsp;Save Basket</button>
+      </div>
     </div>
     <h2>My basket</h2>
     <div id="completed-items">
