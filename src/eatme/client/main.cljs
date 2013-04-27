@@ -124,7 +124,7 @@
 
 (defn item-completed [{:keys [item]}]
   (d/add-class! item "btn-success")
-  (d/append! completed-items-list (d/detach! (x/xpath item ".."))))
+  (d/append! completed-items-list (d/detach! (x/xpath item "../.."))))
 
 (defn remove-item-from-list [item]
   ;; (:item item) is actually the delete button that was clicked
