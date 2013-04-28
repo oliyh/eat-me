@@ -136,7 +136,7 @@
     :dec (dec value)))
 
 (defn change-quantity [{:keys [item direction remove-on-zero?]}]
-  (let [qty (-> item (x/xpath "../input[@rel='qty']"))
+  (let [qty (-> item (x/xpath "../../*/input[@rel='qty']"))
         new-value (adjust-quantity direction (to-int (d/value qty)))]
     (if (< 0 new-value)
       (d/set-value! qty new-value)
