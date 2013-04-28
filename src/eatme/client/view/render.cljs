@@ -1,10 +1,10 @@
 (ns eatme.client.render
-  (:require 
+  (:require
    [hiccups.runtime :as hiccupsrt])
   (:require-macros
-   [hiccups.core :as hiccups]))
+   [hiccups.core :as h]))
 
-(hiccups/defhtml shopping-list-item [{:keys [item-name qty]}]
+(h/defhtml shopping-list-item [{:keys [item-name qty]}]
   [:div.row.controls-row {:rel item-name}
    [:div.span4.offset1
     [:label item-name]]
@@ -15,3 +15,9 @@
     [:button.btn.btn-danger {:rel "delete-item"} [:i.icon-remove-sign]]]
    [:div.span1
     [:button.btn {:rel "complete"} [:i.icon-ok]]]])
+
+(h/defhtml user-button [{:keys [firstname lastname]}]
+  [:div.btn-group
+   [:button.btn.btn-success
+    [:i.icon-user] "&nbsp;" firstname "&nbsp;" lastname]
+   [:a.btn.btn-success {:href "logout"} "Sign out"]])

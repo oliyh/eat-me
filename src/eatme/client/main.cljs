@@ -169,8 +169,7 @@
 (defn display-user-details []
   (srm/rpc
      (api/user-details) [details]
-     :on-success (doseq [[k v] details]
-                   (d/append! user-details (str "<p>" k ": " v "</p>")))
+     :on-success (when details (d/set-html! user-details (render/user-button details)))
      :on-error (js/alert (str "Error loading user details"))))
 
 
