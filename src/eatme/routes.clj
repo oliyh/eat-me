@@ -5,11 +5,6 @@
                                                ANY]]
             [compojure.route :as c-route]
             [shoreleave.middleware.rpc :refer [remote-ns]]
-            [ring.util.response :as resp]
-            ;; Friend authentication
-            ;;[ring.util.request :as request]
-            [cemerick.friend :as friend]
-            [cemerick.friend.openid :as openid]
             ;; Controllers
             [eatme.controllers.site :as cont-site]
             ;; Public APIs
@@ -23,6 +18,7 @@
 ;; -------------------------------
 (defroutes site
   (GET "/" {session :session} (cont-site/index session))
+  (GET "/logout" req (cont-site/logout req))
   (GET "/auth" req (cont-site/auth req))
   (GET "/test" [] (cont-site/test-shoreleave)))
 
@@ -35,9 +31,4 @@
 ;; The top-level collection of all routes
 ;; --------------------------------------
 (def all-routes
-  (friend/authenticate (c-core/routes site app-routes)
-                       {:allow-anon? true
-                        :default-landing-uri "/"
-                        :workflows [(openid/workflow
-                                     :openid-uri "/login"
-                                     :credential-fn identity)]}))
+  (c-core/routes site app-routes))

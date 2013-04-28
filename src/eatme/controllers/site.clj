@@ -1,7 +1,9 @@
 (ns eatme.controllers.site
+  (:use [ring.middleware.anti-forgery :only [*anti-forgery-token*]])
   (:require [hiccup.page :as h]
             [cemerick.friend :as friend]
-            [cemerick.friend.openid :as openid]))
+            [cemerick.friend.openid :as openid]
+            [ring.util.response :as resp]))
 
 (defn index [session]
   (slurp "resources/public/html/shopping-list.html"))
@@ -10,10 +12,10 @@
   (slurp "resources/public/html/test.html"))
 
 (def providers [{:name "Google" :url "https://www.google.com/accounts/o8/id"}
-                {:name "Yahoo" :url "http://me.yahoo.com/"}
-                {:name "AOL" :url "http://openid.aol.com/"}
-                {:name "Wordpress.com" :url "http://username.wordpress.com"}
-                {:name "MyOpenID" :url "http://username.myopenid.com/"}])
+                {:name "Yahoo" :url "http://me.yahoo.com/"}])
+
+(defn logout [req]
+  (friend/logout* (resp/redirect (str (:context req) "/"))))
 
 (defn auth [req]
   (h/html5
@@ -31,12 +33,9 @@
          (for [{:keys [name url]} providers
                :let [base-login-url (str "/login?identifier=" url)
                      dom-id (str (gensym))]]
-           [:form {:method "POST" :action "login"
-                   :onsubmit (when (.contains ^String url "username")
-                               (format "var input = document.getElementById(%s); input.value = input.value.replace('username', prompt('What is your %s username?')); return true;"
-                                       (str \' dom-id \') name))}
+           [:form {:method "POST" :action "login"}
             [:input {:type "hidden" :name "identifier" :value url :id dom-id}]
-            [:input {:type "hidden" :name "__anti-forgery-token" :value ring.middleware.anti-forgery/*anti-forgery-token*}]
+            [:input {:type "hidden" :name "__anti-forgery-token" :value *anti-forgery-token*}]
             [:input {:type "submit" :class "button" :value name}]])
          [:p "…or, with a user-provided OpenID URL:"]
          [:form {:method "POST" :action "login"}
