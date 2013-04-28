@@ -56,12 +56,16 @@
 (def completed-items-list (d/by-id "completed-items"))
 
 (defn set-basket-unsaved! []
-  (-> (x/xpath save-basket-button "i")
-      (d/remove-class! "icon-white")))
+  (-> save-basket-button
+      (d/add-class! "btn-primary")
+      (x/xpath "i")
+      (d/add-class! "icon-white")))
 
 (defn set-basket-saved! []
-  (-> (x/xpath save-basket-button "i")
-      (d/add-class! "icon-white")))
+  (-> save-basket-button
+      (d/remove-class! "btn-primary")
+      (x/xpath "i")
+      (d/remove-class! "icon-white")))
 
 (defn serialise-basket []
   {:id (basket-id)
