@@ -18,6 +18,8 @@
 
 (h/defhtml user-button [{:keys [firstname lastname]}]
   [:div.btn-group
-   [:button.btn.btn-success
-    [:i.icon-user] "&nbsp;" firstname "&nbsp;" lastname]
-   [:a.btn.btn-success {:href "logout"} "Sign out"]])
+   [:a.btn.btn-success.dropdown-toggle {:data-toggle "dropdown"}
+    [:i.icon-user] "&nbsp;" firstname "&nbsp;" lastname "&nbsp;"
+    [:span.caret]]
+   [:ul.dropdown-menu
+    [:a {:href "logout"} "Sign out"]]])

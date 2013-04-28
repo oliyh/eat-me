@@ -28,12 +28,13 @@
   :ring {:handler eatme.handler/war-handler
          :init eatme.handler/init
          :destroy eatme.handler/destroy}
-   :cljsbuild {:builds [{:source-paths ["src"],
-                         :compiler {:output-dir "resources/build/cljs",
-                                    :output-to "resources/public/js/eatme.js",
-                                    ;:externs  ["externs/jquery.js"],
-                                    :optimizations :simple,;:advanced ;:whitespace
-                                    :pretty-print true}}]}
+  :cljsbuild {:builds [{:source-paths ["src"]
+                        :compiler {:output-dir "resources/build/cljs",
+                                   :output-to "resources/public/js/eatme.js",
+                                   :externs ["externs/twitter-bootstrap.js"
+                                             "externs/jquery-1.9.1.js"]
+                                   :optimizations :whitespace ;:simple ;:advanced ;:whitespace
+                                   :pretty-print true}}]}
   :profiles {:production
              {:ring {:open-browser? false, :stacktraces? false, :auto-reload? false}}}
 

@@ -169,10 +169,9 @@
 (defn display-user-details []
   (srm/rpc
      (api/user-details) [details]
-     :on-success (when details (d/set-html! user-details (render/user-button details)))
+     :on-success (when details
+                   (d/set-html! user-details (render/user-button details)))
      :on-error (js/alert (str "Error loading user details"))))
-
-
 
 (pubsub/subscribe bus item-added add-item-to-list)
 (pubsub/subscribe bus item-added set-basket-unsaved!)
