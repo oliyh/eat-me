@@ -54,6 +54,7 @@
 (def item-qty-field (d/by-id "item-qty"))
 (def items-list (d/by-id "items-to-get"))
 (def completed-items-list (d/by-id "completed-items"))
+(def user-details (d/by-id "user-details"))
 
 (defn set-basket-unsaved! []
   (-> save-basket-button
@@ -69,7 +70,7 @@
 
 (defn serialise-basket []
   {:id (basket-id)
-   :items   
+   :items
    (map
     (fn [input] {:item-name (d/attr input "name")
                  :qty (d/value input)})
@@ -165,6 +166,15 @@
                    (add-item-to-list item))
      :on-error (js/alert (str "Error loading basket: " basket-id)))))
 
+(defn display-user-details []
+  (srm/rpc
+     (api/user-details) [details]
+     :on-success (doseq [[k v] details]
+                   (d/append! user-details (str "<p>" k ": " v "</p>")))
+     :on-error (js/alert (str "Error loading user details"))))
+
+
+
 (pubsub/subscribe bus item-added add-item-to-list)
 (pubsub/subscribe bus item-added set-basket-unsaved!)
 (pubsub/subscribe bus item-added log-to-console)
@@ -180,5 +190,6 @@
 
 (pubsub/subscribe bus completed-item item-completed)
 
+(display-user-details)
 (load-basket)
 (focus-item-input)

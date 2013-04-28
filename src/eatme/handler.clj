@@ -21,13 +21,13 @@
 
 (defn get-handler [app]
   (-> app
+      (shoreleave.middleware.rpc/wrap-rpc)
       (friend/authenticate
        {:allow-anon? true
         :default-landing-uri "/"
         :workflows [(openid/workflow
                      :openid-uri "/login"
                      :credential-fn identity)]})
-      (shoreleave.middleware.rpc/wrap-rpc)
       (ring.middleware.anti-forgery/wrap-anti-forgery)
       (ring.middleware.gzip/wrap-gzip)
       (handler/site {:session {:cookie-name "eatme"

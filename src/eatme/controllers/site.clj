@@ -18,6 +18,7 @@
   (friend/logout* (resp/redirect (str (:context req) "/"))))
 
 (defn auth [req]
+  (println "identity = " friend/*identity*)
   (h/html5
       [:h2 "Authenticating with various services using OpenID"]
       [:h3 "Current Status " [:small "(this will change when you log in/out)"]]
@@ -36,10 +37,6 @@
            [:form {:method "POST" :action "login"}
             [:input {:type "hidden" :name "identifier" :value url :id dom-id}]
             [:input {:type "hidden" :name "__anti-forgery-token" :value *anti-forgery-token*}]
-            [:input {:type "submit" :class "button" :value name}]])
-         [:p "…or, with a user-provided OpenID URL:"]
-         [:form {:method "POST" :action "login"}
-          [:input {:type "text" :name "identifier" :style "width:250px;"}]
-          [:input {:type "submit" :class "button" :value "Login"}]]])
+            [:input {:type "submit" :class "button" :value name}]])])
       [:h3 "Logging out"]
       [:p [:a {:href "logout"} "Click here to log out"] "."]))

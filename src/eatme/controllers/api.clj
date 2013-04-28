@@ -1,4 +1,5 @@
-(ns eatme.controllers.api)
+(ns eatme.controllers.api
+  (:require [cemerick.friend :as friend]))
 
 (def basket-store (atom {}))
 
@@ -15,8 +16,12 @@
   (if-let [id (:id basket)]
     (Long/parseLong id)
     (inc (count @basket-store))))
-   
+
 (defn save-basket [basket]
   (let [id (basket-id basket)]
     (swap! basket-store assoc id (:items basket))
     {:id id}))
+
+(defn user-details []
+  (println "identity =" friend/*identity*)
+   (friend/current-authentication)) ;; not ideal, should pass the request object through
