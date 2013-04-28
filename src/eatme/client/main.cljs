@@ -128,7 +128,7 @@
 
 (defn remove-item-from-list [item]
   ;; (:item item) is actually the delete button that was clicked
-  (d/detach! (-> item :item .-parentNode)))
+  (d/detach! (-> item :item .-parentNode .-parentNode)))
 
 (defn adjust-quantity [direction value]
   (condp = direction
