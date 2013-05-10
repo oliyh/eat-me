@@ -24,3 +24,8 @@
      [:span.caret]]
     [:ul.dropdown-menu
      [:li [:a {:href "logout"} "Sign out"]]]]])
+
+(h/defhtml user-baskets [baskets]
+  (into [:ul]
+        (map (fn [b]
+               [:li [:a {:href (str "#" (:id b))} (:id b)]]) baskets)))

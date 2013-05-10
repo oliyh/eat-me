@@ -76,10 +76,17 @@
                  :qty (d/value input)})
     (d/nodes (x/xpath items-list "div/*/input[@rel='qty']")))})
 
+(defn load-user-baskets []
+  (srm/rpc (api/user-baskets) [baskets]
+           :on-success (d/set-html! (d/by-id "userBaskets") (render/user-baskets baskets))
+           :on-error (js/alert (str "Error loading user baskets"))))
+
 (defn save-basket []
     (srm/rpc
      (api/save-basket (serialise-basket)) [response]
-     :on-success (do (js/alert (str "Basket saved! Id: " (:id response))) (basket-id (:id response)) (set-basket-saved!))
+     :on-success (do (js/alert (str "Basket saved! Id: " (:id response)))
+                     (basket-id (:id response)) (set-basket-saved!)
+                     (load-user-baskets))
      :on-error (js/alert (str "Error saving basket"))))
 
 
@@ -169,7 +176,9 @@
 (defn display-user-details []
   (srm/rpc
      (api/user-details) [details]
-     :on-success (when details (d/set-html! user-details (render/user-button details)))
+     :on-success (do (when details
+                       (d/set-html! user-details (render/user-button details)))
+                     (load-user-baskets))
      :on-error (js/alert (str "Error loading user details"))))
 
 (pubsub/subscribe bus item-added add-item-to-list)

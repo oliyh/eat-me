@@ -3,6 +3,9 @@
 
 (def basket-store (atom {}))
 
+(defn current-user []
+  (or (:email (friend/current-authentication)) :public))
+
 (defn ping-the-api [pingback]
   (str "You have hit the API with: " pingback))
 
@@ -21,9 +24,13 @@
   (let [id (basket-id basket)]
     (swap! basket-store assoc id (assoc basket
                                    :id id
-                                   :owner (or (:email (friend/current-authentication)) :public)))
+                                   :owner (current-user)))
     {:id id}))
 
 (defn user-details []
   (println "identity =" friend/*identity*)
    (friend/current-authentication)) ;; not ideal, should pass the request object through
+
+(defn user-baskets []
+  (let [owner (current-user)]
+    (filter (fn [b] (= owner (:owner b))) (vals @basket-store))))
