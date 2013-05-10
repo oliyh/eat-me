@@ -121,10 +121,9 @@
      :on-success (basket-saved response)
      :on-error (js/alert (str "Error saving basket"))))
 
-
 (def item-added (pubsub/publishize
                  (fn [] {:item-name (d/value item-name-field)
-                         :qty (to-int (d/value item-qty-field))}) bus))
+                        :qty (to-int (d/value item-qty-field))}) bus))
 
 (defn on-enter [e f]
   (when (= 13 (:keyCode e)) (event/prevent-default e) (f)))
@@ -141,9 +140,14 @@
 (event/listen! item-name-field :keypress
                #(on-minus % (partial quantity-changed :dec false item-name-field)))
 
-(event/listen! add-item-button :click #(item-added))
-(event/listen! item-name-field :keypress #(on-enter % item-added))
-(event/listen! item-qty-field :keypress #(on-enter % item-added))
+(defn valid-item-added []
+  (when (and (not-empty (d/value item-name-field))
+             (not (js/isNaN (to-int (d/value item-qty-field)))))
+    (item-added)))
+
+(event/listen! add-item-button :click #(valid-item-added))
+(event/listen! item-name-field :keypress #(on-enter % valid-item-added))
+(event/listen! item-qty-field :keypress #(on-enter % valid-item-added))
 (event/listen! save-basket-button :click #(save-basket))
 
 (defn item-completed [{:keys [item]}]
