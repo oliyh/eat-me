@@ -14,9 +14,21 @@
     <div>
       <h2>You</h2>
       <div id="user-details">
-	<button class="btn">
+	<a href="auth" role="button" class="btn" data-toggle="modal" data-target="#loginModal">
 	  <i class="icon-user"></i>&nbsp;Sign in
-	</button>
+	</a>
+	<div id="loginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+	  <div class="modal-header">
+	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	    <h3 id="loginModalLabel">Sign in</h3>
+	  </div>
+	  <div class="modal-body">
+	    <p>Form goes here</p>
+	  </div>
+	  <div class="modal-footer">
+	    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+	  </div>
+	</div>
       </div>
       <h2>My list</h2>
       <div id="items-to-get">

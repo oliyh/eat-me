@@ -18,11 +18,9 @@
   (friend/logout* (resp/redirect (str (:context req) "/"))))
 
 (defn auth [req]
-  (println "identity = " friend/*identity*)
   (h/html5
-      [:h2 "Authenticating with various services using OpenID"]
-      [:h3 "Current Status " [:small "(this will change when you log in/out)"]]
-      (if-let [auth (friend/current-authentication req)]
+   [:h3 "Current Status " [:small "(this will change when you log in/out)"]]
+   (if-let [auth (friend/current-authentication req)]
         [:p "Some information delivered by your OpenID provider:"
          [:ul (for [[k v] auth
                     :let [[k v] (if (= :identity k)
@@ -30,13 +28,10 @@
                                   [k v])]]
                 [:li [:strong (str (name k) ": ")] v])]]
         [:div
-         [:h3 "Login with…"]
          (for [{:keys [name url]} providers
                :let [base-login-url (str "/login?identifier=" url)
                      dom-id (str (gensym))]]
            [:form {:method "POST" :action "login"}
             [:input {:type "hidden" :name "identifier" :value url :id dom-id}]
             [:input {:type "hidden" :name "__anti-forgery-token" :value *anti-forgery-token*}]
-            [:input {:type "submit" :class "button" :value name}]])])
-      [:h3 "Logging out"]
-      [:p [:a {:href "logout"} "Click here to log out"] "."]))
+            [:input {:type "submit" :class "button" :value name}]])])))
