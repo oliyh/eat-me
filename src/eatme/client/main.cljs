@@ -161,8 +161,8 @@
 (defn load-basket []
   (when-let [basket-id (basket-id)]
     (srm/rpc
-     (api/load-basket basket-id) [items]
-     :on-success (doseq [item items]
+     (api/load-basket basket-id) [basket]
+     :on-success (doseq [item (:items basket)]
                    (add-item-to-list item))
      :on-error (js/alert (str "Error loading basket: " basket-id)))))
 

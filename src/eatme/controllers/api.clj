@@ -19,7 +19,9 @@
 
 (defn save-basket [basket]
   (let [id (basket-id basket)]
-    (swap! basket-store assoc id (:items basket))
+    (swap! basket-store assoc id (assoc basket
+                                   :id id
+                                   :owner (or (:email (friend/current-authentication)) :public)))
     {:id id}))
 
 (defn user-details []
