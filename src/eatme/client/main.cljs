@@ -88,6 +88,8 @@
 
 (def completed-item (pubsub/publishize (fn [e] {:item e}) bus))
 
+(def basket-loaded (pubsub/publishize identity bus))
+
 (defn add-item-to-list [item]
   (when (and (< 0 (:qty item)) (not-empty (:item-name item)))
     (d/append! items-list (render/shopping-list-item item))
@@ -97,14 +99,16 @@
       (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec true (event/target %)))
       (event/listen-once! (css/sel new-item "button[rel=complete]") :click #(completed-item (event/target %))))))
 
+(defn set-basket-contents! [basket]
+  (d/destroy-children! items-list)
+  (doseq [item (:items basket)]
+    (add-item-to-list item)))
+
 (defn load-basket []
   (when-let [basket-id (basket-id)]
     (srm/rpc
      (api/load-basket basket-id) [basket]
-     :on-success (do
-                   (d/destroy-children! items-list)
-                   (doseq [item (:items basket)]
-                     (add-item-to-list item)))
+     :on-success (basket-loaded basket)
      :on-error (js/alert (str "Error loading basket: " basket-id)))))
 
 
@@ -212,6 +216,11 @@
 (pubsub/subscribe bus basket-saved (partial log-to-console "Basket saved"))
 (pubsub/subscribe bus basket-saved (fn [b] (history/set-token session-history (str (:id b)))))
 (pubsub/subscribe bus basket-saved display-qr-code)
+
+(pubsub/subscribe bus basket-loaded set-basket-contents!)
+(pubsub/subscribe bus basket-loaded display-qr-code)
+(pubsub/subscribe bus basket-loaded (partial log-to-console "Basket loaded"))
+
 
 (display-user-details)
 (load-basket)
