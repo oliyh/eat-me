@@ -10,16 +10,12 @@
             [domina.css :as css]
             [domina.xpath :as x]
             [eatme.client.render :as render]
-            [clojure.string :as string])
+            [clojure.string :as string]
+            [one.browser.history :as history])
   (:require-macros [shoreleave.remotes.macros :as srm]))
 
 (def query-args (common/query-args-map))
 (def hash-args (common/hash-args-map))
-
-;; Integrate history/back-button to the search
-;For example:
-;    (history/navigate-callback #(process-search (subs (:token %) 4) false))
-;Where process-search is the main action to take when processing the page/url
 
 ;; ### Browser REPL
 ;; If you add a `repl` as a query-string arg, even on the live site,
@@ -37,11 +33,10 @@
 ;;    :on-success (js/alert "You should never see this")
 ;;    :on-error (js/alert "Remotes correctly handle error conditions"))
 
-(defn- basket-id
-  ([] (when-let [matches (re-matches #".*/#([1-9]*)"
-                                     (.-href (.-location js/window)))]
-        (last matches)))
-  ([id] (.assign (.-location js/window) (str "#" id))))
+(defn- basket-id []
+  (when-let [matches (re-matches #".*/#([1-9]*)"
+                                 (.-href (.-location js/window)))]
+    (last matches)))
 
 (defn to-int [s]
   (js/parseInt s))
@@ -81,19 +76,6 @@
            :on-success (d/set-html! (d/by-id "userBaskets") (render/user-baskets baskets))
            :on-error (js/alert (str "Error loading user baskets"))))
 
-(defn save-basket []
-    (srm/rpc
-     (api/save-basket (serialise-basket)) [response]
-     :on-success (do (js/alert (str "Basket saved! Id: " (:id response)))
-                     (basket-id (:id response)) (set-basket-saved!)
-                     (load-user-baskets))
-     :on-error (js/alert (str "Error saving basket"))))
-
-
-(def item-added (pubsub/publishize
-                 (fn [] {:item-name (d/value item-name-field)
-                         :qty (to-int (d/value item-qty-field))}) bus))
-
 (def item-deleted (pubsub/publishize (fn [e] {:item e}) bus))
 
 (def quantity-changed (pubsub/publishize
@@ -103,6 +85,46 @@
                           :item e}) bus))
 
 (def completed-item (pubsub/publishize (fn [e] {:item e}) bus))
+
+(defn add-item-to-list [item]
+  (when (and (< 0 (:qty item)) (not-empty (:item-name item)))
+    (d/append! items-list (render/shopping-list-item item))
+    (let [new-item (css/sel items-list (str "div[rel=" (:item-name item) "]"))]
+      (event/listen-once! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %)))
+      (event/listen! (css/sel new-item "button[rel=increment]") :click #(quantity-changed :inc true (event/target %)))
+      (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec true (event/target %)))
+      (event/listen-once! (css/sel new-item "button[rel=complete]") :click #(completed-item (event/target %))))))
+
+(defn load-basket []
+  (when-let [basket-id (basket-id)]
+    (srm/rpc
+     (api/load-basket basket-id) [basket]
+     :on-success (do
+                   (d/destroy-children! items-list)
+                   (doseq [item (:items basket)]
+                     (add-item-to-list item)))
+     :on-error (js/alert (str "Error loading basket: " basket-id)))))
+
+
+(defn nav-handler [{:keys [token navigation?]}]
+  (when navigation?
+    (load-basket)))
+
+(def session-history (history/history nav-handler))
+
+(defn save-basket []
+    (srm/rpc
+     (api/save-basket (serialise-basket)) [response]
+     :on-success (do (js/alert (str "Basket saved! Id: " (:id response)))
+                     (history/set-token (str (:id response)))
+                     (set-basket-saved!)
+                     (load-user-baskets))
+     :on-error (js/alert (str "Error saving basket"))))
+
+
+(def item-added (pubsub/publishize
+                 (fn [] {:item-name (d/value item-name-field)
+                         :qty (to-int (d/value item-qty-field))}) bus))
 
 (defn on-enter [e f]
   (when (= 13 (:keyCode e)) (event/prevent-default e) (f)))
@@ -123,16 +145,6 @@
 (event/listen! item-name-field :keypress #(on-enter % item-added))
 (event/listen! item-qty-field :keypress #(on-enter % item-added))
 (event/listen! save-basket-button :click #(save-basket))
-
-
-(defn add-item-to-list [item]
-  (when (and (< 0 (:qty item)) (not-empty (:item-name item)))
-    (d/append! items-list (render/shopping-list-item item))
-    (let [new-item (css/sel items-list (str "div[rel=" (:item-name item) "]"))]
-      (event/listen-once! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %)))
-      (event/listen! (css/sel new-item "button[rel=increment]") :click #(quantity-changed :inc true (event/target %)))
-      (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec true (event/target %)))
-      (event/listen-once! (css/sel new-item "button[rel=complete]") :click #(completed-item (event/target %))))))
 
 (defn item-completed [{:keys [item]}]
   (d/add-class! item "btn-success")
@@ -164,14 +176,6 @@
 
 (defn log-to-console [o]
   (js/console.log "event: " o))
-
-(defn load-basket []
-  (when-let [basket-id (basket-id)]
-    (srm/rpc
-     (api/load-basket basket-id) [basket]
-     :on-success (doseq [item (:items basket)]
-                   (add-item-to-list item))
-     :on-error (js/alert (str "Error loading basket: " basket-id)))))
 
 (defn display-user-details []
   (srm/rpc
