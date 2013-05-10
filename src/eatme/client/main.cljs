@@ -51,13 +51,13 @@
 (def completed-items-list (d/by-id "completed-items"))
 (def user-details (d/by-id "user-details"))
 
-(defn set-basket-unsaved! []
+(defn mark-basket-unsaved! []
   (-> save-basket-button
       (d/add-class! "btn-primary")
       (x/xpath "i")
       (d/add-class! "icon-white")))
 
-(defn set-basket-saved! []
+(defn mark-basket-saved! []
   (-> save-basket-button
       (d/remove-class! "btn-primary")
       (x/xpath "i")
@@ -77,6 +77,8 @@
            :on-error (js/alert (str "Error loading user baskets"))))
 
 (def item-deleted (pubsub/publishize (fn [e] {:item e}) bus))
+
+(def basket-saved (pubsub/publishize (fn [b] b) bus))
 
 (def quantity-changed (pubsub/publishize
                        (fn [direction remove-on-zero? e]
@@ -116,10 +118,7 @@
 (defn save-basket []
     (srm/rpc
      (api/save-basket (serialise-basket)) [response]
-     :on-success (do (js/alert (str "Basket saved! Id: " (:id response)))
-                     (history/set-token session-history (str (:id response)))
-                     (set-basket-saved!)
-                     (load-user-baskets))
+     :on-success (basket-saved response)
      :on-error (js/alert (str "Error saving basket"))))
 
 
@@ -175,8 +174,8 @@
   (d/set-value! item-name-field "")
   (d/set-value! item-qty-field 1))
 
-(defn log-to-console [o]
-  (js/console.log "event: " o))
+(defn log-to-console [event o]
+  (js/console.log event ": " o))
 
 (defn display-user-details []
   (srm/rpc
@@ -187,19 +186,24 @@
      :on-error (js/alert (str "Error loading user details"))))
 
 (pubsub/subscribe bus item-added add-item-to-list)
-(pubsub/subscribe bus item-added set-basket-unsaved!)
-(pubsub/subscribe bus item-added log-to-console)
+(pubsub/subscribe bus item-added mark-basket-unsaved!)
+(pubsub/subscribe bus item-added (partial log-to-console "Item added"))
 (pubsub/subscribe bus item-added focus-item-input)
 (pubsub/subscribe bus item-added clear-item-input)
 
-(pubsub/subscribe bus item-deleted log-to-console)
+(pubsub/subscribe bus item-deleted (partial log-to-console "Item deleted"))
 (pubsub/subscribe bus item-deleted remove-item-from-list)
-(pubsub/subscribe bus item-deleted set-basket-unsaved!)
+(pubsub/subscribe bus item-deleted mark-basket-unsaved!)
 
 (pubsub/subscribe bus quantity-changed change-quantity)
-(pubsub/subscribe bus quantity-changed set-basket-unsaved!)
+(pubsub/subscribe bus quantity-changed mark-basket-unsaved!)
 
 (pubsub/subscribe bus completed-item item-completed)
+
+(pubsub/subscribe bus basket-saved mark-basket-saved!)
+(pubsub/subscribe bus basket-saved load-user-baskets)
+(pubsub/subscribe bus basket-saved (partial log-to-console "Basket saved"))
+(pubsub/subscribe bus basket-saved (fn [b] (history/set-token session-history (str (:id b)))))
 
 (display-user-details)
 (load-basket)
