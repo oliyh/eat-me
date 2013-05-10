@@ -106,7 +106,8 @@
      :on-error (js/alert (str "Error loading basket: " basket-id)))))
 
 
-(defn nav-handler [{:keys [token navigation?]}]
+(defn nav-handler [{:keys [token navigation? type]}]
+  (js/console.log token " " navigation? " " type)
   (when navigation?
     (load-basket)))
 
@@ -116,7 +117,7 @@
     (srm/rpc
      (api/save-basket (serialise-basket)) [response]
      :on-success (do (js/alert (str "Basket saved! Id: " (:id response)))
-                     (history/set-token (str (:id response)))
+                     (history/set-token session-history (str (:id response)))
                      (set-basket-saved!)
                      (load-user-baskets))
      :on-error (js/alert (str "Error saving basket"))))
