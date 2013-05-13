@@ -1,7 +1,8 @@
 (ns eatme.basket-store
   (:require [eatme.config :refer [config]]
             [monger.core :as m]
-            [monger.collection :as mc])
+            [monger.collection :as mc]
+            [monger.joda-time])
   (:import [org.bson.types ObjectId]
            [com.mongodb DB WriteConcern]))
 
