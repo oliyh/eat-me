@@ -193,8 +193,8 @@
                      (load-user-baskets))
      :on-error (js/alert (str "Error loading user details"))))
 
-(defn display-qr-code [{:keys [id]}]
-  (d/set-html! (d/by-id "qrCode") (render/qr-code-image (str "http://localhost:8080/%23" id))))
+(defn display-qr-code [{:keys [id url]}]
+  (d/set-html! (d/by-id "qrCode") (render/qr-code-image url)))
 
 (pubsub/subscribe bus item-added add-item-to-list)
 (pubsub/subscribe bus item-added mark-basket-unsaved!)

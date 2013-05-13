@@ -1,5 +1,6 @@
 (ns eatme.controllers.api
-  (:require [cemerick.friend :as friend]))
+  (:require [cemerick.friend :as friend]
+            [eatme.config :refer [config]]))
 
 (def basket-store (atom {}))
 
@@ -20,12 +21,16 @@
     (Long/parseLong id)
     (inc (count @basket-store))))
 
+(defn- url-for [basket-id]
+  (str (config :eatme-url) "/%23" basket-id))
+
 (defn save-basket [basket]
   (let [id (basket-id basket)]
     (swap! basket-store assoc id (assoc basket
                                    :id id
                                    :owner (current-user)))
-    {:id id}))
+    {:id id
+     :url (url-for id)}))
 
 (defn user-details []
   (println "identity =" friend/*identity*)
