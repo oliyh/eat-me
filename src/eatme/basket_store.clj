@@ -5,9 +5,11 @@
   (:import [org.bson.types ObjectId]
            [com.mongodb DB WriteConcern]))
 
-;; connect to mongo
-(m/connect-via-uri! (config :mongo-uri) )
-(m/set-db! (m/get-db)) ;; db name is in the uri
+(defn init
+  "Connect to Mongo"
+  [{:keys [mongo-uri] :as config}]
+  (m/connect-via-uri! mongo-uri)
+  (m/set-db! (m/get-db))) ;; db name is in the uri
 
 (defn- replace-id [id basket]
   (assoc (dissoc basket :id) :_id id))

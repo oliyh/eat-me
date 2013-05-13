@@ -1,7 +1,8 @@
 (ns eatme.server
   (:require [eatme.config :refer [config init-config]]
             [eatme.handler :as handler]
-            [ring.server.standalone :as ring-server]))
+            [ring.server.standalone :as ring-server]
+            [eatme.basket-store :as store]))
 
 ;; You'll want to do something like: `(defonce server (start-server))`
 
@@ -9,16 +10,17 @@
   "used for starting the server in development mode from REPL"
   ([] (start-server (init-config :dev)))
   ([config]
-      (let [port (or (Integer. (get (System/getenv) "PORT" (config :eatme-port)))
-                     8080)
-            server (ring-server/serve (handler/get-handler #'handler/app)
-                                      {:port port
-                                       :init handler/init
-                                       :auto-reload? true
-                                       :destroy handler/destroy
-                                       :join true})]
-        (println (str "You can view the site at " (config :eatme-url)))
-        server)))
+     (store/init config)
+     (let [port (or (Integer. (get (System/getenv) "PORT" (config :eatme-port)))
+                    8080)
+           server (ring-server/serve (handler/get-handler #'handler/app)
+                                     {:port port
+                                      :init handler/init
+                                      :auto-reload? true
+                                      :destroy handler/destroy
+                                      :join true})]
+       (println (str "You can view the site at " (config :eatme-url)))
+       server)))
 
 (defn stop-server [server]
   (when server
