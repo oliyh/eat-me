@@ -47,3 +47,4 @@ Gemfile.lock
 # Project specific
 /out
 /repl/out
+/.env
