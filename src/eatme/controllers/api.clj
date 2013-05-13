@@ -24,8 +24,7 @@
      :url (url-for id)}))
 
 (defn user-details []
-  (println "identity =" friend/*identity*)
-   (friend/current-authentication)) ;; not ideal, should pass the request object through
+  (friend/current-authentication)) ;; not ideal, should pass the request object through
 
 (defn user-baskets []
   (store/user-baskets (current-user)))
