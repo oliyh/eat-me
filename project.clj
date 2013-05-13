@@ -1,6 +1,7 @@
 (defproject eatme "0.0.1-SNAPSHOT"
   :description "Eat what you buy and buy what you eat. An application built on Compojure and Shoreleave"
   :url "https://github.com/oliyh/eat-me"
+  :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/tools.reader "0.7.0"]
                  [compojure "1.1.5" :exclusions [[org.clojure/clojure] [ring/ring-core]]]
