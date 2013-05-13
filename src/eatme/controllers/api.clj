@@ -1,34 +1,25 @@
 (ns eatme.controllers.api
   (:require [cemerick.friend :as friend]
-            [eatme.config :refer [config]]))
-
-(def basket-store (atom {}))
+            [eatme.config :refer [config]]
+            [eatme.basket-store :as store]))
 
 (defn current-user []
   (or (:email (friend/current-authentication)) :public))
+
+(defn with-owner [basket]
+  (assoc basket :owner (current-user)))
 
 (defn ping-the-api [pingback]
   (str "You have hit the API with: " pingback))
 
 (defn load-basket [id]
-  (let [id (Long/parseLong id)]
-    (if (contains? @basket-store id)
-      (get @basket-store id)
-      (throw (Exception. (str "No basket found for id " id))))))
-
-(defn basket-id [basket]
-  (if-let [id (:id basket)]
-    (Long/parseLong id)
-    (inc (count @basket-store))))
+  (store/load-basket id))
 
 (defn- url-for [basket-id]
   (str (config :eatme-url) "/%23" basket-id))
 
 (defn save-basket [basket]
-  (let [id (basket-id basket)]
-    (swap! basket-store assoc id (assoc basket
-                                   :id id
-                                   :owner (current-user)))
+  (let [{:keys [id]} (store/save-basket (with-owner basket))]
     {:id id
      :url (url-for id)}))
 
@@ -37,5 +28,4 @@
    (friend/current-authentication)) ;; not ideal, should pass the request object through
 
 (defn user-baskets []
-  (let [owner (current-user)]
-    (filter (fn [b] (= owner (:owner b))) (vals @basket-store))))
+  (store/user-baskets (current-user)))

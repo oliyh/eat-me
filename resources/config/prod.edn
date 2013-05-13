@@ -3,10 +3,11 @@
   ;; -----------
   ;; :eatme-port 8080 ;; $PORT set by heroku
   :eatme-url "http://eatme.oliy.co.uk"
+
+  :mongo-uri "mongodb://eatme:3atm3@ds061797.mongolab.com:61797/heroku_app15653083"
   
   ;; Sessions and Cookies
   ;; --------------------
   :session-key "s0mes3cret"
   :session-max-age-seconds 1209600
 }
-

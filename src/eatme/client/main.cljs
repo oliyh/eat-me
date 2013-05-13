@@ -34,7 +34,7 @@
 ;;    :on-error (js/alert "Remotes correctly handle error conditions"))
 
 (defn- basket-id []
-  (when-let [matches (re-matches #".*/#([1-9]*)"
+  (when-let [matches (re-matches #".*/#(.*)"
                                  (.-href (.-location js/window)))]
     (last matches)))
 
