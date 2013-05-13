@@ -1,7 +1,8 @@
 {
   ;; Core config
   ;; -----------
-  :eatme-port 8080
+  ;; :eatme-port 8080 ;; $PORT set by heroku
+  :eatme-url "http://eatme.oliy.co.uk"
   
   ;; Sessions and Cookies
   ;; --------------------

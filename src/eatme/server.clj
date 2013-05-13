@@ -1,5 +1,5 @@
 (ns eatme.server
-  (:require [eatme.config :refer [config]]
+  (:require [eatme.config :refer [config init-config]]
             [eatme.handler :as handler]
             [ring.server.standalone :as ring-server]))
 
@@ -7,18 +7,18 @@
 
 (defn start-server
   "used for starting the server in development mode from REPL"
-  [& [port]]
-  (let [port (or (and port (Integer/parseInt port))
-                 (Integer. (get (System/getenv) "PORT" (config :eatme-port)))
-                 8080)
-        server (ring-server/serve (handler/get-handler #'handler/app) 
-                                 {:port port 
-                                  :init handler/init
-                                  :auto-reload? true
-                                  :destroy handler/destroy 
-                                  :join true})]
-    (println (str "You can view the site at http://localhost:" port))
-    server))
+  ([] (start-server (init-config :dev)))
+  ([config]
+      (let [port (or (Integer. (get (System/getenv) "PORT" (config :eatme-port)))
+                     8080)
+            server (ring-server/serve (handler/get-handler #'handler/app)
+                                      {:port port
+                                       :init handler/init
+                                       :auto-reload? true
+                                       :destroy handler/destroy
+                                       :join true})]
+        (println (str "You can view the site at " (config :eatme-url)))
+        server)))
 
 (defn stop-server [server]
   (when server
@@ -31,11 +31,8 @@
       (.stop)
       (.start))))
 
-(def server-starters {:dev start-server})
-
 (defn -main [& m]
-  (let [mode-kw (keyword (or (first m) :dev))
-        server-fn (server-starters mode-kw)
-        server (server-fn)]
-    server))
-
+  (let [mode-kw (keyword (or (first m) :dev))]
+    (init-config mode-kw)
+    (let [server (start-server (config))]
+      server)))

@@ -1,12 +1,17 @@
 (ns eatme.config
   (:require [shoreleave.server-helpers :refer [safe-read]]))
 
-(defn read-config
+(def config-atom (atom {}))
+
+(defn init-config
   ""
   ([]
-   (read-config "resources/config.edn"))
-  ([config-loc]
-   (safe-read (slurp config-loc))))
+     (init-config :dev))
+  ([config-name]
+     (swap! config-atom (fn [old new] new)
+            (safe-read (slurp
+                        (str "resources/config/" (name config-name) ".edn"))))))
 
-(def config (read-config))
-
+(def config (fn
+              ([] @config-atom)
+              ([& args] (apply @config-atom args))))

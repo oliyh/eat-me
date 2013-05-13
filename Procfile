@@ -1,1 +1,1 @@
-web: lein with-profile production trampoline run -m eatme.server dev $PORT
+web: lein with-profile production trampoline run -m eatme.server prod
