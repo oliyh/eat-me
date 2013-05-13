@@ -23,16 +23,6 @@
 ;; Visit: `http://127.0.0.1:8080/test?repl=yes#q=something+else`
 (common/toggle-brepl query-args :repl)
 
-;; ### Confirm we have remote-calling activated
-;;(srm/rpc
-;;  (api/ping-the-api "Testing...") [pong-response]
-;;    (js/alert pong-response))
-
-;;(srm/rpc
-;;  (api/this-is-404 "Failure") [api-response]
-;;    :on-success (js/alert "You should never see this")
-;;    :on-error (js/alert "Remotes correctly handle error conditions"))
-
 (defn- basket-id []
   (when-let [matches (re-matches #".*/#(.*)"
                                  (.-href (.-location js/window)))]
@@ -63,13 +53,18 @@
       (x/xpath "i")
       (d/remove-class! "icon-white")))
 
+(defn- serialise-item [state input]
+  {:item-name (d/attr input "name")
+   :qty (d/value input)
+   :state state})
+
 (defn serialise-basket []
   {:id (basket-id)
    :items
-   (map
-    (fn [input] {:item-name (d/attr input "name")
-                 :qty (d/value input)})
-    (d/nodes (x/xpath items-list "div/*/input[@rel='qty']")))})
+   (concat (map (partial serialise-item :list)
+                (d/nodes (x/xpath items-list "div/*/input[@rel='qty']")))
+           (map (partial serialise-item :basket)
+                (d/nodes (x/xpath completed-items-list "div/*/input[@rel='qty']"))))})
 
 (defn load-user-baskets []
   (srm/rpc (api/user-baskets) [baskets]
@@ -90,19 +85,27 @@
 
 (def basket-loaded (pubsub/publishize identity bus))
 
-(defn add-item-to-list [item]
+(defn add-item-to-list [the-list item]
   (when (and (< 0 (:qty item)) (not-empty (:item-name item)))
-    (d/append! items-list (render/shopping-list-item item))
-    (let [new-item (css/sel items-list (str "div[rel=" (:item-name item) "]"))]
+    (d/append! the-list (render/shopping-list-item item))
+    (let [new-item (css/sel the-list (str "div[rel=" (:item-name item) "]"))]
       (event/listen-once! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %)))
       (event/listen! (css/sel new-item "button[rel=increment]") :click #(quantity-changed :inc true (event/target %)))
       (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec true (event/target %)))
-      (event/listen-once! (css/sel new-item "button[rel=complete]") :click #(completed-item (event/target %))))))
+      (if (= :list (keyword (:state item)))
+        (event/listen-once! (css/sel new-item "button[rel=complete]") :click #(completed-item (event/target %)))
+        (d/add-class! (css/sel new-item "button[rel=complete]") "btn-success")))))
+
+(defn- choose-list [{:keys [state]}]
+  (condp = (keyword state)
+    :list items-list
+    :basket completed-items-list))
 
 (defn set-basket-contents! [basket]
   (d/destroy-children! items-list)
+  (d/destroy-children! completed-items-list)
   (doseq [item (:items basket)]
-    (add-item-to-list item)))
+    (add-item-to-list (choose-list item) item)))
 
 (defn load-basket []
   (when-let [basket-id (basket-id)]
@@ -127,7 +130,8 @@
 
 (def item-added (pubsub/publishize
                  (fn [] {:item-name (d/value item-name-field)
-                        :qty (to-int (d/value item-qty-field))}) bus))
+                        :qty (to-int (d/value item-qty-field))
+                        :state :list}) bus))
 
 (defn on-enter [e f]
   (when (= 13 (:keyCode e)) (event/prevent-default e) (f)))
@@ -196,7 +200,7 @@
 (defn display-qr-code [{:keys [id url]}]
   (d/set-html! (d/by-id "qrCode") (render/qr-code-image url)))
 
-(pubsub/subscribe bus item-added add-item-to-list)
+(pubsub/subscribe bus item-added (partial add-item-to-list items-list))
 (pubsub/subscribe bus item-added mark-basket-unsaved!)
 (pubsub/subscribe bus item-added (partial log-to-console "Item added"))
 (pubsub/subscribe bus item-added focus-item-input)

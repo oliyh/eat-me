@@ -4,7 +4,7 @@
   (:require-macros
    [hiccups.core :as h]))
 
-(h/defhtml shopping-list-item [{:keys [item-name qty]}]
+(h/defhtml shopping-list-item [{:keys [item-name qty state]}]
   [:div.row.controls-row {:rel item-name}
    [:div.span4.offset1
     [:label item-name]]
