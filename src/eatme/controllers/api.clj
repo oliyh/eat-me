@@ -12,11 +12,11 @@
 (defn ping-the-api [pingback]
   (str "You have hit the API with: " pingback))
 
-(defn load-basket [id]
-  (store/load-basket id))
-
 (defn- url-for [basket-id]
   (str (config :eatme-url) "/%23" basket-id))
+
+(defn load-basket [id]
+  (assoc (store/load-basket id) :url (url-for id)))
 
 (defn save-basket [basket]
   (let [{:keys [id]} (store/save-basket (with-owner basket))]
