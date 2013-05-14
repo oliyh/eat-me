@@ -195,7 +195,7 @@
                      (load-user-baskets))
      :on-error (js/alert (str "Error loading user details"))))
 
-(def email-link "mailto://?subject=My%20Shopping%20Basket&body=")
+(def email-link "mailto:?subject=My%20Shopping%20Basket&body=")
 
 (defn update-share-modal [{:keys [id url]}]
   (d/set-html! (d/by-id "share-qr-code") (render/qr-code-image url))
