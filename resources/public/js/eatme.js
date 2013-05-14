@@ -21396,18 +21396,18 @@ hiccups.runtime.render_html = function render_html(x) {
 goog.provide("eatme.client.render");
 goog.require("cljs.core");
 goog.require("hiccups.runtime");
-eatme.client.render.shopping_list_item = function shopping_list_item(p__100475) {
-  var map__100482 = p__100475;
-  var map__100482__$1 = cljs.core.seq_QMARK_.call(null, map__100482) ? cljs.core.apply.call(null, cljs.core.hash_map, map__100482) : map__100482;
-  var state = cljs.core._lookup.call(null, map__100482__$1, "\ufdd0'state", null);
-  var qty = cljs.core._lookup.call(null, map__100482__$1, "\ufdd0'qty", null);
-  var item_name = cljs.core._lookup.call(null, map__100482__$1, "\ufdd0'item-name", null);
+eatme.client.render.shopping_list_item = function shopping_list_item(p__102500) {
+  var map__102507 = p__102500;
+  var map__102507__$1 = cljs.core.seq_QMARK_.call(null, map__102507) ? cljs.core.apply.call(null, cljs.core.hash_map, map__102507) : map__102507;
+  var state = cljs.core._lookup.call(null, map__102507__$1, "\ufdd0'state", null);
+  var qty = cljs.core._lookup.call(null, map__102507__$1, "\ufdd0'qty", null);
+  var item_name = cljs.core._lookup.call(null, map__102507__$1, "\ufdd0'item-name", null);
   return[cljs.core.str("<div"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'rel", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'rel":item_name, "\ufdd0'id":null, "\ufdd0'class":"row-fluid controls-row"}))), cljs.core.str(">"), cljs.core.str("<div"), cljs.core.str(' class="span4"'), cljs.core.str(">"), cljs.core.str(function() {
-    var attrs100483 = item_name;
-    if(cljs.core.map_QMARK_.call(null, attrs100483)) {
-      return[cljs.core.str("<label"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.merge.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'id", "\ufdd0'class"], {"\ufdd0'id":null, "\ufdd0'class":null}), attrs100483))), cljs.core.str(">"), cljs.core.str("</label>")].join("")
+    var attrs102508 = item_name;
+    if(cljs.core.map_QMARK_.call(null, attrs102508)) {
+      return[cljs.core.str("<label"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.merge.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'id", "\ufdd0'class"], {"\ufdd0'id":null, "\ufdd0'class":null}), attrs102508))), cljs.core.str(">"), cljs.core.str("</label>")].join("")
     }else {
-      return[cljs.core.str("<label>"), cljs.core.str(hiccups.runtime.render_html.call(null, attrs100483)), cljs.core.str("</label>")].join("")
+      return[cljs.core.str("<label>"), cljs.core.str(hiccups.runtime.render_html.call(null, attrs102508)), cljs.core.str("</label>")].join("")
     }
   }()), cljs.core.str("</div>"), cljs.core.str("<div"), cljs.core.str(' class="span3"'), cljs.core.str(">"), cljs.core.str("<"), cljs.core.str("input"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'size", "\ufdd0'rel", "\ufdd0'value", "\ufdd0'name", "\ufdd0'type", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'size":1, "\ufdd0'rel":"qty", "\ufdd0'value":function() {
     var or__3943__auto__ = qty;
@@ -21418,11 +21418,11 @@ eatme.client.render.shopping_list_item = function shopping_list_item(p__100475) 
     }
   }(), "\ufdd0'name":item_name, "\ufdd0'type":"text", "\ufdd0'id":null, "\ufdd0'class":"span2"}))), cljs.core.str(" />"), cljs.core.str("&nbsp;"), cljs.core.str('<button class="btn btn-danger" rel="delete-item"><i class="icon-remove-sign"></i></button>'), cljs.core.str("</div>"), cljs.core.str('<div class="span2"><button class="btn" rel="complete"><i class="icon-ok"></i></button></div>'), cljs.core.str("</div>")].join("")
 };
-eatme.client.render.user_button = function user_button(p__100488) {
-  var map__100496 = p__100488;
-  var map__100496__$1 = cljs.core.seq_QMARK_.call(null, map__100496) ? cljs.core.apply.call(null, cljs.core.hash_map, map__100496) : map__100496;
-  var lastname = cljs.core._lookup.call(null, map__100496__$1, "\ufdd0'lastname", null);
-  var firstname = cljs.core._lookup.call(null, map__100496__$1, "\ufdd0'firstname", null);
+eatme.client.render.user_button = function user_button(p__102513) {
+  var map__102521 = p__102513;
+  var map__102521__$1 = cljs.core.seq_QMARK_.call(null, map__102521) ? cljs.core.apply.call(null, cljs.core.hash_map, map__102521) : map__102521;
+  var lastname = cljs.core._lookup.call(null, map__102521__$1, "\ufdd0'lastname", null);
+  var firstname = cljs.core._lookup.call(null, map__102521__$1, "\ufdd0'firstname", null);
   return[cljs.core.str("<div"), cljs.core.str(' class="btn-toolbar"'), cljs.core.str(">"), cljs.core.str("<div"), cljs.core.str(' class="btn-group"'), cljs.core.str(">"), cljs.core.str("<a"), cljs.core.str(' class="btn btn-success dropdown-toggle" data-toggle="dropdown"'), cljs.core.str(">"), cljs.core.str('<i class="icon-user"></i>'), cljs.core.str("&nbsp;"), cljs.core.str(hiccups.runtime.render_html.call(null, firstname)), cljs.core.str("&nbsp;"), cljs.core.str(hiccups.runtime.render_html.call(null, 
   lastname)), cljs.core.str("&nbsp;"), cljs.core.str('<span class="caret"></span>'), cljs.core.str("</a>"), cljs.core.str('<ul class="dropdown-menu"><li><a href="logout">Sign out</a></li></ul>'), cljs.core.str("</div>"), cljs.core.str("</div>")].join("")
 };
@@ -21432,7 +21432,7 @@ eatme.client.render.user_baskets = function user_baskets(baskets) {
   }, baskets))))].join("")
 };
 eatme.client.render.qr_code_image = function qr_code_image(url) {
-  return[cljs.core.str("<"), cljs.core.str("img"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'src", "\ufdd0'title", "\ufdd0'alt", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'src":[cljs.core.str("https://chart.googleapis.com/chart?cht=qr&chs=200x200&chld=L|0&chl="), cljs.core.str(url)].join(""), "\ufdd0'title":"QR code", "\ufdd0'alt":"QR code", "\ufdd0'id":null, "\ufdd0'class":null}))), cljs.core.str(" />")].join("")
+  return[cljs.core.str("<"), cljs.core.str("img"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'src", "\ufdd0'title", "\ufdd0'alt", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'src":[cljs.core.str("https://chart.googleapis.com/chart?cht=qr&chs=160x160&chld=L|0&chl="), cljs.core.str(url)].join(""), "\ufdd0'title":"QR code", "\ufdd0'alt":"QR code", "\ufdd0'id":null, "\ufdd0'class":"media-object"}))), cljs.core.str(" />")].join("")
 };
 goog.provide("goog.disposable.IDisposable");
 goog.disposable.IDisposable = function() {
@@ -35978,12 +35978,12 @@ eatme.client.main.add_item_to_list = function add_item_to_list(the_list, item) {
   }())) {
     domina.append_BANG_.call(null, the_list, eatme.client.render.shopping_list_item.call(null, item));
     var new_item = domina.css.sel.call(null, the_list, [cljs.core.str("div[rel="), cljs.core.str((new cljs.core.Keyword("\ufdd0'item-name")).call(null, item)), cljs.core.str("]")].join(""));
-    domina.events.listen_once_BANG_.call(null, domina.css.sel.call(null, new_item, "button[rel=delete-item]"), "\ufdd0'click", function(p1__101269_SHARP_) {
-      return eatme.client.main.item_deleted.call(null, domina.events.target.call(null, p1__101269_SHARP_))
+    domina.events.listen_once_BANG_.call(null, domina.css.sel.call(null, new_item, "button[rel=delete-item]"), "\ufdd0'click", function(p1__102885_SHARP_) {
+      return eatme.client.main.item_deleted.call(null, domina.events.target.call(null, p1__102885_SHARP_))
     });
     if(cljs.core._EQ_.call(null, "\ufdd0'list", cljs.core.keyword.call(null, (new cljs.core.Keyword("\ufdd0'state")).call(null, item)))) {
-      return domina.events.listen_once_BANG_.call(null, domina.css.sel.call(null, new_item, "button[rel=complete]"), "\ufdd0'click", function(p1__101270_SHARP_) {
-        return eatme.client.main.completed_item.call(null, domina.events.target.call(null, p1__101270_SHARP_))
+      return domina.events.listen_once_BANG_.call(null, domina.css.sel.call(null, new_item, "button[rel=complete]"), "\ufdd0'click", function(p1__102886_SHARP_) {
+        return eatme.client.main.completed_item.call(null, domina.events.target.call(null, p1__102886_SHARP_))
       })
     }else {
       return domina.add_class_BANG_.call(null, domina.css.sel.call(null, new_item, "button[rel=complete]"), "btn-success")
@@ -35992,32 +35992,32 @@ eatme.client.main.add_item_to_list = function add_item_to_list(the_list, item) {
     return null
   }
 };
-eatme.client.main.choose_list = function choose_list(p__101271) {
-  var map__101276 = p__101271;
-  var map__101276__$1 = cljs.core.seq_QMARK_.call(null, map__101276) ? cljs.core.apply.call(null, cljs.core.hash_map, map__101276) : map__101276;
-  var state = cljs.core._lookup.call(null, map__101276__$1, "\ufdd0'state", null);
-  var pred__101277 = cljs.core._EQ_;
-  var expr__101278 = cljs.core.keyword.call(null, state);
-  if(pred__101277.call(null, "\ufdd0'list", expr__101278)) {
+eatme.client.main.choose_list = function choose_list(p__102887) {
+  var map__102892 = p__102887;
+  var map__102892__$1 = cljs.core.seq_QMARK_.call(null, map__102892) ? cljs.core.apply.call(null, cljs.core.hash_map, map__102892) : map__102892;
+  var state = cljs.core._lookup.call(null, map__102892__$1, "\ufdd0'state", null);
+  var pred__102893 = cljs.core._EQ_;
+  var expr__102894 = cljs.core.keyword.call(null, state);
+  if(pred__102893.call(null, "\ufdd0'list", expr__102894)) {
     return eatme.client.main.items_list
   }else {
-    if(pred__101277.call(null, "\ufdd0'basket", expr__101278)) {
+    if(pred__102893.call(null, "\ufdd0'basket", expr__102894)) {
       return eatme.client.main.completed_items_list
     }else {
-      throw new Error([cljs.core.str("No matching clause: "), cljs.core.str(expr__101278)].join(""));
+      throw new Error([cljs.core.str("No matching clause: "), cljs.core.str(expr__102894)].join(""));
     }
   }
 };
 eatme.client.main.set_basket_contents_BANG_ = function set_basket_contents_BANG_(basket) {
   domina.destroy_children_BANG_.call(null, eatme.client.main.items_list);
   domina.destroy_children_BANG_.call(null, eatme.client.main.completed_items_list);
-  var G__101281 = cljs.core.seq.call(null, (new cljs.core.Keyword("\ufdd0'items")).call(null, basket));
+  var G__102897 = cljs.core.seq.call(null, (new cljs.core.Keyword("\ufdd0'items")).call(null, basket));
   while(true) {
-    if(G__101281) {
-      var item = cljs.core.first.call(null, G__101281);
+    if(G__102897) {
+      var item = cljs.core.first.call(null, G__102897);
       eatme.client.main.add_item_to_list.call(null, eatme.client.main.choose_list.call(null, item), item);
-      var G__101282 = cljs.core.next.call(null, G__101281);
-      G__101281 = G__101282;
+      var G__102898 = cljs.core.next.call(null, G__102897);
+      G__102897 = G__102898;
       continue
     }else {
       return null
@@ -36038,12 +36038,12 @@ eatme.client.main.load_basket = function load_basket() {
     return null
   }
 };
-eatme.client.main.nav_handler = function nav_handler(p__101283) {
-  var map__101285 = p__101283;
-  var map__101285__$1 = cljs.core.seq_QMARK_.call(null, map__101285) ? cljs.core.apply.call(null, cljs.core.hash_map, map__101285) : map__101285;
-  var type = cljs.core._lookup.call(null, map__101285__$1, "\ufdd0'type", null);
-  var navigation_QMARK_ = cljs.core._lookup.call(null, map__101285__$1, "\ufdd0'navigation?", null);
-  var token = cljs.core._lookup.call(null, map__101285__$1, "\ufdd0'token", null);
+eatme.client.main.nav_handler = function nav_handler(p__102899) {
+  var map__102901 = p__102899;
+  var map__102901__$1 = cljs.core.seq_QMARK_.call(null, map__102901) ? cljs.core.apply.call(null, cljs.core.hash_map, map__102901) : map__102901;
+  var type = cljs.core._lookup.call(null, map__102901__$1, "\ufdd0'type", null);
+  var navigation_QMARK_ = cljs.core._lookup.call(null, map__102901__$1, "\ufdd0'navigation?", null);
+  var token = cljs.core._lookup.call(null, map__102901__$1, "\ufdd0'token", null);
   console.log(token, " ", navigation_QMARK_, " ", type);
   if(cljs.core.truth_(navigation_QMARK_)) {
     return eatme.client.main.load_basket.call(null)
@@ -36086,11 +36086,11 @@ eatme.client.main.on_minus = function on_minus(e, f) {
     return null
   }
 };
-domina.events.listen_BANG_.call(null, eatme.client.main.item_name_field, "\ufdd0'keypress", function(p1__101286_SHARP_) {
-  return eatme.client.main.on_plus.call(null, p1__101286_SHARP_, cljs.core.partial.call(null, eatme.client.main.quantity_changed, "\ufdd0'inc", false, eatme.client.main.item_name_field))
+domina.events.listen_BANG_.call(null, eatme.client.main.item_name_field, "\ufdd0'keypress", function(p1__102902_SHARP_) {
+  return eatme.client.main.on_plus.call(null, p1__102902_SHARP_, cljs.core.partial.call(null, eatme.client.main.quantity_changed, "\ufdd0'inc", false, eatme.client.main.item_name_field))
 });
-domina.events.listen_BANG_.call(null, eatme.client.main.item_name_field, "\ufdd0'keypress", function(p1__101287_SHARP_) {
-  return eatme.client.main.on_minus.call(null, p1__101287_SHARP_, cljs.core.partial.call(null, eatme.client.main.quantity_changed, "\ufdd0'dec", false, eatme.client.main.item_name_field))
+domina.events.listen_BANG_.call(null, eatme.client.main.item_name_field, "\ufdd0'keypress", function(p1__102903_SHARP_) {
+  return eatme.client.main.on_minus.call(null, p1__102903_SHARP_, cljs.core.partial.call(null, eatme.client.main.quantity_changed, "\ufdd0'dec", false, eatme.client.main.item_name_field))
 });
 eatme.client.main.valid_item_added = function valid_item_added() {
   if(cljs.core.truth_(function() {
@@ -36109,19 +36109,19 @@ eatme.client.main.valid_item_added = function valid_item_added() {
 domina.events.listen_BANG_.call(null, eatme.client.main.add_item_button, "\ufdd0'click", function() {
   return eatme.client.main.valid_item_added.call(null)
 });
-domina.events.listen_BANG_.call(null, eatme.client.main.item_name_field, "\ufdd0'keypress", function(p1__101288_SHARP_) {
-  return eatme.client.main.on_enter.call(null, p1__101288_SHARP_, eatme.client.main.valid_item_added)
+domina.events.listen_BANG_.call(null, eatme.client.main.item_name_field, "\ufdd0'keypress", function(p1__102904_SHARP_) {
+  return eatme.client.main.on_enter.call(null, p1__102904_SHARP_, eatme.client.main.valid_item_added)
 });
-domina.events.listen_BANG_.call(null, eatme.client.main.item_qty_field, "\ufdd0'keypress", function(p1__101289_SHARP_) {
-  return eatme.client.main.on_enter.call(null, p1__101289_SHARP_, eatme.client.main.valid_item_added)
+domina.events.listen_BANG_.call(null, eatme.client.main.item_qty_field, "\ufdd0'keypress", function(p1__102905_SHARP_) {
+  return eatme.client.main.on_enter.call(null, p1__102905_SHARP_, eatme.client.main.valid_item_added)
 });
 domina.events.listen_BANG_.call(null, eatme.client.main.save_basket_button, "\ufdd0'click", function() {
   return eatme.client.main.save_basket.call(null)
 });
-eatme.client.main.item_completed = function item_completed(p__101290) {
-  var map__101292 = p__101290;
-  var map__101292__$1 = cljs.core.seq_QMARK_.call(null, map__101292) ? cljs.core.apply.call(null, cljs.core.hash_map, map__101292) : map__101292;
-  var item = cljs.core._lookup.call(null, map__101292__$1, "\ufdd0'item", null);
+eatme.client.main.item_completed = function item_completed(p__102906) {
+  var map__102908 = p__102906;
+  var map__102908__$1 = cljs.core.seq_QMARK_.call(null, map__102908) ? cljs.core.apply.call(null, cljs.core.hash_map, map__102908) : map__102908;
+  var item = cljs.core._lookup.call(null, map__102908__$1, "\ufdd0'item", null);
   domina.add_class_BANG_.call(null, item, "btn-success");
   return domina.append_BANG_.call(null, eatme.client.main.completed_items_list, domina.detach_BANG_.call(null, domina.xpath.xpath.call(null, item, "../..")))
 };
@@ -36129,24 +36129,24 @@ eatme.client.main.remove_item_from_list = function remove_item_from_list(item) {
   return domina.detach_BANG_.call(null, (new cljs.core.Keyword("\ufdd0'item")).call(null, item).parentNode.parentNode)
 };
 eatme.client.main.adjust_quantity = function adjust_quantity(direction, value) {
-  var pred__101296 = cljs.core._EQ_;
-  var expr__101297 = direction;
-  if(pred__101296.call(null, "\ufdd0'inc", expr__101297)) {
+  var pred__102912 = cljs.core._EQ_;
+  var expr__102913 = direction;
+  if(pred__102912.call(null, "\ufdd0'inc", expr__102913)) {
     return value + 1
   }else {
-    if(pred__101296.call(null, "\ufdd0'dec", expr__101297)) {
+    if(pred__102912.call(null, "\ufdd0'dec", expr__102913)) {
       return value - 1
     }else {
-      throw new Error([cljs.core.str("No matching clause: "), cljs.core.str(expr__101297)].join(""));
+      throw new Error([cljs.core.str("No matching clause: "), cljs.core.str(expr__102913)].join(""));
     }
   }
 };
-eatme.client.main.change_quantity = function change_quantity(p__101299) {
-  var map__101301 = p__101299;
-  var map__101301__$1 = cljs.core.seq_QMARK_.call(null, map__101301) ? cljs.core.apply.call(null, cljs.core.hash_map, map__101301) : map__101301;
-  var remove_on_zero_QMARK_ = cljs.core._lookup.call(null, map__101301__$1, "\ufdd0'remove-on-zero?", null);
-  var direction = cljs.core._lookup.call(null, map__101301__$1, "\ufdd0'direction", null);
-  var item = cljs.core._lookup.call(null, map__101301__$1, "\ufdd0'item", null);
+eatme.client.main.change_quantity = function change_quantity(p__102915) {
+  var map__102917 = p__102915;
+  var map__102917__$1 = cljs.core.seq_QMARK_.call(null, map__102917) ? cljs.core.apply.call(null, cljs.core.hash_map, map__102917) : map__102917;
+  var remove_on_zero_QMARK_ = cljs.core._lookup.call(null, map__102917__$1, "\ufdd0'remove-on-zero?", null);
+  var direction = cljs.core._lookup.call(null, map__102917__$1, "\ufdd0'direction", null);
+  var item = cljs.core._lookup.call(null, map__102917__$1, "\ufdd0'item", null);
   var qty = domina.xpath.xpath.call(null, item, "../../*/input[@rel='qty']");
   var new_value = eatme.client.main.adjust_quantity.call(null, direction, eatme.client.main.to_int.call(null, domina.value.call(null, qty)));
   if(0 < new_value) {
@@ -36171,8 +36171,8 @@ eatme.client.main.focus_item_input = function() {
     return focus_item_input__delegate.call(this, args)
   };
   focus_item_input.cljs$lang$maxFixedArity = 0;
-  focus_item_input.cljs$lang$applyTo = function(arglist__101302) {
-    var args = cljs.core.seq(arglist__101302);
+  focus_item_input.cljs$lang$applyTo = function(arglist__102918) {
+    var args = cljs.core.seq(arglist__102918);
     return focus_item_input__delegate(args)
   };
   focus_item_input.cljs$lang$arity$variadic = focus_item_input__delegate;
@@ -36191,8 +36191,8 @@ eatme.client.main.clear_item_input = function() {
     return clear_item_input__delegate.call(this, args)
   };
   clear_item_input.cljs$lang$maxFixedArity = 0;
-  clear_item_input.cljs$lang$applyTo = function(arglist__101303) {
-    var args = cljs.core.seq(arglist__101303);
+  clear_item_input.cljs$lang$applyTo = function(arglist__102919) {
+    var args = cljs.core.seq(arglist__102919);
     return clear_item_input__delegate(args)
   };
   clear_item_input.cljs$lang$arity$variadic = clear_item_input__delegate;
@@ -36212,12 +36212,16 @@ eatme.client.main.display_user_details = function display_user_details() {
     return eatme.client.main.load_user_baskets.call(null)
   }}))
 };
-eatme.client.main.display_qr_code = function display_qr_code(p__101304) {
-  var map__101306 = p__101304;
-  var map__101306__$1 = cljs.core.seq_QMARK_.call(null, map__101306) ? cljs.core.apply.call(null, cljs.core.hash_map, map__101306) : map__101306;
-  var url = cljs.core._lookup.call(null, map__101306__$1, "\ufdd0'url", null);
-  var id = cljs.core._lookup.call(null, map__101306__$1, "\ufdd0'id", null);
-  return domina.set_html_BANG_.call(null, domina.by_id.call(null, "qrCode"), eatme.client.render.qr_code_image.call(null, url))
+eatme.client.main.email_link = "mailto://?subject=My%20Shopping%20Basket&body=";
+eatme.client.main.update_share_modal = function update_share_modal(p__102920) {
+  var map__102922 = p__102920;
+  var map__102922__$1 = cljs.core.seq_QMARK_.call(null, map__102922) ? cljs.core.apply.call(null, cljs.core.hash_map, map__102922) : map__102922;
+  var url = cljs.core._lookup.call(null, map__102922__$1, "\ufdd0'url", null);
+  var id = cljs.core._lookup.call(null, map__102922__$1, "\ufdd0'id", null);
+  domina.set_html_BANG_.call(null, domina.by_id.call(null, "share-qr-code"), eatme.client.render.qr_code_image.call(null, url));
+  domina.set_attr_BANG_.call(null, domina.by_id.call(null, "share-link"), "href", url);
+  domina.set_html_BANG_.call(null, domina.by_id.call(null, "share-link"), url);
+  return domina.set_attr_BANG_.call(null, domina.by_id.call(null, "share-email"), "href", [cljs.core.str(eatme.client.main.email_link), cljs.core.str(url)].join(""))
 };
 shoreleave.pubsubs.protocols.subscribe.call(null, eatme.client.main.bus, eatme.client.main.item_added, cljs.core.partial.call(null, eatme.client.main.add_item_to_list, eatme.client.main.items_list));
 shoreleave.pubsubs.protocols.subscribe.call(null, eatme.client.main.bus, eatme.client.main.item_added, eatme.client.main.mark_basket_unsaved_BANG_);
@@ -36237,9 +36241,9 @@ shoreleave.pubsubs.protocols.subscribe.call(null, eatme.client.main.bus, eatme.c
 shoreleave.pubsubs.protocols.subscribe.call(null, eatme.client.main.bus, eatme.client.main.basket_saved, function(b) {
   return one.browser.history.set_token.call(null, eatme.client.main.session_history, [cljs.core.str((new cljs.core.Keyword("\ufdd0'id")).call(null, b))].join(""))
 });
-shoreleave.pubsubs.protocols.subscribe.call(null, eatme.client.main.bus, eatme.client.main.basket_saved, eatme.client.main.display_qr_code);
+shoreleave.pubsubs.protocols.subscribe.call(null, eatme.client.main.bus, eatme.client.main.basket_saved, eatme.client.main.update_share_modal);
 shoreleave.pubsubs.protocols.subscribe.call(null, eatme.client.main.bus, eatme.client.main.basket_loaded, eatme.client.main.set_basket_contents_BANG_);
-shoreleave.pubsubs.protocols.subscribe.call(null, eatme.client.main.bus, eatme.client.main.basket_loaded, eatme.client.main.display_qr_code);
+shoreleave.pubsubs.protocols.subscribe.call(null, eatme.client.main.bus, eatme.client.main.basket_loaded, eatme.client.main.update_share_modal);
 shoreleave.pubsubs.protocols.subscribe.call(null, eatme.client.main.bus, eatme.client.main.basket_loaded, cljs.core.partial.call(null, eatme.client.main.log_to_console, "Basket loaded"));
 eatme.client.main.display_user_details.call(null);
 eatme.client.main.load_basket.call(null);

@@ -195,8 +195,13 @@
                      (load-user-baskets))
      :on-error (js/alert (str "Error loading user details"))))
 
-(defn display-qr-code [{:keys [id url]}]
-  (d/set-html! (d/by-id "qrCode") (render/qr-code-image url)))
+(def email-link "mailto://?subject=My%20Shopping%20Basket&body=")
+
+(defn update-share-modal [{:keys [id url]}]
+  (d/set-html! (d/by-id "share-qr-code") (render/qr-code-image url))
+  (d/set-attr! (d/by-id "share-link") "href" url)
+  (d/set-html! (d/by-id "share-link") url)
+  (d/set-attr! (d/by-id "share-email") "href" (str email-link url)))
 
 (pubsub/subscribe bus item-added (partial add-item-to-list items-list))
 (pubsub/subscribe bus item-added mark-basket-unsaved!)
@@ -218,10 +223,10 @@
 (pubsub/subscribe bus basket-saved load-user-baskets)
 (pubsub/subscribe bus basket-saved (partial log-to-console "Basket saved"))
 (pubsub/subscribe bus basket-saved (fn [b] (history/set-token session-history (str (:id b)))))
-(pubsub/subscribe bus basket-saved display-qr-code)
+(pubsub/subscribe bus basket-saved update-share-modal)
 
 (pubsub/subscribe bus basket-loaded set-basket-contents!)
-(pubsub/subscribe bus basket-loaded display-qr-code)
+(pubsub/subscribe bus basket-loaded update-share-modal)
 (pubsub/subscribe bus basket-loaded (partial log-to-console "Basket loaded"))
 
 

@@ -19,11 +19,12 @@
 	  <a class="brand" href="/">Eat Me</a>
 	    <div id="user-details pull-left">
 	      <a href="auth" role="button" class="btn btn-small pull-left" data-toggle="modal" data-target="#loginModal">
-		<i class="icon-user"></i>&nbsp;Sign in
-	      </a>
+		<i class="icon-user"></i>&nbsp;Sign in</a>
 	    </div>
 	    <button class="btn btn-small pull-left" id="save-basket-button">
 	      <i class="icon-hdd"></i>&nbsp;Save</button>
+	    <button role="button" class="btn btn-small pull-left" data-toggle="modal" data-target="#shareModal">
+		<i class="icon-qrcode"></i>&nbsp;Share</button>
 	</div>
       </div>
 
@@ -37,6 +38,31 @@
 	</div>
 	<div class="modal-footer">
 	  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+	</div>
+      </div>
+
+      <div id="shareModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="shareModalLabel" aria-hidden="true">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3 id="shareModalLabel">Share</h3>
+	</div>
+	<div class="modal-body">
+	  <div class="media">
+	    <div id="share-qr-code" class="pull-left"></div>
+	    <div class="media-heading"><h4>Link</h4></div>
+	    <div class="media-body">
+	      <a id="share-link" href="http://localhost:8080/#51910645e4b091c12255536a" alt="Share this link">
+		</a>
+	    </div>
+	    <div class="media-heading"><h4>Email</h4></div>
+	    <div class="media-body">
+	      <a id="share-email" href="mailto://?subject=My%20Shopping%20Basket" alt="Email this link">
+		Click here</a>
+	    </div>
+	  </div>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 	</div>
       </div>
 

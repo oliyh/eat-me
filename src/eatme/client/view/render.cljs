@@ -30,6 +30,7 @@
                [:li [:a {:href (str "#" (:id b))} (:id b)]]) baskets)))
 
 (h/defhtml qr-code-image [url]
-  [:img {:alt "QR code" :title "QR code"
-         :src (str "https://chart.googleapis.com/chart?cht=qr&chs=200x200&chld=L|0&chl="
-                   url)}])
+  [:img.media-object
+   {:alt "QR code" :title "QR code"
+    :src (str "https://chart.googleapis.com/chart?cht=qr&chs=160x160&chld=L|0&chl="
+              url)}])
