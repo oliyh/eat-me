@@ -214,12 +214,13 @@
         days (/ hours 24)
         weeks (/ days 7)]
     (d/set-html! (d/by-id "last-saved")
-                 (cond
-                  (> 60 seconds) "less than a minute ago"
-                  (> 1 hours) (str (int minutes) " minutes ago")
-                  (> 1 days) (str "about " (int hours) " hours ago")
-                  (> 1 weeks) (str "about " (int days) " days ago")
-                  :default (str "about " (int weeks) " weeks ago")))))
+                 (str "Last saved " (cond
+                                     (> 60 seconds) "less than a minute ago"
+                                     (= 1 (int minutes)) "a minute ago"
+                                     (> 1 hours) (str (int minutes) " minutes ago")
+                                     (> 1 days) (str "about " (int hours) " hours ago")
+                                     (> 1 weeks) (str "about " (int days) " days ago")
+                                     :else (str "about " (int weeks) " weeks ago"))))))
 
 (pubsub/subscribe bus item-added (partial add-item-to-list items-list))
 (pubsub/subscribe bus item-added mark-basket-unsaved!)

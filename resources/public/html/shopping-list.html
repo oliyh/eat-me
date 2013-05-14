@@ -18,14 +18,15 @@
       <div class="navbar navbar-inverse navbar-fixed-top">
 	<div class="navbar-inner">
 	  <a class="brand" href="/">Eat Me</a>
-	    <div id="user-details" class="pull-left">
-	      <a href="auth" role="button" class="btn btn-small pull-left" data-toggle="modal" data-target="#loginModal">
-		<i class="icon-user"></i>&nbsp;Sign in</a>
-	    </div>
-	    <button class="btn btn-small pull-left" id="save-basket-button">
-	      <i class="icon-hdd"></i>&nbsp;Save</button>
-	    <button id="share-button" role="button" class="btn btn-small pull-left" data-toggle="modal" data-target="#shareModal">
-		<i class="icon-qrcode"></i>&nbsp;Share</button>
+	  <div id="user-details" class="pull-left">
+	    <a href="auth" role="button" class="btn btn-small pull-left" data-toggle="modal" data-target="#loginModal">
+	      <i class="icon-user"></i>&nbsp;Sign in</a>
+	  </div>
+	  <button class="btn btn-small pull-left" id="save-basket-button">
+	    <i class="icon-hdd"></i>&nbsp;Save</button>
+	  <button id="share-button" role="button" class="btn btn-small pull-left" data-toggle="modal" data-target="#shareModal">
+	    <i class="icon-qrcode"></i>&nbsp;Share</button>
+	  <p class="navbar-text pull-left"><span id="last-saved"></span></p>
 	</div>
       </div>
 
@@ -70,7 +71,7 @@
       <h2>Saved baskets</h2>
       <div id="userBaskets">
       </div>
-      <h2>On my list <small>Last saved <span id="last-saved"></span></small></h2>
+      <h2>On my list</h2>
       <div id="items-to-get">
       </div>
       <div id="add-item-form" class="row-fluid controls-row">

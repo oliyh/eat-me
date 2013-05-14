@@ -50,4 +50,7 @@
 	padding: 10px;
 	margin: -10px;
     }
+    #last-saved {
+	display: none;
+    }
 }
