@@ -19,19 +19,13 @@
 
 (defn auth [req]
   (h/html5
-   [:h3 "Current Status " [:small "(this will change when you log in/out)"]]
-   (if-let [auth (friend/current-authentication req)]
-        [:p "Some information delivered by your OpenID provider:"
-         [:ul (for [[k v] auth
-                    :let [[k v] (if (= :identity k)
-                                  ["Your OpenID identity" (str (subs v 0 (* (count v) 2/3)) "…")]
-                                  [k v])]]
-                [:li [:strong (str (name k) ": ")] v])]]
-        [:div
-         (for [{:keys [name url]} providers
-               :let [base-login-url (str "/login?identifier=" url)
-                     dom-id (str (gensym))]]
-           [:form {:method "POST" :action "login"}
-            [:input {:type "hidden" :name "identifier" :value url :id dom-id}]
-            [:input {:type "hidden" :name "__anti-forgery-token" :value *anti-forgery-token*}]
-            [:input {:type "submit" :class "button" :value name}]])])))
+   [:div
+    (for [{:keys [name url]} providers
+          :let [base-login-url (str "/login?identifier=" url)
+                dom-id (str (gensym))]]
+      [:form {:method "POST" :action "login"}
+       [:input {:type "hidden" :name "identifier" :value url :id dom-id}]
+       [:input {:type "hidden" :name "__anti-forgery-token" :value *anti-forgery-token*}]
+       [:div.btn-group
+        [:button.btn name]
+        [:button.btn {:type "submit"} (str "Sign in with " name)]]])]))

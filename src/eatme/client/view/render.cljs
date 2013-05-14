@@ -16,13 +16,12 @@
     [:button.btn {:rel "complete"} [:i.icon-ok]]]])
 
 (h/defhtml user-button [{:keys [firstname lastname]}]
-  [:div.btn-toolbar
-   [:div.btn-group
-    [:a.btn.btn-success.dropdown-toggle {:data-toggle "dropdown"}
-     [:i.icon-user] "&nbsp;" firstname "&nbsp;" lastname "&nbsp;"
-     [:span.caret]]
-    [:ul.dropdown-menu
-     [:li [:a {:href "logout"} "Sign out"]]]]])
+  [:div.btn-group
+   [:a.btn.btn-small.btn-success.dropdown-toggle {:data-toggle "dropdown"}
+    [:i.icon-user] "&nbsp;" firstname "&nbsp;" lastname "&nbsp;"
+    [:span.caret]]
+   [:ul.dropdown-menu
+    [:li [:a {:href "logout"} "Sign out"]]]])
 
 (h/defhtml user-baskets [baskets]
   (into [:ul]
