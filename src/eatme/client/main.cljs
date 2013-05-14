@@ -11,7 +11,8 @@
             [domina.xpath :as x]
             [eatme.client.render :as render]
             [clojure.string :as string]
-            [one.browser.history :as history])
+            [one.browser.history :as history]
+            [eatme.browser.gestures :as gestures])
   (:require-macros [shoreleave.remotes.macros :as srm]))
 
 (def query-args (common/query-args-map))
@@ -89,7 +90,8 @@
   (let [item-row (render/shopping-list-item item)
         row-id (d/attr item-row "id")]
     (d/append! the-list item-row)
-    (let [item-row (css/sel (str "#" row-id))]
+    (let [item-row (d/single-node (css/sel (str "#" row-id)))]
+      (gestures/on-swipe [:left :right] item-row #(item-deleted row-id))
       (event/listen-once! (css/sel item-row "button[rel=delete-item]") :click #(item-deleted row-id))
       (if (= :list (keyword (:state item)))
         (event/listen-once! (css/sel item-row "button[rel=complete]") :click #(completed-item row-id))

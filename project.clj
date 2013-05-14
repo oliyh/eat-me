@@ -32,7 +32,8 @@
                         :compiler {:output-dir "resources/build/cljs",
                                    :output-to "resources/public/js/eatme.js",
                                    :externs ["externs/twitter-bootstrap.js"
-                                             "externs/jquery-1.9.1.js"]
+                                             "externs/jquery-1.9.1.js"
+                                             "resources/public/js/hammer-1.0.5.min.js"]
                                    :optimizations :whitespace ;:simple ;:advanced ;:whitespace
                                    :pretty-print true}}]}
   :profiles {:production
