@@ -248,6 +248,7 @@
 (pubsub/subscribe bus basket-loaded set-basket-contents!)
 (pubsub/subscribe bus basket-loaded update-share-modal)
 (pubsub/subscribe bus basket-loaded update-basket-saved-time)
+(pubsub/subscribe bus basket-loaded mark-basket-saved!)
 (pubsub/subscribe bus basket-loaded (partial log-to-console "Basket loaded"))
 
 
