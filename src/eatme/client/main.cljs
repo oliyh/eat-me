@@ -207,6 +207,20 @@
   (d/set-html! (d/by-id "share-link") url)
   (d/set-attr! (d/by-id "share-email") "href" (str email-link url)))
 
+(defn update-basket-saved-time [{timestamp :timestamp}]
+  (let [seconds (/ (- (js/Date.) (js/Date. timestamp)) 1000)
+        minutes (/ seconds 60)
+        hours (/ minutes 60)
+        days (/ hours 24)
+        weeks (/ days 7)]
+    (d/set-html! (d/by-id "last-saved")
+                 (cond
+                  (> 60 seconds) "less than a minute ago"
+                  (> 1 hours) (str (int minutes) " minutes ago")
+                  (> 1 days) (str "about " (int hours) " hours ago")
+                  (> 1 weeks) (str "about " (int days) " days ago")
+                  :default (str "about " (int weeks) " weeks ago")))))
+
 (pubsub/subscribe bus item-added (partial add-item-to-list items-list))
 (pubsub/subscribe bus item-added mark-basket-unsaved!)
 (pubsub/subscribe bus item-added (partial log-to-console "Item added"))
@@ -228,9 +242,11 @@
 (pubsub/subscribe bus basket-saved (partial log-to-console "Basket saved"))
 (pubsub/subscribe bus basket-saved (fn [b] (history/set-token session-history (str (:id b)))))
 (pubsub/subscribe bus basket-saved update-share-modal)
+(pubsub/subscribe bus basket-saved update-basket-saved-time)
 
 (pubsub/subscribe bus basket-loaded set-basket-contents!)
 (pubsub/subscribe bus basket-loaded update-share-modal)
+(pubsub/subscribe bus basket-loaded update-basket-saved-time)
 (pubsub/subscribe bus basket-loaded (partial log-to-console "Basket loaded"))
 
 
