@@ -8,34 +8,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link href="../css/bootstrap-responsive.css" rel="stylesheet"> -->
   </head>
-  <body>
+  <body style="padding-top: 40px;">
     <script src="../js/jquery-1.9.1.min.js" type="text/javascript"></script>
     <script src="../js/bootstrap.min.js" type="text/javascript"></script>
     <script src="../js/eatme.js" async="async" type="text/javascript"></script>
 
     <div class="container-fluid">
-      <h2>You</h2>
-      <div id="user-details">
-	<a href="auth" role="button" class="btn" data-toggle="modal" data-target="#loginModal">
-	  <i class="icon-user"></i>&nbsp;Sign in
-	</a>
-	<div id="loginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	    <h3 id="loginModalLabel">Sign in</h3>
-	  </div>
-	  <div class="modal-body">
-	    <p>Form goes here</p>
-	  </div>
-	  <div class="modal-footer">
-	    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-	  </div>
+      <div class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+	  <a class="brand" href="/">Eat Me</a>
+	    <div id="user-details pull-left">
+	      <a href="auth" role="button" class="btn btn-small pull-left" data-toggle="modal" data-target="#loginModal">
+		<i class="icon-user"></i>&nbsp;Sign in
+	      </a>
+	    </div>
+	    <button class="btn btn-small pull-left" id="save-basket-button">
+	      <i class="icon-hdd"></i>&nbsp;Save</button>
 	</div>
       </div>
+
+      <div id="loginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3 id="loginModalLabel">Sign in</h3>
+	</div>
+	<div class="modal-body">
+	  <!-- body goes here -->
+	</div>
+	<div class="modal-footer">
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+	</div>
+      </div>
+
       <h2>Saved baskets</h2>
       <div id="userBaskets">
       </div>
-      <h2>On my list</h2>
+      <h2>On my list <small id="last-saved">Last saved 3 minutes ago</small></h2>
       <div id="items-to-get">
       </div>
       <div id="add-item-form" class="row-fluid controls-row">
@@ -43,17 +51,9 @@
 	  <input type="text" id="item-name" name="item-name"
 		 placeholder="Enter item name"/>
 	</div>
-	<div class="span4">
+	<div class="span3">
 	  <input class="span2" type="text" id="item-qty" name="item-qty" rel="qty" value="1" size="1"/>
-	  <button class="btn btn-primary" id="add-item-button">Add</button>
-	</div>
-	<div class="span2">
-	  <button class="btn" id="save-basket-button">
-	    <i class="icon-hdd"></i>&nbsp;Save</button>
-	</div>
-      </div>
-      <div class="row-fluid controls-row">
-	<div id="qrCode" class="span2 offset8">
+	  <button class="btn btn-primary" id="add-item-button"><i class="icon-plus icon-white"></i></button>
 	</div>
       </div>
       <h2>In my basket</h2>
@@ -61,4 +61,4 @@
       </div>
     </div>
   </body>
-</html>
+  </html>

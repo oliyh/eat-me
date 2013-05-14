@@ -8,7 +8,7 @@
   [:div.row-fluid.controls-row {:rel item-name}
    [:div.span4
     [:label item-name]]
-   [:div.span4
+   [:div.span3
     [:input.span2 {:type "text" :name item-name :value (or qty 1) :rel "qty" :size 1}]
     "&nbsp;"
     [:button.btn.btn-danger {:rel "delete-item"} [:i.icon-remove-sign]]]

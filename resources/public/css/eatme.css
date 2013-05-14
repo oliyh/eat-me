@@ -13,3 +13,11 @@
 [class*="span"] {
     /*border: 1px solid black;*/
 }
+
+.navbar-inner .pull-left {
+    margin-left: 4px;
+}
+
+.navbar .navbar-inner .brand {
+    margin-left: 0px;
+}

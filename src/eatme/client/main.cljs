@@ -90,8 +90,6 @@
     (d/append! the-list (render/shopping-list-item item))
     (let [new-item (css/sel the-list (str "div[rel=" (:item-name item) "]"))]
       (event/listen-once! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %)))
-      (event/listen! (css/sel new-item "button[rel=increment]") :click #(quantity-changed :inc true (event/target %)))
-      (event/listen! (css/sel new-item "button[rel=decrement]") :click #(quantity-changed :dec true (event/target %)))
       (if (= :list (keyword (:state item)))
         (event/listen-once! (css/sel new-item "button[rel=complete]") :click #(completed-item (event/target %)))
         (d/add-class! (css/sel new-item "button[rel=complete]") "btn-success")))))
@@ -214,6 +212,7 @@
 (pubsub/subscribe bus quantity-changed mark-basket-unsaved!)
 
 (pubsub/subscribe bus completed-item item-completed)
+(pubsub/subscribe bus completed-item mark-basket-unsaved!)
 
 (pubsub/subscribe bus basket-saved mark-basket-saved!)
 (pubsub/subscribe bus basket-saved load-user-baskets)
