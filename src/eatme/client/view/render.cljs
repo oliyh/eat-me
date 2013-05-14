@@ -5,7 +5,7 @@
    [hiccups.core :as h]))
 
 (h/defhtml shopping-list-item [{:keys [item-name qty state]}]
-  [:div.row-fluid.controls-row {:rel item-name}
+  [:div.row-fluid.controls-row {:rel item-name :id (gensym)}
    [:div.span4
     [:label item-name]]
    [:div.span3
