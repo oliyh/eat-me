@@ -71,7 +71,7 @@
            :on-success (d/set-html! (d/by-id "userBaskets") (render/user-baskets baskets))
            :on-error (js/alert (str "Error loading user baskets"))))
 
-(def item-deleted (pubsub/publishize (fn [e] {:item e}) bus))
+(def item-deleted (pubsub/publishize (fn [btn list-id item-name] {:btn btn :list list-id :item-name item-name}) bus))
 
 (def basket-saved (pubsub/publishize (fn [b] b) bus))
 
@@ -81,7 +81,7 @@
                           :remove-on-zero? remove-on-zero?
                           :item e}) bus))
 
-(def completed-item (pubsub/publishize (fn [e] {:item e}) bus))
+(def completed-item (pubsub/publishize (fn [btn list-id item-name] {:btn btn :list list-id :item-name item-name}) bus))
 
 (def basket-loaded (pubsub/publishize identity bus))
 
@@ -89,9 +89,9 @@
   (when (and (< 0 (:qty item)) (not-empty (:item-name item)))
     (d/append! the-list (render/shopping-list-item item))
     (let [new-item (css/sel the-list (str "div[rel=" (:item-name item) "]"))]
-      (event/listen-once! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %)))
+      (event/listen-once! (css/sel new-item "button[rel=delete-item]") :click #(item-deleted (event/target %) (d/attr the-list "id") (:item-name item)))
       (if (= :list (keyword (:state item)))
-        (event/listen-once! (css/sel new-item "button[rel=complete]") :click #(completed-item (event/target %)))
+        (event/listen-once! (css/sel new-item "button[rel=complete]") :click #(completed-item (event/target %) (d/attr the-list "id") (:item-name item)))
         (d/add-class! (css/sel new-item "button[rel=complete]") "btn-success")))))
 
 (defn- choose-list [{:keys [state]}]
@@ -156,13 +156,12 @@
 (event/listen! item-qty-field :keypress #(on-enter % valid-item-added))
 (event/listen! save-basket-button :click #(save-basket))
 
-(defn item-completed [{:keys [item]}]
-  (d/add-class! item "btn-success")
-  (d/append! completed-items-list (d/detach! (x/xpath item "../.."))))
+(defn item-completed [{:keys [btn item-name]}]
+  (d/add-class! (css/sel items-list (str "div[rel=" item-name "] button[rel=complete]")) "btn-success")
+  (d/append! completed-items-list (d/detach! (css/sel items-list (str "div[rel=" item-name "]")))))
 
-(defn remove-item-from-list [item]
-  ;; (:item item) is actually the delete button that was clicked
-  (d/detach! (-> item :item .-parentNode .-parentNode)))
+(defn remove-item-from-list [{:keys [btn list item-name]}]
+  (d/detach! (css/sel (d/by-id list) (str "div[rel=" item-name "]"))))
 
 (defn adjust-quantity [direction value]
   (condp = direction
