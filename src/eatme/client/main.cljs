@@ -161,7 +161,7 @@
   (d/append! completed-items-list (d/detach! (css/sel items-list (str "div[rel=" item-name "]")))))
 
 (defn remove-item-from-list [{:keys [btn list item-name]}]
-  (d/detach! (css/sel (d/by-id list) (str "div[rel=" item-name "]"))))
+  (d/detach! (css/sel (str "div[rel=" item-name "]"))))
 
 (defn adjust-quantity [direction value]
   (condp = direction
