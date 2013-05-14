@@ -1,5 +1,6 @@
 (ns eatme.basket-store
   (:require [eatme.config :refer [config]]
+            [cheshire.generate]
             [monger.core :as m]
             [monger.collection :as mc]
             [monger.joda-time])

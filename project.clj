@@ -5,6 +5,7 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/tools.reader "0.7.0"]
                  [compojure "1.1.5" :exclusions [[org.clojure/clojure] [ring/ring-core]]]
+                 [cheshire "5.1.1"]
                  [com.novemberain/monger "1.6.0-beta2"]
                  [clj-time "0.5.0"]
                  [shoreleave "0.3.0"]
