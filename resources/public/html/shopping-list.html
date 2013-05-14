@@ -5,13 +5,15 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="../css/eatme.css"></link>
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"></link>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link href="../css/bootstrap-responsive.css" rel="stylesheet"> -->
   </head>
   <body>
     <script src="../js/jquery-1.9.1.min.js" type="text/javascript"></script>
     <script src="../js/bootstrap.min.js" type="text/javascript"></script>
     <script src="../js/eatme.js" async="async" type="text/javascript"></script>
 
-    <div>
+    <div class="container-fluid">
       <h2>You</h2>
       <div id="user-details">
 	<a href="auth" role="button" class="btn" data-toggle="modal" data-target="#loginModal">
@@ -36,22 +38,22 @@
       <h2>On my list</h2>
       <div id="items-to-get">
       </div>
-      <div id="add-item-form" class="row controls-row">
-	<div class="span4 offset1">
-	  <input class="span4" type="text" id="item-name" name="item-name"
+      <div id="add-item-form" class="row-fluid controls-row">
+	<div class="span4">
+	  <input type="text" id="item-name" name="item-name"
 		 placeholder="Enter item name"/>
 	</div>
 	<div class="span4">
-	  <input class="input-small span1" type="text" id="item-qty" name="item-qty" rel="qty" value="1" size="1"/>
-	  <button class="btn btn-primary" id="add-item-button">Add item</button>
+	  <input class="span2" type="text" id="item-qty" name="item-qty" rel="qty" value="1" size="1"/>
+	  <button class="btn btn-primary" id="add-item-button">Add</button>
 	</div>
 	<div class="span2">
 	  <button class="btn" id="save-basket-button">
-	    <i class="icon-hdd"></i>&nbsp;Save Basket</button>
+	    <i class="icon-hdd"></i>&nbsp;Save</button>
 	</div>
       </div>
-      <div class="row controls-row">
-	<div id="qrCode" class="span2 offset9">
+      <div class="row-fluid controls-row">
+	<div id="qrCode" class="span2 offset8">
 	</div>
       </div>
       <h2>In my basket</h2>

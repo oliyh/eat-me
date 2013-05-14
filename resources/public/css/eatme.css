@@ -1,3 +1,15 @@
+.row-fluid.controls-row .btn {
+    vertical-align: top;
+}
+
+.controls-row input {
+    min-width: 30px;
+}
+
 #item-name {
-    width: 300px;
+    width: 100%;
+}
+
+[class*="span"] {
+    /*border: 1px solid black;*/
 }

@@ -5,15 +5,14 @@
    [hiccups.core :as h]))
 
 (h/defhtml shopping-list-item [{:keys [item-name qty state]}]
-  [:div.row.controls-row {:rel item-name}
-   [:div.span4.offset1
+  [:div.row-fluid.controls-row {:rel item-name}
+   [:div.span4
     [:label item-name]]
    [:div.span4
-    [:input.input-small.span1 {:type "text" :name item-name :value (or qty 1) :rel "qty" :size 1}]
-    [:button.btn {:rel "increment"} [:i.icon-plus-sign]]
-    [:button.btn {:rel "decrement"} [:i.icon-minus-sign]]
+    [:input.span2 {:type "text" :name item-name :value (or qty 1) :rel "qty" :size 1}]
+    "&nbsp;"
     [:button.btn.btn-danger {:rel "delete-item"} [:i.icon-remove-sign]]]
-   [:div.span1
+   [:div.span2
     [:button.btn {:rel "complete"} [:i.icon-ok]]]])
 
 (h/defhtml user-button [{:keys [firstname lastname]}]

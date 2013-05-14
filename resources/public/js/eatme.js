@@ -21396,18 +21396,18 @@ hiccups.runtime.render_html = function render_html(x) {
 goog.provide("eatme.client.render");
 goog.require("cljs.core");
 goog.require("hiccups.runtime");
-eatme.client.render.shopping_list_item = function shopping_list_item(p__94265) {
-  var map__94276 = p__94265;
-  var map__94276__$1 = cljs.core.seq_QMARK_.call(null, map__94276) ? cljs.core.apply.call(null, cljs.core.hash_map, map__94276) : map__94276;
-  var state = cljs.core._lookup.call(null, map__94276__$1, "\ufdd0'state", null);
-  var qty = cljs.core._lookup.call(null, map__94276__$1, "\ufdd0'qty", null);
-  var item_name = cljs.core._lookup.call(null, map__94276__$1, "\ufdd0'item-name", null);
-  return[cljs.core.str("<div"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'rel", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'rel":item_name, "\ufdd0'id":null, "\ufdd0'class":"row controls-row"}))), cljs.core.str(">"), cljs.core.str("<div"), cljs.core.str(' class="span4 offset1"'), cljs.core.str(">"), cljs.core.str(function() {
-    var attrs94277 = item_name;
-    if(cljs.core.map_QMARK_.call(null, attrs94277)) {
-      return[cljs.core.str("<label"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.merge.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'id", "\ufdd0'class"], {"\ufdd0'id":null, "\ufdd0'class":null}), attrs94277))), cljs.core.str(">"), cljs.core.str("</label>")].join("")
+eatme.client.render.shopping_list_item = function shopping_list_item(p__98879) {
+  var map__98886 = p__98879;
+  var map__98886__$1 = cljs.core.seq_QMARK_.call(null, map__98886) ? cljs.core.apply.call(null, cljs.core.hash_map, map__98886) : map__98886;
+  var state = cljs.core._lookup.call(null, map__98886__$1, "\ufdd0'state", null);
+  var qty = cljs.core._lookup.call(null, map__98886__$1, "\ufdd0'qty", null);
+  var item_name = cljs.core._lookup.call(null, map__98886__$1, "\ufdd0'item-name", null);
+  return[cljs.core.str("<div"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'rel", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'rel":item_name, "\ufdd0'id":null, "\ufdd0'class":"row-fluid controls-row"}))), cljs.core.str(">"), cljs.core.str("<div"), cljs.core.str(' class="span4"'), cljs.core.str(">"), cljs.core.str(function() {
+    var attrs98887 = item_name;
+    if(cljs.core.map_QMARK_.call(null, attrs98887)) {
+      return[cljs.core.str("<label"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.merge.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'id", "\ufdd0'class"], {"\ufdd0'id":null, "\ufdd0'class":null}), attrs98887))), cljs.core.str(">"), cljs.core.str("</label>")].join("")
     }else {
-      return[cljs.core.str("<label>"), cljs.core.str(hiccups.runtime.render_html.call(null, attrs94277)), cljs.core.str("</label>")].join("")
+      return[cljs.core.str("<label>"), cljs.core.str(hiccups.runtime.render_html.call(null, attrs98887)), cljs.core.str("</label>")].join("")
     }
   }()), cljs.core.str("</div>"), cljs.core.str("<div"), cljs.core.str(' class="span4"'), cljs.core.str(">"), cljs.core.str("<"), cljs.core.str("input"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'size", "\ufdd0'rel", "\ufdd0'value", "\ufdd0'name", "\ufdd0'type", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'size":1, "\ufdd0'rel":"qty", "\ufdd0'value":function() {
     var or__3943__auto__ = qty;
@@ -21416,14 +21416,13 @@ eatme.client.render.shopping_list_item = function shopping_list_item(p__94265) {
     }else {
       return 1
     }
-  }(), "\ufdd0'name":item_name, "\ufdd0'type":"text", "\ufdd0'id":null, "\ufdd0'class":"input-small span1"}))), cljs.core.str(" />"), cljs.core.str('<button class="btn" rel="increment"><i class="icon-plus-sign"></i></button>'), cljs.core.str('<button class="btn" rel="decrement"><i class="icon-minus-sign"></i></button>'), cljs.core.str('<button class="btn btn-danger" rel="delete-item"><i class="icon-remove-sign"></i></button>'), cljs.core.str("</div>"), cljs.core.str('<div class="span1"><button class="btn" rel="complete"><i class="icon-ok"></i></button></div>'), 
-  cljs.core.str("</div>")].join("")
+  }(), "\ufdd0'name":item_name, "\ufdd0'type":"text", "\ufdd0'id":null, "\ufdd0'class":"span2"}))), cljs.core.str(" />"), cljs.core.str("&nbsp;"), cljs.core.str('<button class="btn btn-danger" rel="delete-item"><i class="icon-remove-sign"></i></button>'), cljs.core.str("</div>"), cljs.core.str('<div class="span2"><button class="btn" rel="complete"><i class="icon-ok"></i></button></div>'), cljs.core.str("</div>")].join("")
 };
-eatme.client.render.user_button = function user_button(p__94286) {
-  var map__94294 = p__94286;
-  var map__94294__$1 = cljs.core.seq_QMARK_.call(null, map__94294) ? cljs.core.apply.call(null, cljs.core.hash_map, map__94294) : map__94294;
-  var lastname = cljs.core._lookup.call(null, map__94294__$1, "\ufdd0'lastname", null);
-  var firstname = cljs.core._lookup.call(null, map__94294__$1, "\ufdd0'firstname", null);
+eatme.client.render.user_button = function user_button(p__98892) {
+  var map__98900 = p__98892;
+  var map__98900__$1 = cljs.core.seq_QMARK_.call(null, map__98900) ? cljs.core.apply.call(null, cljs.core.hash_map, map__98900) : map__98900;
+  var lastname = cljs.core._lookup.call(null, map__98900__$1, "\ufdd0'lastname", null);
+  var firstname = cljs.core._lookup.call(null, map__98900__$1, "\ufdd0'firstname", null);
   return[cljs.core.str("<div"), cljs.core.str(' class="btn-toolbar"'), cljs.core.str(">"), cljs.core.str("<div"), cljs.core.str(' class="btn-group"'), cljs.core.str(">"), cljs.core.str("<a"), cljs.core.str(' class="btn btn-success dropdown-toggle" data-toggle="dropdown"'), cljs.core.str(">"), cljs.core.str('<i class="icon-user"></i>'), cljs.core.str("&nbsp;"), cljs.core.str(hiccups.runtime.render_html.call(null, firstname)), cljs.core.str("&nbsp;"), cljs.core.str(hiccups.runtime.render_html.call(null, 
   lastname)), cljs.core.str("&nbsp;"), cljs.core.str('<span class="caret"></span>'), cljs.core.str("</a>"), cljs.core.str('<ul class="dropdown-menu"><li><a href="logout">Sign out</a></li></ul>'), cljs.core.str("</div>"), cljs.core.str("</div>")].join("")
 };
