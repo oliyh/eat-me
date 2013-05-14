@@ -105,12 +105,16 @@
   (doseq [item (:items basket)]
     (add-item-to-list (choose-list item) item)))
 
+(defn no-basket []
+  (d/add-class! (d/by-id "share-button") "hide"))
+
 (defn load-basket []
-  (when-let [basket-id (basket-id)]
+  (if-let [basket-id (basket-id)]
     (srm/rpc
      (api/load-basket basket-id) [basket]
      :on-success (basket-loaded basket)
-     :on-error (js/alert (str "Error loading basket: " basket-id)))))
+     :on-error (js/alert (str "Error loading basket: " basket-id)))
+    (no-basket)))
 
 
 (defn nav-handler [{:keys [token navigation? type]}]
@@ -197,6 +201,7 @@
 (def email-link "mailto:?subject=My%20Shopping%20Basket&body=")
 
 (defn update-share-modal [{:keys [id url]}]
+  (d/remove-class! (d/by-id "share-button") "hide")
   (d/set-html! (d/by-id "share-qr-code") (render/qr-code-image url))
   (d/set-attr! (d/by-id "share-link") "href" url)
   (d/set-html! (d/by-id "share-link") url)
