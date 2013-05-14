@@ -11,8 +11,8 @@
 (defn test-shoreleave []
   (slurp "resources/public/html/test.html"))
 
-(def providers [{:name "Google" :url "https://www.google.com/accounts/o8/id"}
-                {:name "Yahoo" :url "http://me.yahoo.com/"}])
+(def providers [{:name "Google" :url "https://www.google.com/accounts/o8/id" :icon "google"}
+                {:name "Yahoo" :url "http://me.yahoo.com/" :icon "yahoo"}])
 
 (defn logout [req]
   (friend/logout* (resp/redirect (str (:context req) "/"))))
@@ -20,12 +20,12 @@
 (defn auth [req]
   (h/html5
    [:div
-    (for [{:keys [name url]} providers
+    (for [{:keys [name url icon]} providers
           :let [base-login-url (str "/login?identifier=" url)
                 dom-id (str (gensym))]]
       [:form {:method "POST" :action "login"}
        [:input {:type "hidden" :name "identifier" :value url :id dom-id}]
        [:input {:type "hidden" :name "__anti-forgery-token" :value *anti-forgery-token*}]
        [:div.btn-group
-        [:button.btn name]
+        [:button.btn [:i {:class (str "icon-social " icon)}]]
         [:button.btn {:type "submit"} (str "Sign in with " name)]]])]))

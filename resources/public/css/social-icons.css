@@ -1,0 +1,38 @@
+.icon-social { background: url('/img/icon-social.png') no-repeat top left;
+	       width: 24px; height: 24px;
+	       margin: -4px;}
+.icon-social.addthis { background-position: 0px -34px;  }
+.icon-social.aim { background-position: -28px -34px;  }
+.icon-social.apple { background-position: -56px -34px;  }
+.icon-social.behance { background-position: -84px -34px;  }
+.icon-social.blogger { background-position: -112px -34px;  }
+.icon-social.delicious { background-position: -14-34px -34px;  }
+.icon-social.deviantart { background-position: -168px -34px;  }
+.icon-social.digg { background-position: -196px -34px;  }
+.icon-social.dribbble { background-position: -224px -34px;  }
+.icon-social.email { background-position: -252px -34px;  }
+.icon-social.facebook { background-position: -28-34px -34px;  }
+.icon-social.flickr { background-position: -308px -34px;  }
+.icon-social.forrst { background-position: -336px -34px;  }
+.icon-social.github { background-position: -364px -34px;  }
+.icon-social.google { background-position: -392px -34px;  }
+.icon-social.googleplus { background-position: -42-34px -34px;  }
+.icon-social.lastfm { background-position: -448px -34px;  }
+.icon-social.linkedin { background-position: -476px -34px;  }
+.icon-social.myspace { background-position: -504px -34px;  }
+.icon-social.netvibes { background-position: -532px -34px;  }
+.icon-social.paypal { background-position: -56-34px -34px;  }
+.icon-social.pinterest { background-position: -588px -34px;  }
+.icon-social.reddit { background-position: -616px -34px;  }
+.icon-social.rss { background-position: -644px -34px;  }
+.icon-social.sharethis { background-position: -672px -34px;  }
+.icon-social.skype { background-position: -70-34px -34px;  }
+.icon-social.slashdot { background-position: -728px -34px;  }
+.icon-social.stumbleupon { background-position: -756px -34px;  }
+.icon-social.technorati { background-position: -784px -34px;  }
+.icon-social.tumblr { background-position: -812px -34px;  }
+.icon-social.twitter { background-position: -84-34px -34px;  }
+.icon-social.vimeo { background-position: -868px -34px;  }
+.icon-social.yahoo { background-position: -896px -34px;  }
+.icon-social.yelp { background-position: -924px -34px;  }
+.icon-social.youtube { background-position: -952px -34px;  }
