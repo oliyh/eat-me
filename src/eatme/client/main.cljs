@@ -69,7 +69,9 @@
 
 (defn load-user-baskets []
   (srm/rpc (api/user-baskets) [baskets]
-           :on-success (d/set-html! (d/by-id "userBaskets") (render/user-baskets baskets))
+           :on-success (when (not-empty baskets)
+                         (d/set-html! (d/by-id "user-baskets") (render/user-baskets baskets))
+                         (d/remove-class! (d/by-id "user-baskets-section") "hide"))
            :on-error (js/alert (str "Error loading user baskets"))))
 
 (def basket-saved (pubsub/publishize (fn [b] b) bus))
@@ -97,16 +99,15 @@
         (event/listen-once! (css/sel item-row "button[rel=complete]") :click #(completed-item row-id))
         (d/add-class! (css/sel item-row "button[rel=complete]") "btn-success")))))
 
-(defn- choose-list [{:keys [state]}]
-  (condp = (keyword state)
-    :list items-list
-    :basket completed-items-list))
-
 (defn set-basket-contents! [basket]
   (d/destroy-children! items-list)
   (d/destroy-children! completed-items-list)
-  (doseq [item (:items basket)]
-    (add-item-to-list (choose-list item) item)))
+  (when-let [items (not-empty (filter #(= "list" (:state %)) (:items basket)))]
+    (doseq [item items]
+      (add-item-to-list items-list item)))
+  (when-let [items (not-empty (filter #(= "basket" (:state %)) (:items basket)))]
+    (doseq [item items]
+      (add-item-to-list completed-items-list item))))
 
 (defn no-basket []
   (d/add-class! (d/by-id "share-button") "hide"))

@@ -69,24 +69,32 @@
 	</div>
       </div>
 
-      <h2>Saved baskets</h2>
-      <div id="userBaskets">
-      </div>
-      <h2>On my list</h2>
-      <div id="items-to-get">
-      </div>
-      <div id="add-item-form" class="row-fluid controls-row">
-	<div class="span4">
-	  <input type="text" id="item-name" name="item-name"
-		 placeholder="Enter item name"/>
-	</div>
-	<div class="span3">
-	  <input class="span2" type="text" id="item-qty" name="item-qty" rel="qty" value="1" size="1"/>
-	  <button class="btn btn-primary" id="add-item-button"><i class="icon-plus icon-white"></i></button>
+      <div id="user-baskets-section" class="hide">
+	<h2>Saved baskets</h2>
+	<div id="user-baskets">
 	</div>
       </div>
-      <h2>In my basket</h2>
-      <div id="completed-items">
+
+      <div id="items-section">
+	<h2>On my list</h2>
+	<div id="items-to-get">
+	</div>
+	<div id="add-item-form" class="row-fluid controls-row">
+	  <div class="span4">
+	    <input type="text" id="item-name" name="item-name"
+		   placeholder="Enter item name"/>
+	  </div>
+	  <div class="span3">
+	    <input class="span2" type="text" id="item-qty" name="item-qty" rel="qty" value="1" size="1"/>
+	    <button class="btn btn-primary" id="add-item-button"><i class="icon-plus icon-white"></i></button>
+	  </div>
+	</div>
+      </div>
+
+      <div id="completed-items-section">
+	<h2>In my basket</h2>
+	<div id="completed-items">
+	</div>
       </div>
     </div>
   </body>

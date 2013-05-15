@@ -10,10 +10,6 @@
     width: 100%;
 }
 
-[class*="span"] {
-    /*border: 1px solid black;*/
-}
-
 .navbar-inner .pull-left {
     margin-left: 4px;
 }
