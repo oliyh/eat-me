@@ -30,3 +30,38 @@
 
 (defn user-baskets [owner]
   (map replace-_id (mc/find-maps "basket" {:owner owner})))
+
+(defn get-state [a b]
+  (if (not= (:state a) (:state b))
+    "conflict"
+    (:state a)))
+
+(defn normalise-basket [{:keys [items] :as basket}]
+  (assoc basket :items
+         (for [item-group (vals (group-by :item-name items))]
+           (reduce (fn [o n]
+                     (assoc o :qty (+ (:qty o) (:qty n))
+                            :state (get-state o n)))
+                   (first item-group) (rest item-group)))))
+
+(def states {"list" 0
+             "basket" 1
+             "conflict" 2})
+
+(defn greater-state [a b]
+  (condp some [(:state a) (:state b)]
+    #(= "conflict" %) "conflict"
+    #(= "basket" %) "basket"
+    "list"))
+
+(defn merge-baskets [a b]
+  (let [all-a-items (group-by :item-name (:items (normalise-basket a)))
+        all-b-items (group-by :item-name (:items (normalise-basket b)))]
+    {:items
+     (for [item-name (keys all-a-items)
+           :let [a-items (get all-a-items item-name)
+                 b-items (get all-b-items item-name)]]
+       (cond
+        (every? #(= (:qty (first a-items)) (:qty %)) (concat (rest a-items) b-items))
+        (reduce (fn [o n] (assoc o :state (greater-state o n)))
+                (first a-items) (concat (rest a-items) b-items))))}))
