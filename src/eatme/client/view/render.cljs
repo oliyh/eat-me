@@ -1,6 +1,7 @@
 (ns eatme.client.render
   (:require
-   [hiccups.runtime :as hiccupsrt])
+   [hiccups.runtime :as hiccupsrt]
+   [eatme.date-utils :as date-utils])
   (:require-macros
    [hiccups.core :as h]))
 
@@ -26,7 +27,7 @@
 (h/defhtml user-baskets [baskets]
   (into [:ul]
         (map (fn [b]
-               [:li [:a {:href (str "#" (:id b))} (:id b)]]) baskets)))
+               [:li [:a {:href (str "#" (:id b))} (date-utils/humanise (:timestamp b))]]) baskets)))
 
 (h/defhtml qr-code-image [url]
   [:img.media-object

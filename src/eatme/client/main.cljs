@@ -12,7 +12,8 @@
             [eatme.client.render :as render]
             [clojure.string :as string]
             [one.browser.history :as history]
-            [eatme.browser.gestures :as gestures])
+            [eatme.browser.gestures :as gestures]
+            [eatme.date-utils :as date-utils])
   (:require-macros [shoreleave.remotes.macros :as srm]))
 
 (def query-args (common/query-args-map))
@@ -213,19 +214,8 @@
   (d/set-attr! (d/by-id "share-email") "href" (str email-link url)))
 
 (defn update-basket-saved-time [{timestamp :timestamp}]
-  (let [seconds (/ (- (js/Date.) (js/Date. timestamp)) 1000)
-        minutes (/ seconds 60)
-        hours (/ minutes 60)
-        days (/ hours 24)
-        weeks (/ days 7)]
-    (d/set-html! (d/by-id "last-saved")
-                 (str "Last saved " (cond
-                                     (> 60 seconds) "less than a minute ago"
-                                     (= 1 (int minutes)) "a minute ago"
-                                     (> 1 hours) (str (int minutes) " minutes ago")
-                                     (> 1 days) (str "about " (int hours) " hours ago")
-                                     (> 1 weeks) (str "about " (int days) " days ago")
-                                     :else (str "about " (int weeks) " weeks ago"))))))
+  (d/set-html! (d/by-id "last-saved")
+               (str "Last saved " (date-utils/friendly-age timestamp))))
 
 (pubsub/subscribe bus item-added (partial add-item-to-list items-list))
 (pubsub/subscribe bus item-added mark-basket-unsaved!)
