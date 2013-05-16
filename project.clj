@@ -7,6 +7,7 @@
                  [compojure "1.1.5" :exclusions [[org.clojure/clojure] [ring/ring-core]]]
                  [cheshire "5.1.1"]
                  [com.novemberain/monger "1.6.0-beta2"]
+                 [clj-http "0.7.2"]
                  [clj-time "0.5.0"]
                  [shoreleave "0.3.0"]
                  [shoreleave/shoreleave-remote "0.3.0"]

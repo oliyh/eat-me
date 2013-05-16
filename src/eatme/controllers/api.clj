@@ -2,7 +2,8 @@
   (:require [cemerick.friend :as friend]
             [eatme.config :refer [config]]
             [eatme.basket-store :as store]
-            [clj-time.core :as time]))
+            [clj-time.core :as time]
+            [eatme.recipe-book :as recipes]))
 
 (defn current-user []
   (or (:email (friend/current-authentication)) :public))
@@ -36,3 +37,6 @@
 
 (defn user-baskets []
   (map for-api (store/user-baskets (current-user))))
+
+(defn suggest-recipe [q p]
+  (recipes/suggest-recipe q p))

@@ -83,6 +83,16 @@
 	  <div class="span4">
 	    <input type="text" id="item-name" name="item-name"
 		   placeholder="Enter item name"/>
+	    <div id="recipe-suggestions" class="hide">
+	    </div>
+	    <label class="radio inline">
+	      <input id="lookup-item" type="radio" name="lookup" value="item" checked/>
+	      Item
+	    </label>
+	    <label class="radio inline">
+	      <input id="lookup-recipe" type="radio" name="lookup" value="recipe"/>
+	      Recipe
+	    </label>
 	  </div>
 	  <div class="span3">
 	    <input class="span2" type="text" id="item-qty" name="item-qty" rel="qty" value="1" size="1"/>

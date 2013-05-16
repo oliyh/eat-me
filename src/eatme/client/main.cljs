@@ -160,8 +160,23 @@
              (not (js/isNaN (to-int (d/value item-qty-field)))))
     (item-added)))
 
+(defn on-length [length e f]
+  (when (< (dec length) (count (d/value (event/target e))))
+    (f)))
+
+(defn show-recipe-suggestions [recipes]
+  (d/set-html! (d/by-id "recipe-suggestions") (render/recipe-suggestions recipes))
+  (d/remove-class! (d/by-id "recipe-suggestions") "hide"))
+
+(defn suggest-recipe []
+  (srm/rpc
+   (api/suggest-recipe (d/value item-name-field) 1) [response]
+   :on-success (show-recipe-suggestions response)
+   :on-error (js/alert (str "Error looking up recipe"))))
+
 (event/listen! add-item-button :click #(valid-item-added))
 (event/listen! item-name-field :keypress #(on-enter % valid-item-added))
+(event/listen! item-name-field :keypress #(on-length 4 % suggest-recipe))
 (event/listen! item-qty-field :keypress #(on-enter % valid-item-added))
 (event/listen! save-basket-button :click #(save-basket))
 
