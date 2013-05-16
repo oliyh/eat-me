@@ -1,7 +1,8 @@
 (ns eatme.client.render
   (:require
    [hiccups.runtime :as hiccupsrt]
-   [eatme.date-utils :as date-utils])
+   [eatme.date-utils :as date-utils]
+   [clojure.string :as string])
   (:require-macros
    [hiccups.core :as h]))
 
@@ -36,4 +37,4 @@
               url)}])
 
 (h/defhtml recipe-suggestions [recipes]
-  (into [:ul] (map (fn [r] [:li (:title r)]) recipes)))
+  (into [:ul] (map (fn [r] [:li {:data-ingredients (string/join "," (:ingredients r))} (:title r)]) recipes)))

@@ -166,8 +166,15 @@
   (when (< (dec length) (count (d/value (event/target e))))
     (f)))
 
+(defn recipe-selected [e]
+  (d/add-class! recipe-suggestions "hide")
+  (let [ingredients (string/split (d/attr (event/target e) "data-ingredients") #",")]
+    (doseq [i ingredients]
+      (add-item-to-list items-list {:item-name i :qty 1 :state "list"}))))
+
 (defn show-recipe-suggestions [recipes]
   (d/set-html! recipe-suggestions (render/recipe-suggestions recipes))
+  (event/listen-once! (css/sel recipe-suggestions "li") :click #(recipe-selected %))
   (d/remove-class! recipe-suggestions "hide"))
 
 (defn checked? [input]
