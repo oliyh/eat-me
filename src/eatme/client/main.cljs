@@ -42,8 +42,13 @@
 (def items-list (d/by-id "items-to-get"))
 (def completed-items-list (d/by-id "completed-items"))
 (def user-details (d/by-id "user-details"))
+(def lookup-item (d/by-id "lookup-item"))
 (def lookup-recipe (d/by-id "lookup-recipe"))
 (def recipe-suggestions (d/by-id "recipe-suggestions"))
+
+
+(defn checked? [input]
+  (.-checked input))
 
 (defn mark-basket-unsaved! []
   (-> save-basket-button
@@ -159,7 +164,8 @@
 
 (defn valid-item-added []
   (when (and (not-empty (d/value item-name-field))
-             (not (js/isNaN (to-int (d/value item-qty-field)))))
+             (not (js/isNaN (to-int (d/value item-qty-field))))
+             (checked? lookup-item))
     (item-added)))
 
 (defn on-length [length e f]
@@ -177,8 +183,6 @@
   (event/listen-once! (css/sel recipe-suggestions "li > a") :click #(recipe-selected %))
   (d/add-class! recipe-suggestions "show"))
 
-(defn checked? [input]
-  (.-checked input))
 
 (defn suggest-recipe []
   (when (checked? lookup-recipe)
