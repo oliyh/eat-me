@@ -81,9 +81,11 @@
 	</div>
 	<div id="add-item-form" class="row-fluid controls-row">
 	  <div class="span4">
-	    <input type="text" id="item-name" name="item-name"
-		   placeholder="Enter item name"/>
-	    <div id="recipe-suggestions" class="hide">
+	    <div class="btn-group">
+	      <input type="text" id="item-name" name="item-name"
+		     placeholder="Enter item name"/>
+	      <ul id="recipe-suggestions" class="dropdown-menu hide">
+	      </li>
 	    </div>
 	    <label class="radio inline">
 	      <input id="lookup-item" type="radio" name="lookup" value="item" checked/>

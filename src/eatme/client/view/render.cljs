@@ -37,4 +37,4 @@
               url)}])
 
 (h/defhtml recipe-suggestions [recipes]
-  (into [:ul] (map (fn [r] [:li {:data-ingredients (string/join "," (:ingredients r))} (:title r)]) recipes)))
+  (map (fn [r] [:li [:a {:data-ingredients (string/join "," (:ingredients r))} (:title r)]]) recipes))
