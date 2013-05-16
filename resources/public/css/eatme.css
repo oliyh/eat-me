@@ -10,6 +10,10 @@
     width: 100%;
 }
 
+#recipe-suggestion-control {
+    display: block;
+}
+
 .navbar-inner .pull-left {
     margin-left: 4px;
 }
