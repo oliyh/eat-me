@@ -1,7 +1,7 @@
 (ns eatme.date-utils)
 
 (defn humanise [timestamp]
-  (.toLocaleFormat (js/Date. timestamp)))
+  (.toLocaleString (js/Date. timestamp)))
 
 (defn friendly-age [timestamp]
   (let [seconds (/ (- (js/Date.) (js/Date. timestamp)) 1000)
