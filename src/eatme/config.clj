@@ -5,7 +5,7 @@
 (def env-prefix "eatme_")
 (def config-atom (atom {}))
 
-(defn- read-config-file
+(defn read-config-file
   "Loads config from resources/config/<env>.edn"
   [config-name]
   (safe-read (slurp
@@ -17,7 +17,7 @@
      (fn [env [k v]]
        (if-let [env-key (cond
                          (.startsWith k env-prefix) (keyword (string/replace-first k env-prefix ""))
-                         (contains? env-keys k) k
+                         (contains? env-keys (keyword k)) (keyword k)
                          :else nil)]
          (assoc env env-key v)
          env))
