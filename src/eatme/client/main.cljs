@@ -143,9 +143,10 @@
      :on-error (js/alert (str "Error saving basket"))))
 
 (def item-added (pubsub/publishize
-                 (fn [] {:item-name (d/value item-name-field)
-                        :qty (to-int (d/value item-qty-field))
-                        :state :list}) bus))
+                 (fn [item-name qty] (js/console.log "i-n: " item-name qty)
+                   {:item-name item-name
+                    :qty qty
+                    :state :list}) bus))
 
 (defn on-enter [e f]
   (when (= 13 (:keyCode e)) (event/prevent-default e) (f)))
@@ -166,7 +167,7 @@
   (when (and (not-empty (d/value item-name-field))
              (not (js/isNaN (to-int (d/value item-qty-field))))
              (checked? lookup-item))
-    (item-added)))
+    (item-added (d/value item-name-field) (to-int (d/value item-qty-field)))))
 
 (defn on-length [length e f]
   (when (< (dec length) (count (d/value (event/target e))))
@@ -176,12 +177,14 @@
   (d/remove-class! suggestions "show")
   (let [ingredients (string/split (d/attr (event/target e) "data-ingredients") #",")]
     (doseq [i ingredients]
-      (add-item-to-list items-list {:item-name i :qty 1 :state "list"}))))
+      (item-added i 1))))
 
 (defn show-recipe-suggestions [recipes]
-  (d/set-html! suggestions (render/recipe-suggestions recipes))
-  (event/listen-once! (css/sel suggestions "li > a") :click #(recipe-selected %))
-  (d/add-class! suggestions "show"))
+  (if (not-empty recipes)
+    (do (d/set-html! suggestions (render/recipe-suggestions recipes))
+        (event/listen-once! (css/sel suggestions "li > a") :click #(recipe-selected %))
+        (d/add-class! suggestions "show"))
+    (d/remove-class! suggestions "show")))
 
 (defn suggest-recipe []
   (when (checked? lookup-recipe)
@@ -192,13 +195,14 @@
 
 (defn item-selected [e]
   (d/remove-class! suggestions "show")
-  (add-item-to-list items-list {:item-name (d/attr (event/target e) "data-name")
-                                :qty 1 :state "list"}))
+  (item-added (d/attr (event/target e) "data-name") 1))
 
-(defn show-item-suggestions [recipes]
-  (d/set-html! suggestions (render/item-suggestions recipes))
-  (event/listen-once! (css/sel suggestions "li > a") :click #(item-selected %))
-  (d/add-class! suggestions "show"))
+(defn show-item-suggestions [items]
+  (if (not-empty items)
+    (do (d/set-html! suggestions (render/item-suggestions items))
+        (event/listen-once! (css/sel suggestions "li > a") :click #(item-selected %))
+        (d/add-class! suggestions "show"))
+    (d/remove-class! suggestions "show")))
 
 (defn suggest-item []
   (when (checked? lookup-item)
