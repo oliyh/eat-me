@@ -34,14 +34,23 @@
 
 (defn search
   ([q] (search q 1))
-  ([q p] (call-api :productsearch {:searchtext q :page p})))
+  ([q p] (:Products (call-api :productsearch {:searchtext q :page p}))))
 
 (defn categories []
   (call-api :listproductcategories))
 
 (defn products [category-id]
-  (call-api :listproductsbycategory {:category category-id}))
+  (:Products (call-api :listproductsbycategory {:category category-id})))
 
 ;; login and get a session id
 (defn init []
   (login))
+
+(defn- id-name [o]
+  (select-keys o [:Id :Name]))
+
+(defn all-shelves []
+  (for [dept (:Departments (categories))
+        aisle (:Aisles dept)
+        shelf (:Shelves aisle)]
+    {:dept (id-name dept) :aisle (id-name aisle) :shelf (id-name shelf)}))
