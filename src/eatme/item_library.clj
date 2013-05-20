@@ -36,10 +36,12 @@
   ([q] (search q 1))
   ([q p] (call-api :productsearch {:searchtext q :page p})))
 
+(defn categories []
+  (call-api :listproductcategories))
+
+(defn products [category-id]
+  (call-api :listproductsbycategory {:category category-id}))
+
 ;; login and get a session id
 (defn init []
   (login))
-
-;; useful commands
-;; LISTPRODUCTCATEGORIES - Lists the departments, aisles and shelves in a nested format
-;; LISTPRODUCTSBYCATEGORY - Lists the products for a given shelf (provided by ListProductCategories. Now with new parameter EXTENDEDINFO=Y
