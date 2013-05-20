@@ -18,7 +18,8 @@
                                       :init handler/init
                                       :auto-reload? true
                                       :destroy handler/destroy
-                                      :join true})]
+                                      :join true
+                                      :open-browser? false})]
        (println (str "You can view the site at " (config :eatme-url)))
        server)))
 
