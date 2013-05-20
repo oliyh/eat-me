@@ -3,7 +3,8 @@
   (:require [hiccup.page :as h]
             [cemerick.friend :as friend]
             [cemerick.friend.openid :as openid]
-            [ring.util.response :as resp]))
+            [ring.util.response :as resp]
+            [eatme.item-store :as items]))
 
 (defn index [session]
   (slurp "resources/public/html/shopping-list.html"))
@@ -29,3 +30,7 @@
        [:div.btn-group
         [:button.btn [:i {:class (str "icon-social " icon)}]]
         [:button.btn {:type "submit"} (str "Sign in with " name)]]])]))
+
+(defn item-store []
+  (items/populate-from-library)
+  (h/html5 [:p "complete"]))

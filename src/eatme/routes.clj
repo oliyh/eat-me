@@ -20,7 +20,8 @@
   (GET "/" {session :session} (cont-site/index session))
   (GET "/logout" req (cont-site/logout req))
   (GET "/auth" req (cont-site/auth req))
-  (GET "/test" [] (cont-site/test-shoreleave)))
+  (GET "/test" [] (cont-site/test-shoreleave))
+  (GET "/admin/item-store" [] (cont-site/item-store)))
 
 ;; Core system routes
 ;; ------------------
