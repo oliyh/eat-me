@@ -2,6 +2,7 @@
   (:require [clojure.string :as string]
             [shoreleave.server-helpers :refer [safe-read]]))
 
+(def env-key "eatme.")
 (def config-atom (atom {}))
 
 (defn- read-config-file
@@ -12,8 +13,8 @@
 
 (defn read-env-vars []
   (reduce
-   (fn [env [k v]] (if (.startsWith k "eatme.")
-                    (assoc env (keyword (string/replace-first k "eatme." "")) v)
+   (fn [env [k v]] (if (.startsWith k env-key)
+                    (assoc env (keyword (string/replace-first k env-key "")) v)
                     env))
    {} (System/getenv)))
 
