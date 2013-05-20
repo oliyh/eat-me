@@ -9,8 +9,8 @@
 
 (defn init
   "Connect to Mongo"
-  [{:keys [mongo-uri] :as config}]
-  (m/connect-via-uri! mongo-uri)
+  []
+  (m/connect-via-uri! (config :MONGOLAB_URI))
   (m/set-db! (m/get-db))) ;; db name is in the uri
 
 (defn- replace-id [id basket]

@@ -9,10 +9,16 @@
             [shoreleave.middleware.rpc]
             [hiccup.middleware]
             [cemerick.friend :as friend]
-            [cemerick.friend.openid :as openid]))
+            [cemerick.friend.openid :as openid]
+            [eatme.basket-store :as basket-store]
+            [eatme.item-library :as item-lib]))
 
 (defn init []
-  (println "The eatme app is starting"))
+  (println "The eatme app is starting")
+  (println "Initialising basket store")
+  (basket-store/init)
+  (println "Initialising item library")
+  (item-lib/init))
 
 (defn destroy []
   (println "The eatme app has been shut down"))
@@ -31,8 +37,7 @@
       (ring.middleware.anti-forgery/wrap-anti-forgery)
       (ring.middleware.gzip/wrap-gzip)
       (handler/site {:session {:cookie-name "eatme"
-                               :store (cookie-store {:key (config :session-secret)})
-                                        ;:store (cookie-store)
+                               :store (cookie-store)
                                :cookie-attrs {:max-age (config :session-max-age-seconds)
                                               :http-only true}}})
       (ring.middleware.file-info/wrap-file-info)

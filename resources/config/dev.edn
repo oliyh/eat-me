@@ -3,12 +3,11 @@
   ;; -----------
   :eatme-port 8080
   :eatme-url "http://localhost:8080"
-  
-  :mongo-uri "mongodb://localhost/eatme"
+
+  :MONGOLAB_URI "mongodb://localhost/eatme"
 
   ;; Sessions and Cookies
   ;; --------------------
-  :session-key "s0mes3cret"
+  :session_key "s0mes3cret"
   :session-max-age-seconds 1209600
 }
-
