@@ -3,7 +3,8 @@
             [eatme.config :refer [config]]
             [eatme.basket-store :as store]
             [clj-time.core :as time]
-            [eatme.recipe-book :as recipes]))
+            [eatme.recipe-book :as recipes]
+            [eatme.item-store :as items]))
 
 (defn current-user []
   (or (:email (friend/current-authentication)) :public))
@@ -40,3 +41,6 @@
 
 (defn suggest-recipe [q p]
   (recipes/suggest-recipe q p))
+
+(defn suggest-item [q p]
+  (items/suggest-item q))

@@ -44,7 +44,7 @@
 (def user-details (d/by-id "user-details"))
 (def lookup-item (d/by-id "lookup-item"))
 (def lookup-recipe (d/by-id "lookup-recipe"))
-(def recipe-suggestions (d/by-id "recipe-suggestions"))
+(def suggestions (d/by-id "suggestions"))
 
 
 (defn checked? [input]
@@ -173,16 +173,15 @@
     (f)))
 
 (defn recipe-selected [e]
-  (d/remove-class! recipe-suggestions "show")
+  (d/remove-class! suggestions "show")
   (let [ingredients (string/split (d/attr (event/target e) "data-ingredients") #",")]
     (doseq [i ingredients]
       (add-item-to-list items-list {:item-name i :qty 1 :state "list"}))))
 
 (defn show-recipe-suggestions [recipes]
-  (d/set-html! recipe-suggestions (render/recipe-suggestions recipes))
-  (event/listen-once! (css/sel recipe-suggestions "li > a") :click #(recipe-selected %))
-  (d/add-class! recipe-suggestions "show"))
-
+  (d/set-html! suggestions (render/recipe-suggestions recipes))
+  (event/listen-once! (css/sel suggestions "li > a") :click #(recipe-selected %))
+  (d/add-class! suggestions "show"))
 
 (defn suggest-recipe []
   (when (checked? lookup-recipe)
@@ -191,9 +190,27 @@
      :on-success (show-recipe-suggestions response)
      :on-error (js/alert (str "Error looking up recipe")))))
 
+(defn item-selected [e]
+  (d/remove-class! suggestions "show")
+  (add-item-to-list items-list {:item-name (d/attr (event/target e) "data-name")
+                                :qty 1 :state "list"}))
+
+(defn show-item-suggestions [recipes]
+  (d/set-html! suggestions (render/item-suggestions recipes))
+  (event/listen-once! (css/sel suggestions "li > a") :click #(item-selected %))
+  (d/add-class! suggestions "show"))
+
+(defn suggest-item []
+  (when (checked? lookup-item)
+    (srm/rpc
+     (api/suggest-item (d/value item-name-field) 1) [response]
+     :on-success (show-item-suggestions response)
+     :on-error (js/alert (str "Error looking up item")))))
+
 (event/listen! add-item-button :click #(valid-item-added))
 (event/listen! item-name-field :keypress #(on-enter % valid-item-added))
 (event/listen! item-name-field :keypress #(on-length 4 % suggest-recipe))
+(event/listen! item-name-field :keypress #(on-length 4 % suggest-item))
 (event/listen! item-qty-field :keypress #(on-enter % valid-item-added))
 (event/listen! save-basket-button :click #(save-basket))
 

@@ -38,3 +38,6 @@
 
 (h/defhtml recipe-suggestions [recipes]
   (map (fn [r] [:li [:a {:data-ingredients (string/join "," (:ingredients r))} (:title r)]]) recipes))
+
+(h/defhtml item-suggestions [items]
+  (map (fn [i] [:li [:a {:data-name (:Name i)} (:Name i)]]) items))
