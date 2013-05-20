@@ -4,13 +4,12 @@
 (def config-atom (atom {}))
 
 (defn init-config
-  ""
+  "Loads config from resources/config/<env>.edn"
   ([]
      (init-config :dev))
   ([config-name]
-     (swap! config-atom (fn [old new] new)
-            (safe-read (slurp
-                        (str "resources/config/" (name config-name) ".edn"))))))
+     (reset! config-atom (safe-read (slurp
+                                     (str "resources/config/" (name config-name) ".edn"))))))
 
 (def config (fn
               ([] @config-atom)
