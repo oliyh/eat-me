@@ -87,20 +87,22 @@
 	      <ul id="suggestions" class="dropdown-menu">
 	      </li>
 	    </div>
-	    <label class="radio inline">
-	      <input id="lookup-item" type="radio" name="lookup" value="item" checked/>
-	      Item
-	    </label>
-	    <label class="radio inline">
-	      <input id="lookup-recipe" type="radio" name="lookup" value="recipe"/>
-	      Recipe
-	    </label>
+	    <div id="suggestion-types" class="btn-group" data-toggle="buttons-radio">
+	      <button id="lookup-item" type="button" class="btn active">Item</button>
+	      <button id="lookup-recipe" type="button" class="btn">Recipe</button>
+	    </div>
 	  </div>
-	  <div class="span3">
+	  <div class="span3 input-append">
 	    <input class="span2" type="text" id="item-qty" name="item-qty" rel="qty" value="1" size="1"/>
 	    <button class="btn btn-primary" id="add-item-button"><i class="icon-plus icon-white"></i></button>
 	  </div>
 	</div>
+	<div class="row-fluid controls-row">
+	  <div class="span4">
+
+	  </div>
+	</div>
+
       </div>
 
       <div id="completed-items-section">

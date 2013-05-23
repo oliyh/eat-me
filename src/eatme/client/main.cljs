@@ -48,7 +48,7 @@
 
 
 (defn checked? [input]
-  (.-checked input))
+  (d/has-class? input "active"))
 
 (defn mark-basket-unsaved! []
   (-> save-basket-button

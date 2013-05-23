@@ -1,3 +1,13 @@
+#suggestion-types {
+    margin: 0px;
+    margin-top: -14px;
+}
+
+#suggestion-types button {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
 .row-fluid.controls-row .btn {
     vertical-align: top;
 }
@@ -8,6 +18,7 @@
 
 #item-name {
     width: 100%;
+    border-bottom-left-radius: 0;
 }
 
 #suggestion-control {
