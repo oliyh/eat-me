@@ -8,9 +8,9 @@
 
 (h/defhtml shopping-list-item [{:keys [item-name qty state]}]
   [:div.row-fluid.controls-row {:rel item-name :id (gensym)}
-   [:div.span4
+   [:div.span6
     [:label item-name]]
-   [:div.span3.input-append
+   [:div.span5.input-append
     [:input.span2 {:type "text" :name item-name :value (or qty 1) :rel "qty" :size 1}]
     "&nbsp;"
     [:button.btn.btn-danger {:rel "delete-item"} [:i.icon-remove-sign]]

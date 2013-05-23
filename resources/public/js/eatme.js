@@ -21435,20 +21435,20 @@ goog.require("cljs.core");
 goog.require("clojure.string");
 goog.require("eatme.date_utils");
 goog.require("hiccups.runtime");
-eatme.client.render.shopping_list_item = function shopping_list_item(p__179267) {
-  var map__179274 = p__179267;
-  var map__179274__$1 = cljs.core.seq_QMARK_.call(null, map__179274) ? cljs.core.apply.call(null, cljs.core.hash_map, map__179274) : map__179274;
-  var state = cljs.core._lookup.call(null, map__179274__$1, "\ufdd0'state", null);
-  var qty = cljs.core._lookup.call(null, map__179274__$1, "\ufdd0'qty", null);
-  var item_name = cljs.core._lookup.call(null, map__179274__$1, "\ufdd0'item-name", null);
-  return[cljs.core.str("<div"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'rel", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'rel":item_name, "\ufdd0'id":cljs.core.gensym.call(null), "\ufdd0'class":"row-fluid controls-row"}))), cljs.core.str(">"), cljs.core.str("<div"), cljs.core.str(' class="span4"'), cljs.core.str(">"), cljs.core.str(function() {
-    var attrs179275 = item_name;
-    if(cljs.core.map_QMARK_.call(null, attrs179275)) {
-      return[cljs.core.str("<label"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.merge.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'id", "\ufdd0'class"], {"\ufdd0'id":null, "\ufdd0'class":null}), attrs179275))), cljs.core.str(">"), cljs.core.str("</label>")].join("")
+eatme.client.render.shopping_list_item = function shopping_list_item(p__181016) {
+  var map__181023 = p__181016;
+  var map__181023__$1 = cljs.core.seq_QMARK_.call(null, map__181023) ? cljs.core.apply.call(null, cljs.core.hash_map, map__181023) : map__181023;
+  var state = cljs.core._lookup.call(null, map__181023__$1, "\ufdd0'state", null);
+  var qty = cljs.core._lookup.call(null, map__181023__$1, "\ufdd0'qty", null);
+  var item_name = cljs.core._lookup.call(null, map__181023__$1, "\ufdd0'item-name", null);
+  return[cljs.core.str("<div"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'rel", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'rel":item_name, "\ufdd0'id":cljs.core.gensym.call(null), "\ufdd0'class":"row-fluid controls-row"}))), cljs.core.str(">"), cljs.core.str("<div"), cljs.core.str(' class="span6"'), cljs.core.str(">"), cljs.core.str(function() {
+    var attrs181024 = item_name;
+    if(cljs.core.map_QMARK_.call(null, attrs181024)) {
+      return[cljs.core.str("<label"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.merge.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'id", "\ufdd0'class"], {"\ufdd0'id":null, "\ufdd0'class":null}), attrs181024))), cljs.core.str(">"), cljs.core.str("</label>")].join("")
     }else {
-      return[cljs.core.str("<label>"), cljs.core.str(hiccups.runtime.render_html.call(null, attrs179275)), cljs.core.str("</label>")].join("")
+      return[cljs.core.str("<label>"), cljs.core.str(hiccups.runtime.render_html.call(null, attrs181024)), cljs.core.str("</label>")].join("")
     }
-  }()), cljs.core.str("</div>"), cljs.core.str("<div"), cljs.core.str(' class="span3 input-append"'), cljs.core.str(">"), cljs.core.str("<"), cljs.core.str("input"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'size", "\ufdd0'rel", "\ufdd0'value", "\ufdd0'name", "\ufdd0'type", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'size":1, "\ufdd0'rel":"qty", "\ufdd0'value":function() {
+  }()), cljs.core.str("</div>"), cljs.core.str("<div"), cljs.core.str(' class="span5 input-append"'), cljs.core.str(">"), cljs.core.str("<"), cljs.core.str("input"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'size", "\ufdd0'rel", "\ufdd0'value", "\ufdd0'name", "\ufdd0'type", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'size":1, "\ufdd0'rel":"qty", "\ufdd0'value":function() {
     var or__3943__auto__ = qty;
     if(cljs.core.truth_(or__3943__auto__)) {
       return or__3943__auto__
@@ -21457,11 +21457,11 @@ eatme.client.render.shopping_list_item = function shopping_list_item(p__179267) 
     }
   }(), "\ufdd0'name":item_name, "\ufdd0'type":"text", "\ufdd0'id":null, "\ufdd0'class":"span2"}))), cljs.core.str(" />"), cljs.core.str("&nbsp;"), cljs.core.str('<button class="btn btn-danger" rel="delete-item"><i class="icon-remove-sign"></i></button>'), cljs.core.str('<button class="btn" rel="complete"><i class="icon-ok"></i></button>'), cljs.core.str("</div>"), cljs.core.str("</div>")].join("")
 };
-eatme.client.render.user_button = function user_button(p__179280) {
-  var map__179288 = p__179280;
-  var map__179288__$1 = cljs.core.seq_QMARK_.call(null, map__179288) ? cljs.core.apply.call(null, cljs.core.hash_map, map__179288) : map__179288;
-  var lastname = cljs.core._lookup.call(null, map__179288__$1, "\ufdd0'lastname", null);
-  var firstname = cljs.core._lookup.call(null, map__179288__$1, "\ufdd0'firstname", null);
+eatme.client.render.user_button = function user_button(p__181029) {
+  var map__181037 = p__181029;
+  var map__181037__$1 = cljs.core.seq_QMARK_.call(null, map__181037) ? cljs.core.apply.call(null, cljs.core.hash_map, map__181037) : map__181037;
+  var lastname = cljs.core._lookup.call(null, map__181037__$1, "\ufdd0'lastname", null);
+  var firstname = cljs.core._lookup.call(null, map__181037__$1, "\ufdd0'firstname", null);
   return[cljs.core.str("<div"), cljs.core.str(' class="btn-group"'), cljs.core.str(">"), cljs.core.str("<a"), cljs.core.str(' class="btn btn-small btn-success dropdown-toggle" data-toggle="dropdown"'), cljs.core.str(">"), cljs.core.str('<i class="icon-user"></i>'), cljs.core.str("&nbsp;"), cljs.core.str(hiccups.runtime.render_html.call(null, firstname)), cljs.core.str("&nbsp;"), cljs.core.str(hiccups.runtime.render_html.call(null, lastname)), cljs.core.str("&nbsp;"), cljs.core.str('<span class="caret"></span>'), 
   cljs.core.str("</a>"), cljs.core.str('<ul class="dropdown-menu"><li><a href="logout">Sign out</a></li></ul>'), cljs.core.str("</div>")].join("")
 };
