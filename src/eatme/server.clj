@@ -9,8 +9,7 @@
   "used for starting the server in development mode from REPL"
   ([] (start-server (init-config :dev)))
   ([config]
-     (let [port (or (Integer. (get (System/getenv) "PORT" (config :eatme-port)))
-                    8080)
+     (let [port (Integer. (or (get (System/getenv) "PORT" (config :eatme-port)) 8080))
            server (ring-server/serve (handler/get-handler #'handler/app)
                                      {:port port
                                       :init handler/init
