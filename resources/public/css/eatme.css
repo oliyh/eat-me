@@ -8,17 +8,47 @@
     border-top-right-radius: 0;
 }
 
-.row-fluid.controls-row .btn {
-    vertical-align: top;
-}
-
 .controls-row input {
     min-width: 30px;
+    line-height: 20px;
+}
+
+.controls-row button {
+    line-height: 20px;
+}
+
+#add-item-form {
+    margin-top: 10px;
+}
+
+.controls-row .input-append {
+    margin-bottom: 10px;
 }
 
 #item-name {
     width: 100%;
     border-bottom-left-radius: 0;
+}
+
+.items-container .controls-row:first-child input {
+    border-top-left-radius: 4px;
+}
+
+.items-container .controls-row:first-child .input-append .btn:last-child {
+    border-top-right-radius: 4px;
+}
+
+.items-container .controls-row .input-append .btn:last-child,
+.items-container .controls-row input {
+    border-radius: 0;
+}
+
+.items-container .controls-row:last-child input {
+    border-bottom-left-radius: 4px;
+}
+
+.items-container .controls-row:last-child .input-append .btn:last-child {
+    border-bottom-right-radius: 4px;
 }
 
 #suggestion-control {
