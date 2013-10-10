@@ -42,5 +42,8 @@
 (defn suggest-recipe [q p]
   (recipes/suggest-recipe q p))
 
+(defn recipe-ingredients [id]
+  (recipes/ingredients id))
+
 (defn suggest-item [q p]
   (items/suggest-item q))

@@ -175,9 +175,11 @@
 
 (defn recipe-selected [e]
   (d/remove-class! suggestions "show")
-  (let [ingredients (string/split (d/attr (event/target e) "data-ingredients") #",")]
-    (doseq [i ingredients]
-      (item-added i 1))))
+  (srm/rpc
+     (api/recipe-ingredients (d/attr (event/target e) "id")) [response]
+     :on-success (doseq [i (:ingredients response)]
+                   (item-added (:name i) (:qty i)))
+     :on-error (js/alert (str "Error looking up ingredients for " (d/attr (event/target e) "id")))))
 
 (defn show-recipe-suggestions [recipes]
   (if (not-empty recipes)
