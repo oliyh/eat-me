@@ -2,9 +2,12 @@
   (:require [clj-http.client :as client]
             [clojure.string :as string]))
 
-(def recipe-puppy "http://www.recipepuppy.com/api/?q=omelet&p=1")
+(def recipe-puppy "http://www.recipepuppy.com/api/")
+(def ingred "http://ingred.oliy.co.uk")
+(def ^:dynamic *provider* :recipe-puppy)
 
 (defn call-api [q p]
+  (println q p)
   (:body (client/get recipe-puppy {:query-params {"q" q "p" p} :as :json})))
 
 (defn upper-first [s]
@@ -15,5 +18,7 @@
       (select-keys [:title :href])
       (assoc :ingredients (map #(-> % string/trim upper-first) (string/split ingredients #",")))))
 
-(defn suggest-recipe [q p]
+(defmulti suggest-recipe (fn [q p] *provider*))
+
+(defmethod suggest-recipe :recipe-puppy [q p]
   (map clean-recipe (:results (call-api q p))))
