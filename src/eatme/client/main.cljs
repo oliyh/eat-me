@@ -10,10 +10,10 @@
             [domina.css :as css]
             [domina.xpath :as x]
             [eatme.client.render :as render]
-            [clojure.string :as string]
             [one.browser.history :as history]
             [eatme.browser.gestures :as gestures]
-            [eatme.date-utils :as date-utils])
+            [eatme.date-utils :as date-utils]
+            [eatme.utils :as utils])
   (:require-macros [shoreleave.remotes.macros :as srm]))
 
 (def query-args (common/query-args-map))
@@ -144,7 +144,7 @@
 
 (def item-added (pubsub/publishize
                  (fn [item-name qty] (js/console.log "i-n: " item-name qty)
-                   {:item-name item-name
+                   {:item-name (utils/upper-first item-name)
                     :qty qty
                     :state :list}) bus))
 
