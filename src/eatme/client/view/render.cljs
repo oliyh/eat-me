@@ -8,14 +8,15 @@
    [hiccups.core :as h]))
 
 (h/defhtml shopping-list-item [{:keys [item-name qty state]}]
-  [:div.row-fluid.controls-row {:rel item-name :id (gensym)}
-   [:div.span6
-    [:label item-name]]
-   [:div.span5.input-append
-    [:input.span2 {:type "text" :name item-name :value (or qty 1) :rel "qty" :size 1}]
-    "&nbsp;"
+  [:div.item.boxed.text-center {:rel item-name :id (gensym)}
+   [:div
+    [:p
+     [:span.badge.badge-important (or qty 1)] "&nbsp;"
+     [:strong item-name]]]
+   [:div
     [:button.btn.btn-danger {:rel "delete-item"} [:i.icon-remove-sign]]
-    [:button.btn {:rel "complete"} [:i.icon-ok]]]])
+    [:button.btn.btn-warning {:rel "edit-item"} [:i.icon-pencil]]
+    [:button.btn.btn-success {:rel "complete"} [:i.icon-ok]]]])
 
 (h/defhtml user-button [{:keys [firstname lastname]}]
   [:div.btn-group

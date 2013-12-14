@@ -66,11 +66,18 @@
     padding: 4px;
 }
 
+.item {
+    width: 200px;
+    float: left;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
 .basket {
     width: 200px;
     float: left;
     margin-left: 10px;
-    margin-top: 10px;
+    margin-bottom: 10px;
     background-image: url('/img/basket.png');
     background-repeat: no-repeat;
     background-position: center;
