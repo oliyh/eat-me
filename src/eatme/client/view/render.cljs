@@ -33,7 +33,7 @@
             [:p [:span.badge.badge-info (count (:items b))] " items"]
             (utils/upper-first (date-utils/friendly-age (:timestamp b)))
             [:br]
-            [:span.muted [:small (date-utils/humanise (:timestamp b))]]]]])
+            [:span [:small (date-utils/humanise (:timestamp b))]]]]])
        baskets))
 
 (h/defhtml qr-code-image [url]

@@ -76,6 +76,11 @@
     background-position: center;
 }
 
+.basket > a {
+    color: black;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.4), 0 0 3px rgba(255, 255, 255, 0.075);
+}
+
 .basket:hover {
     background-color: #cccccc;
     transition: background 0.2s ease 0s;
