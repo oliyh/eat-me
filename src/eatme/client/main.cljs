@@ -93,6 +93,8 @@
 
 (def item-deleted (pubsub/publishize (fn [row-id] {:row-id row-id}) bus))
 
+(def item-edited (pubsub/publishize (fn [row-id] {:row-id row-id}) bus))
+
 (def basket-loaded (pubsub/publishize identity bus))
 
 (defn add-item-to-list [the-list item]
@@ -102,6 +104,7 @@
     (let [item-row (d/single-node (css/sel (str "#" row-id)))]
       (gestures/on-swipe [:left :right] item-row #(item-deleted row-id))
       (event/listen-once! (css/sel item-row "button[rel=delete-item]") :click #(item-deleted row-id))
+      (event/listen-once! (css/sel item-row "button[rel=edit-item]") :click #(item-edited row-id))
       (if (= :list (keyword (:state item)))
         (event/listen-once! (css/sel item-row "button[rel=complete]") :click #(completed-item row-id))
         (d/add-class! (css/sel item-row "button[rel=complete]") "btn-success")))))
@@ -244,6 +247,11 @@
   (d/set-value! item-name-field "")
   (d/set-value! item-qty-field 1))
 
+(defn fill-item-input [{:keys [row-id]}]
+  (let [item (css/sel (str "#" row-id))]
+    (d/set-value! item-name-field (d/attr item "data-name"))
+    (d/set-value! item-qty-field (d/attr item "data-qty"))))
+
 (defn log-to-console [event o]
   (js/console.log event ": " o))
 
@@ -277,6 +285,11 @@
 (pubsub/subscribe bus item-deleted (partial log-to-console "Item deleted"))
 (pubsub/subscribe bus item-deleted remove-item-from-list)
 (pubsub/subscribe bus item-deleted mark-basket-unsaved!)
+
+(pubsub/subscribe bus item-edited fill-item-input)
+(pubsub/subscribe bus item-edited remove-item-from-list)
+(pubsub/subscribe bus item-edited mark-basket-unsaved!)
+(pubsub/subscribe bus item-edited focus-item-input)
 
 (pubsub/subscribe bus quantity-changed change-quantity)
 (pubsub/subscribe bus quantity-changed mark-basket-unsaved!)
