@@ -30,13 +30,14 @@
 
 (h/defhtml user-baskets [baskets]
   (map (fn [b]
-         [:div {:class "basket boxed text-center"}
-          [:a {:href (str "#" (:id b))}
-           [:div
-            [:p [:span.badge.badge-info (count (:items b))] " items"]
-            (utils/upper-first (date-utils/friendly-age (:timestamp b)))
-            [:br]
-            [:span [:small (date-utils/humanise (:timestamp b))]]]]])
+         [:td
+          [:div {:class "basket boxed text-center"}
+           [:a {:href (str "#" (:id b))}
+            [:div
+             [:p [:span.badge.badge-info (count (:items b))] " items"]
+             (utils/upper-first (date-utils/friendly-age (:timestamp b)))
+             [:br]
+             [:span [:small (date-utils/humanise (:timestamp b))]]]]]])
        baskets))
 
 (h/defhtml qr-code-image [url]

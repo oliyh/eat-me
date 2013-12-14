@@ -66,10 +66,12 @@
     padding: 4px;
 }
 
+/* item section ---------------------- */
+
 .item {
     width: 200px;
     float: left;
-    margin-left: 10px;
+    margin-right: 10px;
     margin-bottom: 10px;
 }
 
@@ -95,11 +97,21 @@
     display: none;
 }
 
+/* baskets section ------------------------ */
+
+#user-baskets-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#user-baskets {
+
+}
+
 .basket {
     width: 200px;
-    float: left;
-    margin-left: 10px;
-    margin-bottom: 10px;
+    min-width: 200px;
+    margin-right: 10px;
     background-image: url('/img/basket.png');
     background-repeat: no-repeat;
     background-position: center;
@@ -117,10 +129,6 @@
 
 .basket:hover > a {
     text-decoration: none;
-}
-
-#user-baskets {
-    clear: both;
 }
 
 .navbar-inner .pull-left {
