@@ -63,17 +63,17 @@
       (d/remove-class! "icon-white")))
 
 (defn- serialise-item [state input]
-  {:item-name (d/attr input "name")
-   :qty (d/value input)
+  {:item-name (d/attr input "data-name")
+   :qty (d/attr input "data-qty")
    :state state})
 
 (defn serialise-basket []
   {:id (basket-id)
    :items
    (concat (map (partial serialise-item :list)
-                (d/nodes (x/xpath items-list "div/*/input[@rel='qty']")))
+                (d/nodes (css/sel items-list "div.item")))
            (map (partial serialise-item :basket)
-                (d/nodes (x/xpath completed-items-list "div/*/input[@rel='qty']"))))})
+                (d/nodes (css/sel completed-items-list "div.item"))))})
 
 (defn load-user-baskets []
   (srm/rpc (api/user-baskets) [baskets]

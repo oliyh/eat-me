@@ -8,7 +8,9 @@
    [hiccups.core :as h]))
 
 (h/defhtml shopping-list-item [{:keys [item-name qty state]}]
-  [:div.item.boxed.text-center {:rel item-name :id (gensym)}
+  [:div.item.boxed.text-center
+   {:rel item-name :id (gensym)
+    :data-name item-name :data-qty qty}
    [:div
     [:p
      [:span.badge.badge-important (or qty 1)] "&nbsp;"
