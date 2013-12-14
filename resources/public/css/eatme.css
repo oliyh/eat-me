@@ -71,6 +71,9 @@
     float: left;
     margin-left: 10px;
     margin-top: 10px;
+    background-image: url('/img/basket.png');
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .basket:hover {
