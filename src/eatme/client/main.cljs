@@ -85,9 +85,8 @@
 (def basket-saved (pubsub/publishize (fn [b] b) bus))
 
 (def quantity-changed (pubsub/publishize
-                       (fn [direction remove-on-zero? e]
+                       (fn [direction e]
                          {:direction direction
-                          :remove-on-zero? remove-on-zero?
                           :item e}) bus))
 
 (def completed-item (pubsub/publishize (fn [row-id] {:row-id row-id}) bus))
@@ -158,10 +157,10 @@
   (when (= 45 (:charCode e)) (event/prevent-default e) (f)))
 
 (event/listen! item-name-field :keypress
-               #(on-plus % (partial quantity-changed :inc false item-name-field)))
+               #(on-plus % (partial quantity-changed :inc item-name-field)))
 
 (event/listen! item-name-field :keypress
-               #(on-minus % (partial quantity-changed :dec false item-name-field)))
+               #(on-minus % (partial quantity-changed :dec item-name-field)))
 
 (defn valid-item-added []
   (when (and (not-empty (d/value item-name-field))
@@ -233,13 +232,10 @@
     :inc (inc value)
     :dec (dec value)))
 
-(defn change-quantity [{:keys [item direction remove-on-zero?]}]
-  (let [qty (-> item (x/xpath "../../*/input[@rel='qty']"))
-        new-value (adjust-quantity direction (to-int (d/value qty)))]
-    (if (< 0 new-value)
-      (d/set-value! qty new-value)
-      (when remove-on-zero?
-        (item-deleted item)))))
+(defn change-quantity [{:keys [item direction]}]
+  (let [new-value (adjust-quantity direction (to-int (d/value item-qty-field)))]
+    (when (pos? new-value) (d/set-value! item-qty-field new-value))))
+
 
 (defn focus-item-input [& args]
   (.focus item-name-field))
