@@ -8,13 +8,13 @@
    [hiccups.core :as h]))
 
 (h/defhtml shopping-list-item [{:keys [item-name qty state]}]
-  [:div.item.boxed.text-center
+  [:div.item.boxed
    {:rel item-name :id (gensym)
     :data-name item-name :data-qty qty}
    [:div
-    [:p
-     [:span.badge.badge-important (or qty 1)] "&nbsp;"
-     [:strong item-name]]]
+    [:p.item-title
+     [:span item-name]
+     [:span.badge.badge-important (or qty 1)]]]
    [:div.control
     [:button.btn.btn-danger.delete-control {:rel "delete-item"} [:i.icon-remove-sign]]
     [:button.btn.btn-warning.edit-control {:rel "edit-item"} [:i.icon-pencil]]

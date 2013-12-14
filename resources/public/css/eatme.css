@@ -73,12 +73,26 @@
     margin-bottom: 10px;
 }
 
+.item-title {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.item-title .badge {
+    float: right;
+}
+
 .item .control .delete-control {
     float: left;
 }
 
 .item .control .complete-control {
     float: right;
+    width: 50%;
+}
+
+#completed-items .complete-control {
+    display: none;
 }
 
 .basket {
