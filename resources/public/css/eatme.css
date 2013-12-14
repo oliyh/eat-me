@@ -73,6 +73,14 @@
     margin-bottom: 10px;
 }
 
+.item .control .delete-control {
+    float: left;
+}
+
+.item .control .complete-control {
+    float: right;
+}
+
 .basket {
     width: 200px;
     float: left;
