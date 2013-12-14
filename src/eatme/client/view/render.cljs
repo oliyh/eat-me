@@ -2,6 +2,7 @@
   (:require
    [hiccups.runtime :as hiccupsrt]
    [eatme.date-utils :as date-utils]
+   [eatme.utils :as utils]
    [clojure.string :as string])
   (:require-macros
    [hiccups.core :as h]))
@@ -25,9 +26,15 @@
     [:li [:a {:href "logout"} "Sign out"]]]])
 
 (h/defhtml user-baskets [baskets]
-  (into [:ul]
-        (map (fn [b]
-               [:li [:a {:href (str "#" (:id b))} (date-utils/humanise (:timestamp b))]]) baskets)))
+  (map (fn [b]
+         [:div {:class "basket boxed text-center"}
+          [:a {:href (str "#" (:id b))}
+           [:div
+            [:p [:span.badge.badge-info (count (:items b))] " items"]
+            (utils/upper-first (date-utils/friendly-age (:timestamp b)))
+            [:br]
+            [:span.muted [:small (date-utils/humanise (:timestamp b))]]]]])
+       baskets))
 
 (h/defhtml qr-code-image [url]
   [:img.media-object

@@ -29,7 +29,8 @@
   (replace-_id (mc/find-map-by-id "basket" (ObjectId. id))))
 
 (defn user-baskets [owner]
-  (map replace-_id (mc/find-maps "basket" {:owner owner})))
+  (reverse (sort-by :timestamp
+                    (map replace-_id (mc/find-maps "basket" {:owner owner})))))
 
 (defn get-state [a b]
   (if (not= (:state a) (:state b))
