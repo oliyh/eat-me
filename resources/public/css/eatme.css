@@ -1,3 +1,6 @@
+
+/* input form --------------------------------- */
+
 #suggestion-types {
     margin: 0px;
     margin-top: -14px;
@@ -8,9 +11,16 @@
     border-top-right-radius: 0;
 }
 
+.controls-row {
+    width: 90%;
+    margin: 0 auto;
+}
+
 .controls-row input {
     min-width: 30px;
-    line-height: 20px;
+    font-size: xx-large;
+    padding: 0.2em;
+    height: 40px;
 }
 
 .controls-row button {
@@ -21,8 +31,17 @@
     margin-top: 10px;
 }
 
-.controls-row .input-append {
-    margin-bottom: 10px;
+#name-input {
+    float: left;
+    width: 70%;
+}
+
+#qty-input {
+    width: 30%;
+}
+
+#qty-input button {
+    font-size: xx-large;
 }
 
 #item-name {

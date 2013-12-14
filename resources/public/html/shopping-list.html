@@ -86,8 +86,8 @@
       </div>
 
       <div id="form-section" class="section">
-	<div id="add-item-form" class="row-fluid controls-row">
-	  <div class="span6">
+	<div id="add-item-form" class="controls-row">
+	  <div id="name-input">
 	    <div class="btn-group" id="suggestion-control">
 	      <input type="text" id="item-name" name="item-name"
 		     placeholder="Enter item name"/>
@@ -99,9 +99,9 @@
 	      <button id="lookup-recipe" type="button" class="btn">Recipe</button>
 	    </div>
 	  </div>
-	  <div class="span5 input-append">
-	    <input class="span2" type="text" id="item-qty" name="item-qty" rel="qty" value="1" size="1"/>
-	    <button class="btn btn-primary" id="add-item-button"><i class="icon-plus icon-white"></i></button>
+	  <div id="qty-input" class="input-append">
+	    <input type="text" id="item-qty" name="item-qty" rel="qty" value="1"/>
+	    <button class="btn btn-primary btn-large" id="add-item-button"><i class="icon-plus icon-white"></i></button>
 	  </div>
 	</div>
 	<div class="row-fluid controls-row">

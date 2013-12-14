@@ -21451,22 +21451,22 @@ goog.require("clojure.string");
 goog.require("eatme.utils");
 goog.require("eatme.date_utils");
 goog.require("hiccups.runtime");
-eatme.client.render.shopping_list_item = function shopping_list_item(p__82009) {
-  var map__82015 = p__82009;
-  var map__82015__$1 = cljs.core.seq_QMARK_.call(null, map__82015) ? cljs.core.apply.call(null, cljs.core.hash_map, map__82015) : map__82015;
-  var state = cljs.core._lookup.call(null, map__82015__$1, "\ufdd0'state", null);
-  var qty = cljs.core._lookup.call(null, map__82015__$1, "\ufdd0'qty", null);
-  var item_name = cljs.core._lookup.call(null, map__82015__$1, "\ufdd0'item-name", null);
+eatme.client.render.shopping_list_item = function shopping_list_item(p__83200) {
+  var map__83206 = p__83200;
+  var map__83206__$1 = cljs.core.seq_QMARK_.call(null, map__83206) ? cljs.core.apply.call(null, cljs.core.hash_map, map__83206) : map__83206;
+  var state = cljs.core._lookup.call(null, map__83206__$1, "\ufdd0'state", null);
+  var qty = cljs.core._lookup.call(null, map__83206__$1, "\ufdd0'qty", null);
+  var item_name = cljs.core._lookup.call(null, map__83206__$1, "\ufdd0'item-name", null);
   return[cljs.core.str("<div"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'data-qty", "\ufdd0'data-name", "\ufdd0'rel", "\ufdd0'id", "\ufdd0'class"], {"\ufdd0'data-qty":qty, "\ufdd0'data-name":item_name, "\ufdd0'rel":item_name, "\ufdd0'id":cljs.core.gensym.call(null), "\ufdd0'class":"item boxed"}))), cljs.core.str(">"), cljs.core.str("<div"), cljs.core.str(""), cljs.core.str(">"), cljs.core.str("<p"), cljs.core.str(' class="item-title"'), cljs.core.str(">"), 
   cljs.core.str(function() {
-    var attrs82016 = item_name;
-    if(cljs.core.map_QMARK_.call(null, attrs82016)) {
-      return[cljs.core.str("<span"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.merge.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'id", "\ufdd0'class"], {"\ufdd0'id":null, "\ufdd0'class":null}), attrs82016))), cljs.core.str(">"), cljs.core.str("</span>")].join("")
+    var attrs83207 = item_name;
+    if(cljs.core.map_QMARK_.call(null, attrs83207)) {
+      return[cljs.core.str("<span"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.merge.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'id", "\ufdd0'class"], {"\ufdd0'id":null, "\ufdd0'class":null}), attrs83207))), cljs.core.str(">"), cljs.core.str("</span>")].join("")
     }else {
-      return[cljs.core.str("<span>"), cljs.core.str(hiccups.runtime.render_html.call(null, attrs82016)), cljs.core.str("</span>")].join("")
+      return[cljs.core.str("<span>"), cljs.core.str(hiccups.runtime.render_html.call(null, attrs83207)), cljs.core.str("</span>")].join("")
     }
   }()), cljs.core.str(function() {
-    var attrs82017 = function() {
+    var attrs83208 = function() {
       var or__3943__auto__ = qty;
       if(cljs.core.truth_(or__3943__auto__)) {
         return or__3943__auto__
@@ -21474,26 +21474,26 @@ eatme.client.render.shopping_list_item = function shopping_list_item(p__82009) {
         return 1
       }
     }();
-    if(cljs.core.map_QMARK_.call(null, attrs82017)) {
-      return[cljs.core.str("<span"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.merge.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'id", "\ufdd0'class"], {"\ufdd0'id":null, "\ufdd0'class":"badge badge-important"}), attrs82017))), cljs.core.str(">"), cljs.core.str("</span>")].join("")
+    if(cljs.core.map_QMARK_.call(null, attrs83208)) {
+      return[cljs.core.str("<span"), cljs.core.str(hiccups.runtime.render_attr_map.call(null, cljs.core.merge.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'id", "\ufdd0'class"], {"\ufdd0'id":null, "\ufdd0'class":"badge badge-important"}), attrs83208))), cljs.core.str(">"), cljs.core.str("</span>")].join("")
     }else {
-      return[cljs.core.str('<span class="badge badge-important">'), cljs.core.str(hiccups.runtime.render_html.call(null, attrs82017)), cljs.core.str("</span>")].join("")
+      return[cljs.core.str('<span class="badge badge-important">'), cljs.core.str(hiccups.runtime.render_html.call(null, attrs83208)), cljs.core.str("</span>")].join("")
     }
   }()), cljs.core.str("</p>"), cljs.core.str("</div>"), cljs.core.str('<div class="control"><button class="btn btn-danger delete-control" rel="delete-item"><i class="icon-remove-sign"></i></button><button class="btn btn-warning edit-control" rel="edit-item"><i class="icon-pencil"></i></button><button class="btn btn-success complete-control" rel="complete"><i class="icon-ok"></i></button></div>'), cljs.core.str("</div>")].join("")
 };
-eatme.client.render.user_button = function user_button(p__82020) {
-  var map__82028 = p__82020;
-  var map__82028__$1 = cljs.core.seq_QMARK_.call(null, map__82028) ? cljs.core.apply.call(null, cljs.core.hash_map, map__82028) : map__82028;
-  var lastname = cljs.core._lookup.call(null, map__82028__$1, "\ufdd0'lastname", null);
-  var firstname = cljs.core._lookup.call(null, map__82028__$1, "\ufdd0'firstname", null);
+eatme.client.render.user_button = function user_button(p__83211) {
+  var map__83219 = p__83211;
+  var map__83219__$1 = cljs.core.seq_QMARK_.call(null, map__83219) ? cljs.core.apply.call(null, cljs.core.hash_map, map__83219) : map__83219;
+  var lastname = cljs.core._lookup.call(null, map__83219__$1, "\ufdd0'lastname", null);
+  var firstname = cljs.core._lookup.call(null, map__83219__$1, "\ufdd0'firstname", null);
   return[cljs.core.str("<div"), cljs.core.str(' class="btn-group"'), cljs.core.str(">"), cljs.core.str("<a"), cljs.core.str(' class="btn btn-small btn-success dropdown-toggle" data-toggle="dropdown"'), cljs.core.str(">"), cljs.core.str('<i class="icon-user"></i>'), cljs.core.str("&nbsp;"), cljs.core.str(hiccups.runtime.render_html.call(null, firstname)), cljs.core.str("&nbsp;"), cljs.core.str(hiccups.runtime.render_html.call(null, lastname)), cljs.core.str("&nbsp;"), cljs.core.str('<span class="caret"></span>'), 
   cljs.core.str("</a>"), cljs.core.str('<ul class="dropdown-menu"><li><a href="logout">Sign out</a></li></ul>'), cljs.core.str("</div>")].join("")
 };
 eatme.client.render.user_baskets = function user_baskets(baskets) {
   return[cljs.core.str(hiccups.runtime.render_html.call(null, cljs.core.map.call(null, function(b) {
-    return cljs.core.PersistentVector.fromArray(["\ufdd0'div", cljs.core.ObjMap.fromObject(["\ufdd0'class"], {"\ufdd0'class":"basket boxed text-center"}), cljs.core.PersistentVector.fromArray(["\ufdd0'a", cljs.core.ObjMap.fromObject(["\ufdd0'href"], {"\ufdd0'href":[cljs.core.str("#"), cljs.core.str((new cljs.core.Keyword("\ufdd0'id")).call(null, b))].join("")}), cljs.core.PersistentVector.fromArray(["\ufdd0'div", cljs.core.PersistentVector.fromArray(["\ufdd0'p", cljs.core.PersistentVector.fromArray(["\ufdd0'span.badge.badge-info", 
-    cljs.core.count.call(null, (new cljs.core.Keyword("\ufdd0'items")).call(null, b))], true), " items"], true), eatme.utils.upper_first.call(null, eatme.date_utils.friendly_age.call(null, (new cljs.core.Keyword("\ufdd0'timestamp")).call(null, b))), cljs.core.PersistentVector.fromArray(["\ufdd0'br"], true), cljs.core.PersistentVector.fromArray(["\ufdd0'span", cljs.core.PersistentVector.fromArray(["\ufdd0'small", eatme.date_utils.humanise.call(null, (new cljs.core.Keyword("\ufdd0'timestamp")).call(null, 
-    b))], true)], true)], true)], true)], true)
+    return cljs.core.PersistentVector.fromArray(["\ufdd0'td", cljs.core.PersistentVector.fromArray(["\ufdd0'div", cljs.core.ObjMap.fromObject(["\ufdd0'class"], {"\ufdd0'class":"basket boxed text-center"}), cljs.core.PersistentVector.fromArray(["\ufdd0'a", cljs.core.ObjMap.fromObject(["\ufdd0'href"], {"\ufdd0'href":[cljs.core.str("#"), cljs.core.str((new cljs.core.Keyword("\ufdd0'id")).call(null, b))].join("")}), cljs.core.PersistentVector.fromArray(["\ufdd0'div", cljs.core.PersistentVector.fromArray(["\ufdd0'p", 
+    cljs.core.PersistentVector.fromArray(["\ufdd0'span.badge.badge-info", cljs.core.count.call(null, (new cljs.core.Keyword("\ufdd0'items")).call(null, b))], true), " items"], true), eatme.utils.upper_first.call(null, eatme.date_utils.friendly_age.call(null, (new cljs.core.Keyword("\ufdd0'timestamp")).call(null, b))), cljs.core.PersistentVector.fromArray(["\ufdd0'br"], true), cljs.core.PersistentVector.fromArray(["\ufdd0'span", cljs.core.PersistentVector.fromArray(["\ufdd0'small", eatme.date_utils.humanise.call(null, 
+    (new cljs.core.Keyword("\ufdd0'timestamp")).call(null, b))], true)], true)], true)], true)], true)], true)
   }, baskets)))].join("")
 };
 eatme.client.render.qr_code_image = function qr_code_image(url) {
