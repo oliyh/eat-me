@@ -1,6 +1,6 @@
 (ns eatme.config
   (:require [clojure.string :as string]
-            [clojure.edn :refer [read-string]]))
+            [clojure.edn :as edn]))
 
 (def env-prefix "eatme_")
 (def config-atom (atom {}))
@@ -8,7 +8,7 @@
 (defn read-config-file
   "Loads config from resources/config/<env>.edn"
   [config-name]
-  (read-string (slurp
+  (edn/read-string (slurp
               (str "resources/config/" config-name ".edn"))))
 
 (defn read-env-vars [config]
