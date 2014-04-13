@@ -17,9 +17,13 @@
 
 (defroutes site
   (GET "/" {session :session} (cont-site/index session))
+
   (GET "/logout" req (cont-site/logout req))
   (GET "/auth" req (cont-site/auth req))
-  (GET "/admin/item-store" [] (cont-site/item-store)))
+  (GET "/admin/item-store" [] (cont-site/item-store))
+
+  (GET "/async" [] cont-site/ws-handler)
+  )
 
 (defroutes app-routes
   (c-route/resources "/")
@@ -41,6 +45,6 @@
    (c-core/routes site app-routes)
    wrap-params
    wrap-session
-   ;;wrap-keyword-params
+   wrap-keyword-params
    wrap-websocket-handler
    wrap-friend))

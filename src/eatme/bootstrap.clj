@@ -1,6 +1,8 @@
 (ns eatme.bootstrap
   (:require [eatme.config :refer [init-config config]]
             [eatme.routes]
+            [eatme.basket-store :as basket-store]
+            [eatme.item-library :as item-lib]
             [clojure.tools.logging :as log]
             [com.stuartsierra.component :as component]
             [org.httpkit.server :refer [run-server]]))
@@ -26,9 +28,36 @@
         (dissoc this :http-server))
       this)))
 
+(defrecord BasketStoreComponent [config]
+  component/Lifecycle
+
+  (start [this]
+    (log/info "Initialising basket store")
+    (basket-store/init)
+    this)
+
+  (stop [this]
+    this)
+  )
+
+(defrecord ItemLibraryComponent [config]
+  component/Lifecycle
+
+  (start [this]
+    (log/info "Initialising item library")
+    (item-lib/init)
+    this)
+
+  (stop [this]
+    this)
+  )
+
+
 (defn bootstrap []
   (init-config)
   (intern 'eatme.bootstrap 'system
           (component/start
            (component/system-map
+            :basket-store (BasketStoreComponent. config)
+            :item-library (ItemLibraryComponent. config)
             :http-kit (HttpKitComponent. eatme.routes/app config)))))

@@ -1,6 +1,6 @@
 (ns eatme.controllers.site
   (:use [clojure.core.async :only [chan timeout >!! <!! buffer alts!! thread
-                                   go-loop close! go tap sliding-buffer untap]])
+                                   go-loop close! go tap sliding-buffer untap mult]])
   (:require [hiccup.page :as h]
             [cemerick.friend :as friend]
             [cemerick.friend.openid :as openid]
@@ -8,7 +8,8 @@
             [eatme.item-store :as items]
             [clojure.tools.logging :as log]))
 
-(def response-mult (chan))
+(def responses (chan))
+(def response-mult (mult responses))
 
 (defn index [session]
   (clojure.java.io/resource "public/html/index.html"))
@@ -34,6 +35,9 @@
 (defn item-store []
   (items/populate-from-library)
   (h/html5 [:p "complete"]))
+
+(go-loop []
+  (>!! responses (str "hello world" (System/currentTimeMillis))))
 
 (defn ws-handler [{:keys [ws-channel] :as req}]
   (let [response-chan (tap response-mult (chan (sliding-buffer 10)))]
