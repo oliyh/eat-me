@@ -1,4 +1,5 @@
 # Project related
+resources/public/js/cljs
 
 # Java related
 pom.xml

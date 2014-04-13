@@ -36,7 +36,7 @@
   (items/populate-from-library)
   (h/html5 [:p "complete"]))
 
-(thread
+#_(thread
   (loop []
     (>!! responses (str "hello world" (System/currentTimeMillis)))
     (<!! (timeout 1000))
@@ -48,6 +48,7 @@
 (defn ws-handler [{:keys [ws-channel] :as req}]
   (let [response-chan (tap response-mult (chan (sliding-buffer 10)))]
     (log/info "New subscriber to websocket")
+    (>!! responses @the-list)
     (go-loop []
       (when-let [r (first (alts! [response-chan ws-channel]))]
         (>! ws-channel (prn-str r))

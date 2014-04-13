@@ -19,15 +19,17 @@
                  [liberator "0.11.0" :exclusions [org.clojure/tools.logging]]
                  [com.cemerick/friend "0.1.5"]
                  [hiccup "1.0.5" :exclusions [org.clojure/clojure]]
+
+
+                 [org.clojure/core.async "0.1.278.0-76b25b-alpha"]
+                 [org.clojure/clojurescript "0.0-2173"]
                  [jarohen/chord "0.2.2" :exclusions [http-kit]]
 
-
-                 [org.clojure/clojurescript "0.0-2173"]
                  ;;[prismatic/dommy "0.1.2"]
                  [om "0.5.3"]
                  [sablono "0.2.15"]
                  [secretary "1.1.0"]
-                 [org.clojure/core.async "0.1.278.0-76b25b-alpha"]]
+                 ]
   :resource-paths ["resources"]
   :source-paths ["src"]
 
@@ -41,9 +43,12 @@
   ;:run-aliases {}
   :main eatme.server
   :cljsbuild {:builds [{:source-paths ["src-cljs"]
-                        :compiler {:output-to "resources/public/js/eatme.js",
+                        :compiler {:output-to "resources/public/js/eatme.js"
+                                   ;;:output-dir "resources/public/js/cljs"
                                    :optimizations :advanced ;:simple ;:advanced ;:whitespace ;; only advanced works atm
-                                   :pretty-print true
+                                   :pretty-print false
+                                   :preamble ["react/react.min.js"]
+                                   :externs ["react/externs/react.js"]
                                    }}]}
 
   ;; :externs
