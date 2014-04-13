@@ -1,35 +1,46 @@
 (ns eatme.routes
+  (:use (ring.middleware [keyword-params :only [wrap-keyword-params]]
+                             [params :only [wrap-params]]
+                             [session :only [wrap-session]]
+                             [flash :only [wrap-flash]]))
   (:require [compojure.core :as c-core :refer [defroutes
                                                GET POST PUT DELETE
                                                HEAD OPTIONS PATCH
                                                ANY]]
             [compojure.route :as c-route]
-            [shoreleave.middleware.rpc :refer [remote-ns]]
-            ;; Controllers
+            [cemerick.friend :as friend]
+            [cemerick.friend.openid :as openid]
+
             [eatme.controllers.site :as cont-site]
-            ;; Public APIs
-            [eatme.controllers.api]))
+            [chord.http-kit :refer [wrap-websocket-handler]]
+            ))
 
-;; Remote APIs exposed
-;; -------------------
-(remote-ns 'eatme.controllers.api :as "api")
-
-;; Controller routes, ROA oriented
-;; -------------------------------
 (defroutes site
   (GET "/" {session :session} (cont-site/index session))
   (GET "/logout" req (cont-site/logout req))
   (GET "/auth" req (cont-site/auth req))
-  (GET "/test" [] (cont-site/test-shoreleave))
   (GET "/admin/item-store" [] (cont-site/item-store)))
 
-;; Core system routes
-;; ------------------
 (defroutes app-routes
   (c-route/resources "/")
   (c-route/not-found "404 Page not found."))
 
-;; The top-level collection of all routes
+(defn wrap-friend [app]
+  (friend/authenticate
+   app
+   {:allow-anon? true
+    :default-landing-uri "/"
+    :workflows [(openid/workflow
+                 :openid-uri "/login"
+                 :credential-fn identity)]}))
+
+;; The app itself
 ;; --------------------------------------
-(def all-routes
-  (c-core/routes site app-routes))
+(defn app []
+  (->
+   (c-core/routes site app-routes)
+   wrap-params
+   wrap-session
+   ;;wrap-keyword-params
+   wrap-websocket-handler
+   wrap-friend))

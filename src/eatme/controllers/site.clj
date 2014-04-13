@@ -1,16 +1,17 @@
 (ns eatme.controllers.site
-  (:use [ring.middleware.anti-forgery :only [*anti-forgery-token*]])
+  (:use [clojure.core.async :only [chan timeout >!! <!! buffer alts!! thread
+                                   go-loop close! go tap sliding-buffer untap]])
   (:require [hiccup.page :as h]
             [cemerick.friend :as friend]
             [cemerick.friend.openid :as openid]
             [ring.util.response :as resp]
-            [eatme.item-store :as items]))
+            [eatme.item-store :as items]
+            [clojure.tools.logging :as log]))
+
+(def response-mult (chan))
 
 (defn index [session]
-  (slurp "resources/public/html/shopping-list.html"))
-
-(defn test-shoreleave []
-  (slurp "resources/public/html/test.html"))
+  (clojure.java.io/resource "public/html/index.html"))
 
 (def providers [{:name "Google" :url "https://www.google.com/accounts/o8/id" :icon "google"}
                 {:name "Yahoo" :url "http://me.yahoo.com/" :icon "yahoo"}])
@@ -26,7 +27,6 @@
                 dom-id (str (gensym))]]
       [:form {:method "POST" :action "login"}
        [:input {:type "hidden" :name "identifier" :value url :id dom-id}]
-       [:input {:type "hidden" :name "__anti-forgery-token" :value *anti-forgery-token*}]
        [:div.btn-group
         [:button.btn [:i {:class (str "icon-social " icon)}]]
         [:button.btn {:type "submit"} (str "Sign in with " name)]]])]))
@@ -34,3 +34,15 @@
 (defn item-store []
   (items/populate-from-library)
   (h/html5 [:p "complete"]))
+
+(defn ws-handler [{:keys [ws-channel] :as req}]
+  (let [response-chan (tap response-mult (chan (sliding-buffer 10)))]
+    (log/info "New subscriber to websocket")
+    (go-loop []
+      (when-let [r (first (alts! [response-chan ws-channel]))]
+        (>! ws-channel (prn-str r))
+        (recur))
+      (log/info "Subscriber disconnecting")
+      (untap response-mult response-chan)
+      (close! response-chan)))
+  nil)

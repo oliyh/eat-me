@@ -1,6 +1,6 @@
 (ns eatme.config
   (:require [clojure.string :as string]
-            [shoreleave.server-helpers :refer [safe-read]]))
+            [clojure.edn :refer [read-string]]))
 
 (def env-prefix "eatme_")
 (def config-atom (atom {}))
@@ -8,7 +8,7 @@
 (defn read-config-file
   "Loads config from resources/config/<env>.edn"
   [config-name]
-  (safe-read (slurp
+  (read-string (slurp
               (str "resources/config/" config-name ".edn"))))
 
 (defn read-env-vars [config]
