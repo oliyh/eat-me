@@ -12,14 +12,13 @@
 (utils/log "hello world from main")
 
 (defroute "/" {:as params}
-  (let [list-state (ctrl/connect-to-server)]
+  (let [[list-state upload-fn] (ctrl/connect-to-server)]
     (om/root views/render-list list-state
              {:target (. js/document (getElementById "list"))})
     (om/root views/render-item-form list-state
              {:target (. js/document (getElementById "add-item-form"))
               :tx-listen (fn [tx-data root-cursor]
-                           (utils/log "Transaction occurred!")
-                           (utils/log tx-data)
-                           (utils/log @root-cursor))})))
+                           (upload-fn (:new-value tx-data))
+                           (utils/log "root cursor" @root-cursor))})))
 
 (utils/load-secretary)

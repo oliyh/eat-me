@@ -18,7 +18,7 @@
                  [liberator "0.11.0" :exclusions [org.clojure/tools.logging]]
                  [com.cemerick/friend "0.1.5"]
                  [hiccup "1.0.5" :exclusions [org.clojure/clojure]]
-                 [jarohen/chord "0.2.2" :exclusions [http-kit]]
+                 [jarohen/chord "0.4.1" :exclusions [http-kit]]
 
                  [org.clojure/clojurescript "0.0-2197"]
 

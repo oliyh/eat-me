@@ -1,6 +1,6 @@
 (ns eatme.controllers
   (:require [cljs.reader]
-            [cljs.core.async :refer [<! timeout alts!]]
+            [cljs.core.async :refer [<! >! timeout alts! pipe chan]]
             [chord.client :refer [ws-ch]]
             [eatme.utils :as utils])
   (:require-macros [cljs.core.async.macros :refer [go go-loop]]))
@@ -35,9 +35,10 @@
   websocket channel."
   [address]
   (go
-    (first
-     (alts! [(ws-ch address)
-             (timeout RECONNECT-TIMEOUT)]))))
+    (:ws-channel
+     (first
+      (alts! [(ws-ch address {:format :edn})
+              (timeout RECONNECT-TIMEOUT)])))))
 
 (defn assoc-msg!
   "Assocs the passed message into the app state and clears any
@@ -72,30 +73,39 @@
 
 (defn start-monitoring-ws! [checks-state address]
   (log "starting to listen to" address)
-  (go-loop []
-    (if-let [ws (<! (connect! address))]
-      (do
-        (set-single-msg! checks-state monitoring-server-waiting-msg)
-        (loop []
-          (let [msg (<! (msg-channel ws))]
-            (condp = msg
-              ::timeout
-              (do
-                (assoc-msg! checks-state monitoring-server-late-messages-msg)
-                (recur))
-              ::disconnected
-              (do
-                (set-single-msg! checks-state monitoring-server-failure-msg)
-                (log "stopped receiving messages from" address)) ;;don't recur into inner loop
-              (do ;;default
-                (assoc-msg! checks-state (parse-message msg))
-                (utils/log @checks-state)
-                (recur)))))
-        (recur))
-      (do (log "ws connection to" address "failed, retrying...")
-          (recur)))))
+  (let [upload-chan (chan)]
+    (go-loop []
+      (if-let [ws (<! (connect! address))]
+        (do
+          (pipe upload-chan ws)
+          (set-single-msg! checks-state monitoring-server-waiting-msg)
+          (loop []
+            (let [msg (<! (msg-channel ws))]
+              (condp = msg
+                ::timeout
+                (do
+                  (assoc-msg! checks-state monitoring-server-late-messages-msg)
+                  (recur))
+                ::disconnected
+                (do
+                  (set-single-msg! checks-state monitoring-server-failure-msg)
+                  (log "stopped receiving messages from" address)) ;;don't recur into inner loop
+                (do ;;default
+                  (assoc-msg! checks-state (parse-message msg))
+                  (utils/log @checks-state)
+                  (recur)))))
+          (recur))
+        (do (log "ws connection to" address "failed, retrying...")
+            (recur))))
+    upload-chan))
+
+(defn upload-fn [upload-chan]
+  (fn [msg]
+    (go
+      (utils/log "sending" msg "to upload chan")
+      (>! upload-chan msg))))
 
 (defn connect-to-server []
-  (let [app-state (atom {})]
-    (start-monitoring-ws! app-state (str "ws://" js/window.location.hostname ":8080/async"))
-    app-state))
+  (let [app-state (atom {})
+        upload-chan (start-monitoring-ws! app-state (str "ws://" js/window.location.hostname ":8080/async"))]
+    [app-state (upload-fn upload-chan)]))

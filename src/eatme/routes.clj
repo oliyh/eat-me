@@ -46,5 +46,5 @@
    wrap-params
    wrap-session
    wrap-keyword-params
-   wrap-websocket-handler
+   (wrap-websocket-handler {:format :edn})
    wrap-friend))

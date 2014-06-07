@@ -47,14 +47,22 @@
                      :items [{:name "Kiwis" :qty 3}
                              {:name "Tin foil" :qty 1}]}))
 
+(defn update-list [items]
+  (println "Updating items in basket to:" items)
+  (swap! the-list (fn [old]
+                    (assoc old :items items))))
+
 (defn ws-handler [{:keys [ws-channel] :as req}]
   (let [response-chan (tap response-mult (chan (sliding-buffer 10)))]
     (log/info "New subscriber to websocket")
     (>!! responses @the-list)
     (go-loop []
-      (when-let [r (first (alts! [response-chan ws-channel]))]
-        (>! ws-channel (prn-str r))
-        (recur))
+      (let [[msg the-chan] (alts! [response-chan ws-channel])]
+        (when msg
+          (condp = the-chan
+            response-chan (>! ws-channel (prn-str msg))
+            ws-channel (update-list (:message msg)))
+          (recur)))
       (log/info "Subscriber disconnecting")
       (untap response-mult response-chan)
       (close! response-chan)))
