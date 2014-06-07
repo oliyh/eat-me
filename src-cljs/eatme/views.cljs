@@ -26,12 +26,31 @@
     [:div
      (om/build render-items (:basket app-state))])))
 
-(defn render-item-form [{:keys [basket]}]
+;; <input id="add-item-name" type="text" class="form-control input-lg" placeholder="Item...">
+
+;; <span id="add-item-form" class="input-group-btn">
+
+(defn render-suggestion [item]
   (om/component
    (html
-    (let [items (:items basket)]
-      [:button {:on-click #(models/add-new-item! items)
-                :class "btn btn-default btn-lg"
-                :type "button"}
-       "Add"])
-    )))
+    [:li [:span {:on-click #(utils/log "clicked span")}
+          [:a (str (:Name item) " (£" (:Price item) ")")]]])))
+
+(defn render-item-form [{:keys [basket suggest]}]
+  (om/component
+   (let [items (:items basket)]
+     (html
+      [:div.search
+       [:input {:id "add-item-name"
+                :type "search"
+                :class "form-control input-lg"
+                :placeholder "Item..."
+                :on-change #(models/suggest-item suggest (.-currentTarget %))}]
+       [:ul.search-ac
+        (om/build-all render-suggestion (:matches suggest))]
+       [:span {:class "input-group-btn"}
+        [:button {:on-click #(models/add-new-item! items)
+                  :class "btn btn-default btn-lg"
+                  :type "button"}
+         "Add"]]]
+      ))))

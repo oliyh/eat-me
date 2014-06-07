@@ -12,8 +12,15 @@
    :name (dom/value (sel1 :#add-item-name))})
 
 (defn add-item! [items {:keys [item qty] :as new-item}]
+  (utils/log "Adding item!")
   (om/transact! items (fn [items]
                         (conj items new-item))))
 
 (defn add-new-item! [items]
   (add-item! items (read-item)))
+
+(defn suggest-item [suggest name-input]
+  (let [q (dom/value name-input)]
+    (if (< 2 (count q))
+      (om/transact! suggest #(assoc % :q q))
+      (om/transact! suggest #(dissoc % :q)))))

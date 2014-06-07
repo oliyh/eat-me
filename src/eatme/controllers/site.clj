@@ -88,6 +88,17 @@
   (or (@the-store basket-id)
       (create-basket! basket-id)))
 
+(defmulti respond-to (fn [m & args] (:type m)))
+
+(defmethod respond-to :basket [basket _ basket-id]
+  (update-basket basket-id basket))
+
+(defmethod respond-to :suggest [query user-chan & args]
+  (thread
+    (>!! user-chan {:type :suggest
+                    :q (:q query)
+                    :matches (items/suggest-item (:q query))})))
+
 (defn ws-handler [{:keys [ws-channel params] :as req}]
   (let [basket-id (:basket-id params)
         response-mult (:out (get-or-create-responses-chan basket-id))
@@ -99,7 +110,7 @@
         (when msg
           (condp = the-chan
             response-chan (>! ws-channel msg)
-            ws-channel (update-basket basket-id (:message msg)))
+            ws-channel (respond-to (:message msg) response-chan basket-id))
           (recur)))
       (log/info "Subscriber disconnecting")
       (untap response-mult response-chan)

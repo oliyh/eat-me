@@ -51,7 +51,7 @@
   "Clears the state of checks and replaces it with a single
   message (msg)."
   [state msg]
-  (reset! state {(:type msg) msg}))
+  (swap! state assoc (:type msg) msg))
 
 (defn msg-channel
   "Wraps the passed web socket channel so that if messages don't
@@ -103,7 +103,7 @@
       (>! upload-chan msg))))
 
 (defn connect-to-server [basket-id]
-  (let [app-state (atom {})
+  (let [app-state (atom {:suggest {:type :suggest}})
         upload-chan (start-monitoring-ws! app-state
                                           (str "ws://" js/window.location.hostname ":8080/" basket-id "/async"))]
     [app-state (upload-fn upload-chan)]))
