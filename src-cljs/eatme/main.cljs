@@ -11,8 +11,8 @@
 
 (utils/log "hello world from main")
 
-(defroute "/" {:as params}
-  (let [[list-state upload-fn] (ctrl/connect-to-server)]
+(defroute "/:basket-id" {:keys [basket-id] :as params}
+  (let [[list-state upload-fn] (ctrl/connect-to-server basket-id)]
     (om/root views/render-list list-state
              {:target (. js/document (getElementById "list"))})
     (om/root views/render-item-form list-state

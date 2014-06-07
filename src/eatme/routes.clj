@@ -10,20 +10,20 @@
             [compojure.route :as c-route]
             [cemerick.friend :as friend]
             [cemerick.friend.openid :as openid]
-
+            [ring.util.response :as response]
             [eatme.controllers.site :as cont-site]
             [chord.http-kit :refer [wrap-websocket-handler]]
-            ))
+            )
+  (:import [java.util UUID]))
 
 (defroutes site
-  (GET "/" {session :session} (cont-site/index session))
-
   (GET "/logout" req (cont-site/logout req))
   (GET "/auth" req (cont-site/auth req))
   (GET "/admin/item-store" [] (cont-site/item-store))
 
-  (GET "/async" [] cont-site/ws-handler)
-  )
+  (GET "/" [] (response/redirect (str "/" (UUID/randomUUID))))
+  (GET "/:basket-id" {session :session basket-id :basket-id} (cont-site/index session))
+  (GET "/:basket-id/async" [basket-id] cont-site/ws-handler))
 
 (defroutes app-routes
   (c-route/resources "/")

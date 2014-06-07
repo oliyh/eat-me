@@ -22,7 +22,7 @@
 
                  [org.clojure/clojurescript "0.0-2197"]
 
-                 ;;[prismatic/dommy "0.1.2"]
+                 [prismatic/dommy "0.1.2"]
                  [om "0.5.3"]
                  [sablono "0.2.15"]
                  [secretary "1.1.0"]

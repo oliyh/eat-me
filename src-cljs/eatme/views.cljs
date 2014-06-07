@@ -27,11 +27,10 @@
      (om/build render-items (:basket app-state))])))
 
 (defn render-item-form [{:keys [basket]}]
-  ;; <button id="add-item-button" class="btn btn-default btn-lg" type="button">Add</button>
   (om/component
    (html
     (let [items (:items basket)]
-      [:button {:on-click #(models/add-item! items {:name "bob" :qty 34})
+      [:button {:on-click #(models/add-new-item! items)
                 :class "btn btn-default btn-lg"
                 :type "button"}
        "Add"])

@@ -105,7 +105,8 @@
       (utils/log "sending" msg "to upload chan")
       (>! upload-chan msg))))
 
-(defn connect-to-server []
+(defn connect-to-server [basket-id]
   (let [app-state (atom {})
-        upload-chan (start-monitoring-ws! app-state (str "ws://" js/window.location.hostname ":8080/async"))]
+        upload-chan (start-monitoring-ws! app-state
+                                          (str "ws://" js/window.location.hostname ":8080/" basket-id "/async"))]
     [app-state (upload-fn upload-chan)]))

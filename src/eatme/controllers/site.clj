@@ -42,26 +42,38 @@
     (<!! (timeout 1000))
     (recur)))
 
-(def the-list (atom {:id "abcdef"
-                     :type :basket
-                     :items [{:name "Kiwis" :qty 3}
-                             {:name "Tin foil" :qty 1}]}))
+(def the-store (atom {"foo" {:id "abcdef"
+                             :type :basket
+                             :items [{:name "Kiwis" :qty 3}
+                                     {:name "Tin foil" :qty 1}]}}))
 
-(defn update-list [items]
-  (println "Updating items in basket to:" items)
-  (swap! the-list (fn [old]
-                    (assoc old :items items))))
+(defn update-basket [basket-id items]
+  (println "Updating items in basket" basket-id "to" items)
+  (swap! the-store (fn [old]
+                     (assoc-in old [basket-id :items] items))))
 
-(defn ws-handler [{:keys [ws-channel] :as req}]
-  (let [response-chan (tap response-mult (chan (sliding-buffer 10)))]
+(defn create-basket! [id]
+  (let [basket {:id id
+                :type :basket
+                :items []}]
+    (swap! the-store (fn [old] (assoc old id basket)))
+    basket))
+
+(defn load-or-create-basket [basket-id]
+  (or (@the-store basket-id)
+      (create-basket! basket-id)))
+
+(defn ws-handler [{:keys [ws-channel params] :as req}]
+  (let [basket-id (:basket-id params)
+        response-chan (tap response-mult (chan (sliding-buffer 10)))]
     (log/info "New subscriber to websocket")
-    (>!! responses @the-list)
+    (>!! responses (load-or-create-basket basket-id))
     (go-loop []
       (let [[msg the-chan] (alts! [response-chan ws-channel])]
         (when msg
           (condp = the-chan
             response-chan (>! ws-channel (prn-str msg))
-            ws-channel (update-list (:message msg)))
+            ws-channel (update-basket basket-id (:message msg)))
           (recur)))
       (log/info "Subscriber disconnecting")
       (untap response-mult response-chan)
