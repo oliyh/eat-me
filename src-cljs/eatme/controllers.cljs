@@ -12,19 +12,19 @@
 (def MESSAGE-WAIT-TIMEOUT 5000)
 
 (def monitoring-server-failure-msg
-  {:id :monitoring-health
+  {:type :monitoring-health
    :result false
    :name "Monitoring server"
    :report "Connection to the monitoring server lost, trying to reconnect..."})
 
 (def monitoring-server-waiting-msg
-  {:id :monitoring-health
+  {:type :monitoring-health
    :result true
    :name "Monitoring server"
    :report "Connected, waiting for messages..."})
 
 (def monitoring-server-late-messages-msg
-  {:id :monitoring-health
+  {:type :monitoring-health
    :result false
    :name "Monitoring server"
    :report "Messages are late."})
@@ -44,13 +44,13 @@
   existing monitoring health messages."
   [state msg]
   (swap! state dissoc :monitoring-health)
-  (swap! state assoc (:id msg) msg))
+  (swap! state assoc (:type msg) msg))
 
 (defn set-single-msg!
   "Clears the state of checks and replaces it with a single
   message (msg)."
   [state msg]
-  (reset! state {(:id msg) msg}))
+  (reset! state {(:type msg) msg}))
 
 (defn msg-channel
   "Wraps the passed web socket channel so that if messages don't
@@ -89,12 +89,13 @@
                 (log "stopped receiving messages from" address)) ;;don't recur into inner loop
               (do ;;default
                 (assoc-msg! checks-state (parse-message msg))
+                (utils/log @checks-state)
                 (recur)))))
         (recur))
       (do (log "ws connection to" address "failed, retrying...")
           (recur)))))
 
 (defn connect-to-server []
-  (let [list-state (atom {})]
-    (start-monitoring-ws! list-state (str "ws://" js/window.location.hostname ":8080/async"))
-    list-state))
+  (let [app-state (atom {})]
+    (start-monitoring-ws! app-state (str "ws://" js/window.location.hostname ":8080/async"))
+    app-state))

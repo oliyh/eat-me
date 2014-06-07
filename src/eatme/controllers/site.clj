@@ -42,8 +42,10 @@
     (<!! (timeout 1000))
     (recur)))
 
-(def the-list (atom {:id "abcdef" :items {:abc {:name "Kiwis" :qty 3}
-                                          :def {:name "Tin foil" :qty 1}}}))
+(def the-list (atom {:id "abcdef"
+                     :type :basket
+                     :items [{:name "Kiwis" :qty 3}
+                             {:name "Tin foil" :qty 1}]}))
 
 (defn ws-handler [{:keys [ws-channel] :as req}]
   (let [response-chan (tap response-mult (chan (sliding-buffer 10)))]

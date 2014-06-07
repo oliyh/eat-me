@@ -20,6 +20,7 @@ goog.addDependency("../cljs/reader.js", ['cljs.reader'], ['goog.string', 'cljs.c
 goog.addDependency("../eatme/controllers.js", ['eatme.controllers'], ['cljs.core', 'chord.client', 'cljs.core.async', 'cljs.reader', 'eatme.utils']);
 goog.addDependency("../sablono/core.js", ['sablono.core'], ['goog.dom', 'sablono.util', 'cljs.core', 'sablono.interpreter', 'clojure.string', 'clojure.walk']);
 goog.addDependency("../om/core.js", ['om.core'], ['cljs.core', 'om.dom', 'goog.ui.IdGenerator']);
-goog.addDependency("../eatme/views.js", ['eatme.views'], ['cljs.core', 'sablono.core', 'om.core', 'eatme.utils']);
+goog.addDependency("../eatme/models.js", ['eatme.models'], ['eatme.controllers', 'cljs.core', 'om.core', 'clojure.string', 'eatme.utils']);
+goog.addDependency("../eatme/views.js", ['eatme.views'], ['cljs.core', 'sablono.core', 'om.core', 'eatme.models', 'eatme.utils']);
 goog.addDependency("../eatme/test.js", ['eatme.test'], ['cljs.core']);
-goog.addDependency("../eatme/main.js", ['eatme.main'], ['eatme.controllers', 'cljs.core', 'om.core', 'eatme.views', 'secretary.core', 'clojure.string', 'eatme.utils']);
+goog.addDependency("../eatme/main.js", ['eatme.main'], ['eatme.controllers', 'cljs.core', 'om.core', 'eatme.views', 'secretary.core', 'eatme.models', 'clojure.string', 'eatme.utils']);
