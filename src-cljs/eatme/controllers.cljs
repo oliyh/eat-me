@@ -68,9 +68,6 @@
         ::timeout
         (if msg msg ::disconnected)))))
 
-(defn parse-message [msg]
-  (cljs.reader/read-string (:message msg)))
-
 (defn start-monitoring-ws! [checks-state address]
   (log "starting to listen to" address)
   (let [upload-chan (chan)]
@@ -91,7 +88,7 @@
                   (set-single-msg! checks-state monitoring-server-failure-msg)
                   (log "stopped receiving messages from" address)) ;;don't recur into inner loop
                 (do ;;default
-                  (assoc-msg! checks-state (parse-message msg))
+                  (assoc-msg! checks-state (:message msg))
                   (utils/log @checks-state)
                   (recur)))))
           (recur))

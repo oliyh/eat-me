@@ -8,8 +8,15 @@
             [eatme.item-store :as items]
             [clojure.tools.logging :as log]))
 
-(def responses (chan))
-(def response-mult (mult responses))
+(def responses (atom {}))
+
+(defn get-or-create-responses-chan [basket-id]
+  (or (@responses basket-id)
+      (let [in (chan)
+            r {:in in
+               :out (mult in)}]
+        (swap! responses assoc basket-id r)
+        r)))
 
 (defn index [session]
   (clojure.java.io/resource "public/html/index.html"))
@@ -67,7 +74,7 @@
           updated-basket (assoc basket :items resolved-items)]
 
       (save-basket! basket-id updated-basket)
-      (>!! responses updated-basket)
+      (>!! (:in (get-or-create-responses-chan basket-id)) updated-basket)
       )))
 
 (defn create-basket! [id]
@@ -83,14 +90,15 @@
 
 (defn ws-handler [{:keys [ws-channel params] :as req}]
   (let [basket-id (:basket-id params)
+        response-mult (:out (get-or-create-responses-chan basket-id))
         response-chan (tap response-mult (chan (sliding-buffer 10)))]
-    (log/info "New subscriber to websocket")
-    (>!! responses (load-or-create-basket basket-id))
+    (log/info "New subscriber to websocket" response-mult response-chan)
+    (>!! response-chan (load-or-create-basket basket-id))
     (go-loop []
       (let [[msg the-chan] (alts! [response-chan ws-channel])]
         (when msg
           (condp = the-chan
-            response-chan (>! ws-channel (prn-str msg))
+            response-chan (>! ws-channel msg)
             ws-channel (update-basket basket-id (:message msg)))
           (recur)))
       (log/info "Subscriber disconnecting")
