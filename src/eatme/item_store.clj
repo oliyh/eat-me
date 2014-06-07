@@ -24,11 +24,12 @@
     (assoc (dissoc i :_id) :id id)))
 
 (defn suggest-item [q]
-  (map replace-_id
-       (mq/with-collection "item"
-         (mq/find {:Name {$regex (str ".*" q ".*") $options "i"}})
-         (mq/fields [:Name])
-         (mq/limit 10))))
+  (sort-by #(count (:Name %))
+           (map replace-_id
+                (mq/with-collection "item"
+                  (mq/find {:Name {$regex (str ".*" q ".*") $options "i"}})
+                  (mq/fields [:Name :Price])
+                  (mq/limit 10)))))
 
 ;; currently only does the first 2 (of 500+) categories
 (defn populate-from-library []

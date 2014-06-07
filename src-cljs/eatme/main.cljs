@@ -18,7 +18,7 @@
     (om/root views/render-item-form list-state
              {:target (. js/document (getElementById "add-item-form"))
               :tx-listen (fn [tx-data root-cursor]
-                           (upload-fn (:new-value tx-data))
+                           (upload-fn (-> tx-data :new-state :basket))
                            (utils/log "root cursor" @root-cursor))})))
 
 (utils/load-secretary)

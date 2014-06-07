@@ -47,10 +47,28 @@
                              :items [{:name "Kiwis" :qty 3}
                                      {:name "Tin foil" :qty 1}]}}))
 
-(defn update-basket [basket-id items]
-  (println "Updating items in basket" basket-id "to" items)
+(defn save-basket! [basket-id basket]
+  (println "Updating basket" basket-id "to" basket)
   (swap! the-store (fn [old]
-                     (assoc-in old [basket-id :items] items))))
+                     (assoc old basket-id basket))))
+
+(defn update-basket [basket-id basket]
+  (thread
+    (save-basket! basket-id basket)
+    (let [resolved-items (for [item (:items basket)]
+                           (if-let [match (and (not (:price item))
+                                               (first (items/suggest-item (:name item))))]
+                             (do (println match)
+                                 (assoc item
+                                   :item-id (:id match)
+                                   :price (:Price match)
+                                   :name (:Name match)))
+                             item))
+          updated-basket (assoc basket :items resolved-items)]
+
+      (save-basket! basket-id updated-basket)
+      (>!! responses updated-basket)
+      )))
 
 (defn create-basket! [id]
   (let [basket {:id id
