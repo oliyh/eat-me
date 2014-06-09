@@ -113,7 +113,7 @@ footer {
     top: 45px;
     z-index: 10;
     padding: 0;
-    height: 250px;
+    max-height: 250px;
     overflow-y: scroll;
     overflow-x: hidden;
 }
