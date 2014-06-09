@@ -42,7 +42,7 @@
      (html
       [:div.search
        [:input {:id "add-item-name"
-                :type "search"
+                :type "tex"
                 :class "form-control input-lg"
                 :placeholder "Item..."
                 :on-change #(models/suggest-item suggest (.-currentTarget %))}]
