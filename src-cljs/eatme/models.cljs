@@ -6,15 +6,18 @@
             [dommy.core :as dom])
   (:use-macros [dommy.macros :only [sel1]]))
 
+(defn read-qty []
+  (js/parseInt (dom/value (sel1 :#add-item-qty))))
+
 (defn read-item []
-  (utils/log "qty is" (dom/value (sel1 :#add-item-qty)))
-  {:qty (js/parseInt (dom/value (sel1 :#add-item-qty)))
+  {:qty (read-qty)
    :name (dom/value (sel1 :#add-item-name))})
 
-(defn add-item! [items {:keys [item qty] :as new-item}]
-  (utils/log "Adding item!")
-  (om/transact! items (fn [items]
-                        (conj items new-item))))
+(defn add-item! [items {:keys [qty] :as new-item}]
+  (let [new-item (assoc new-item :qty (or qty (read-qty)))]
+    (utils/log "Adding item!")
+    (om/transact! items (fn [items]
+                          (conj items new-item)))))
 
 (defn add-new-item! [items]
   (add-item! items (read-item)))
