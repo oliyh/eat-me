@@ -1,7 +1,8 @@
 (ns eatme.item-library
   (:use [eatme.config :only [config]])
   (:require [clj-http.client :as client]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [clojure.set :refer [rename-keys]]))
 
 (def tesco-api "https://secure.techfortesco.com/groceryapi/restservice.aspx")
 
@@ -36,8 +37,19 @@
   ([q] (search q 1))
   ([q p] (:Products (call-api :productsearch {:searchtext q :page p}))))
 
+(def categories->eatme
+  {:Id :id
+   :Name :name
+   :Departments :departments
+   :Aisles :aisles
+   :Shelves :shelves
+   :UnitPrice :price})
+
+(defn ->eatme [m]
+  (rename-keys m categories->eatme))
+
 (defn categories []
-  (call-api :listproductcategories))
+  (rename-keys (call-api :listproductcategories) categories->eatme))
 
 (defn products [category-id]
   (:Products (call-api :listproductsbycategory {:category category-id})))
@@ -47,10 +59,10 @@
   (login))
 
 (defn- id-name [o]
-  (select-keys o [:Id :Name]))
+  (select-keys o [:id :name]))
 
 (defn all-shelves []
-  (for [dept (:Departments (categories))
-        aisle (:Aisles dept)
-        shelf (:Shelves aisle)]
+  (for [dept (map ->eatme (:departments (categories)))
+        aisle (map ->eatme (:aisles dept))
+        shelf (map ->eatme (:shelves aisle))]
     {:dept (id-name dept) :aisle (id-name aisle) :shelf (id-name shelf)}))
