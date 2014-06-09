@@ -37,6 +37,11 @@
   ([q] (search q 1))
   ([q p] (:Products (call-api :productsearch {:searchtext q :page p}))))
 
+(def products->eatme
+  {:UnitPrice :price
+   :Name :name
+   :ProductId :product-id})
+
 (def categories->eatme
   {:Id :id
    :Name :name
@@ -45,14 +50,18 @@
    :Shelves :shelves
    :UnitPrice :price})
 
-(defn ->eatme [m]
+(defn c->eatme [m]
   (rename-keys m categories->eatme))
+
+(defn p->eatme [m]
+  (rename-keys (select-keys m (keys products->eatme)) products->eatme))
 
 (defn categories []
   (rename-keys (call-api :listproductcategories) categories->eatme))
 
 (defn products [category-id]
-  (:Products (call-api :listproductsbycategory {:category category-id})))
+  (map p->eatme
+       (:Products (call-api :listproductsbycategory {:category category-id}))))
 
 ;; login and get a session id
 (defn init []
@@ -62,7 +71,7 @@
   (select-keys o [:id :name]))
 
 (defn all-shelves []
-  (for [dept (map ->eatme (:departments (categories)))
-        aisle (map ->eatme (:aisles dept))
-        shelf (map ->eatme (:shelves aisle))]
+  (for [dept (map c->eatme (:departments (categories)))
+        aisle (map c->eatme (:aisles dept))
+        shelf (map c->eatme (:shelves aisle))]
     {:dept (id-name dept) :aisle (id-name aisle) :shelf (id-name shelf)}))

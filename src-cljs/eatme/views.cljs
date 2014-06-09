@@ -33,11 +33,8 @@
 (defn render-suggestion [items item]
   (om/component
    (html
-    [:li [:span {:on-click #(models/add-item! items
-                                              {:item-id (:id item)
-                                               :price (:Price item)
-                                               :name (:Name item)})}
-          [:a (str (:Name item) " (£" (:Price item) ")")]]])))
+    [:li [:span {:on-click #(models/add-item! items item)}
+          [:a (str (:name item) " (£" (:price item) ")")]]])))
 
 (defn render-item-form [{:keys [basket suggest]}]
   (om/component

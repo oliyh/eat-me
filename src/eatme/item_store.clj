@@ -17,23 +17,31 @@
   (m/set-db! (m/get-db))) ;; db name is in the uri
 
 (defn add-item [category item]
-  (mc/update "item" {:ProductId (:ProductId item)} (assoc item :category category) :upsert true))
+  (mc/update "item"
+             {:product-id (:product-id item)}
+             (assoc item :category category)
+             :upsert true))
 
 (defn- replace-_id [i]
   (let [id (str (:_id i))]
     (assoc (dissoc i :_id) :id id)))
 
 (defn suggest-item [q]
-  (sort-by #(count (:Name %))
+  (sort-by #(count (:name %))
            (map replace-_id
                 (mq/with-collection "item"
-                  (mq/find {:Name {$regex (str ".*" q ".*") $options "i"}})
-                  (mq/fields [:Name :Price])
+                  (mq/find {:name {$regex (str ".*" q ".*") $options "i"}})
+                  (mq/fields [:name :price])
                   (mq/limit 10)))))
 
-;; currently only does the first 2 (of 500+) categories
 (defn populate-from-library []
   (doseq [category (library/all-shelves)]
     (println "Populating category" category)
-    (doseq [p (library/products (-> category :shelf :Id))]
+    (doseq [p (library/products (-> category :shelf :id))]
       (add-item category p))))
+
+#_(defn empty-store []
+  (m/drop-db "item"))
+
+(defn count-items []
+  (mc/count "item"))
