@@ -4,7 +4,8 @@
             [monger.core :as m]
             [monger.collection :as mc]
             [monger.joda-time]
-            [monger.operators :refer :all])
+            [monger.operators :refer :all]
+            [monger.conversion :refer :all])
   (:import [org.bson.types ObjectId]
            [com.mongodb DB WriteConcern]))
 
@@ -15,7 +16,7 @@
   (m/set-db! (m/get-db))) ;; db name is in the uri
 
 (defn load-basket [id]
-  (let [basket-id (ObjectId. id)]
+  (let [basket-id (to-object-id id)]
     (assoc (mc/find-map-by-id "basket" basket-id)
       :items (mc/find-maps "items" {:_basket basket-id}))))
 
@@ -31,9 +32,19 @@
     (str id)))
 
 (defn add-item! [basket-id item]
-  (let [id (ObjectId. basket-id)]
-    (mc/insert "items" (merge {:_id id :_basket (ObjectId. basket-id)} item))
+  (let [id (ObjectId.)]
+    (mc/insert "items" (merge {:_id id :_basket (to-object-id basket-id)} item))
     (str id)))
 
+(def item-updateable #{:name :qty})
+
+(defn update-item! [item]
+  (mc/update-by-id "items" (to-object-id (:_id item)) {$set (select-keys item item-updateable)}))
+
+(defn delete-item! [item-id]
+  (mc/remove-by-id "items" (to-object-id item-id)))
+
 (defn delete-basket! [id]
-  (mc/remove "basket" {:_id (ObjectId. id)}))
+  (let [basket-id (ObjectId. id)]
+    (mc/remove-by-id "basket" basket-id)
+    (mc/remove "items" {:_basket basket-id})))
