@@ -33,9 +33,11 @@
 (defn render-suggestion [suggest items suggestion]
   (om/component
    (html
-    [:li [:span {:on-click #(do (models/add-item! items suggestion)
-                                (models/clear-suggestions! suggest))}
+    [:li [:span {:on-click #(models/add-item! suggest items suggestion)}
           [:a (str (:name suggestion) " (£" (:price suggestion) ")")]]])))
+
+(defn- enter-key? [event]
+  (== (.-keyCode event) 13))
 
 (defn render-item-form [{:keys [basket suggest]}]
   (om/component
@@ -46,8 +48,9 @@
                 :type "tex"
                 :class "form-control input-lg"
                 :placeholder "Item..."
-                :value (or (:q suggest) "")
-                :on-change #(models/suggest-item suggest (.-currentTarget %))}]
+                :on-change #(models/suggest-item suggest (.-currentTarget %))
+                :on-key-press #(when (enter-key? %)
+                                 (models/add-new-item! suggest items))}]
        (when (not-empty (:matches suggest))
          [:ul.search-ac
           (om/build-all (partial render-suggestion suggest items) (:matches suggest))])

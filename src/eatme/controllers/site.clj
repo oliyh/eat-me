@@ -63,13 +63,13 @@
   (thread
     (save-basket! basket-id basket)
     (let [resolved-items (for [item (:items basket)]
-                           (if-let [match (and (not (:price item))
+                           (if-let [match (and (not (:item-id item))
                                                (first (items/suggest-item (:name item))))]
-                             (do (println match)
+                             (do (println "the match!" match)
                                  (assoc item
                                    :item-id (:id match)
-                                   :price (:Price match)
-                                   :name (:Name match)))
+                                   :price (:price match)
+                                   :name (:name match)))
                              item))
           updated-basket (assoc basket :items resolved-items)]
 

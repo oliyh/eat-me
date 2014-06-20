@@ -13,18 +13,24 @@
   {:qty (read-qty)
    :name (dom/value (sel1 :#add-item-name))})
 
-(defn add-item! [items {:keys [qty] :as new-item}]
-  (let [new-item (assoc new-item :qty (or qty (read-qty)))]
-    (utils/log "Adding item!")
-    (om/transact! items (fn [items]
-                          (conj items new-item)))))
-
-(defn add-new-item! [items]
-  (add-item! items (read-item)))
+(defn clear-query! []
+  (-> (sel1 :#add-item-name)
+   (dom/set-value! "")
+   (.focus)))
 
 (defn clear-suggestions! [suggest]
-  (om/transact! suggest #(-> %
-                             (dissoc :q :matches))))
+  (om/transact! suggest #(-> % (dissoc :q :matches))))
+
+(defn add-item! [suggest items {:keys [qty] :as new-item}]
+  (let [new-item (assoc new-item :qty (or qty (read-qty)))]
+    (utils/log "Adding item!" new-item)
+    (om/transact! items (fn [items]
+                          (conj items new-item)))
+    (clear-query!)
+    (clear-suggestions! suggest)))
+
+(defn add-new-item! [suggest items]
+  (add-item! suggest items (read-item)))
 
 (defn suggest-item [suggest name-input]
   (let [q (dom/value name-input)]
