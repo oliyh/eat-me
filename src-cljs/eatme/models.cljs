@@ -37,3 +37,11 @@
     (if (< 2 (count q))
       (om/transact! suggest #(assoc % :q q))
       (clear-suggestions! suggest))))
+
+(defn inc-qty! [e]
+  (dom/set-value! (sel1 :#add-item-qty) (inc (read-qty)))
+  (.preventDefault e))
+
+(defn dec-qty! [e]
+  (dom/set-value! (sel1 :#add-item-qty) (dec (read-qty)))
+  (.preventDefault e))

@@ -36,8 +36,17 @@
     [:li [:span {:on-click #(models/add-item! suggest items suggestion)}
           [:a (str (:name suggestion) " (£" (:price suggestion) ")")]]])))
 
-(defn- enter-key? [event]
-  (== (.-keyCode event) 13))
+(defn- on-key [& {:as key-fs}]
+  (fn [event]
+    (let [known {13 :enter
+                 43 :plus
+                 45 :minus}
+          key (get known (if (< 0 (.-keyCode event))
+                           (.-keyCode event)
+                           (.-charCode event)))]
+      (utils/log "keycode is" key)
+      (when-let [f (get key-fs key)]
+        (f event)))))
 
 (defn render-item-form [{:keys [basket suggest]}]
   (om/component
@@ -49,13 +58,14 @@
                 :class "form-control input-lg"
                 :placeholder "Item..."
                 :on-change #(models/suggest-item suggest (.-currentTarget %))
-                :on-key-press #(when (enter-key? %)
-                                 (models/add-new-item! suggest items))}]
+                :on-key-press (on-key :enter #(models/add-new-item! suggest items)
+                                      :plus #(models/inc-qty! %)
+                                      :minus #(models/dec-qty! %))}]
        (when (not-empty (:matches suggest))
          [:ul.search-ac
           (om/build-all (partial render-suggestion suggest items) (:matches suggest))])
        [:span {:class "input-group-btn"}
-        [:button {:on-click #(models/add-new-item! items)
+        [:button {:on-click #(models/add-new-item! suggest items)
                   :class "btn btn-default btn-lg"
                   :type "button"}
          "Add"]]]
