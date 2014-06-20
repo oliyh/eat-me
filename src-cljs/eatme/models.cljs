@@ -22,8 +22,12 @@
 (defn add-new-item! [items]
   (add-item! items (read-item)))
 
+(defn clear-suggestions! [suggest]
+  (om/transact! suggest #(-> %
+                             (dissoc :q :matches))))
+
 (defn suggest-item [suggest name-input]
   (let [q (dom/value name-input)]
     (if (< 2 (count q))
       (om/transact! suggest #(assoc % :q q))
-      (om/transact! suggest #(dissoc % :q)))))
+      (clear-suggestions! suggest))))

@@ -30,11 +30,12 @@
 
 ;; <span id="add-item-form" class="input-group-btn">
 
-(defn render-suggestion [items item]
+(defn render-suggestion [suggest items suggestion]
   (om/component
    (html
-    [:li [:span {:on-click #(models/add-item! items item)}
-          [:a (str (:name item) " (£" (:price item) ")")]]])))
+    [:li [:span {:on-click #(do (models/add-item! items suggestion)
+                                (models/clear-suggestions! suggest))}
+          [:a (str (:name suggestion) " (£" (:price suggestion) ")")]]])))
 
 (defn render-item-form [{:keys [basket suggest]}]
   (om/component
@@ -45,9 +46,11 @@
                 :type "tex"
                 :class "form-control input-lg"
                 :placeholder "Item..."
+                :value (or (:q suggest) "")
                 :on-change #(models/suggest-item suggest (.-currentTarget %))}]
-       [:ul.search-ac
-        (om/build-all (partial render-suggestion items) (:matches suggest))]
+       (when (not-empty (:matches suggest))
+         [:ul.search-ac
+          (om/build-all (partial render-suggestion suggest items) (:matches suggest))])
        [:span {:class "input-group-btn"}
         [:button {:on-click #(models/add-new-item! items)
                   :class "btn btn-default btn-lg"

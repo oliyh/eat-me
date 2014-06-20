@@ -94,10 +94,12 @@
   (update-basket basket-id basket))
 
 (defmethod respond-to :suggest [query user-chan & args]
-  (thread
-    (>!! user-chan {:type :suggest
-                    :q (:q query)
-                    :matches (items/suggest-item (:q query))})))
+  (let [q (:q query)]
+    (when (and (not-empty q) (< 2 (count q)))
+      (thread
+        (>!! user-chan {:type :suggest
+                        :q q
+                        :matches (items/suggest-item q)})))))
 
 (defn ws-handler [{:keys [ws-channel params] :as req}]
   (let [basket-id (:basket-id params)
