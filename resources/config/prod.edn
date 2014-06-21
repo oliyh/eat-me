@@ -1,10 +1,10 @@
 {
   ;; Core config
   ;; -----------
-  ;; :eatme-port 8080 ;; $PORT set by heroku
+  :PORT "set by heroku"
   :eatme-url "http://eatme.oliy.co.uk"
 
-  :MONGOLAB_URI "set env variable"
+  :MONGOLAB_URI "set by heroku"
 
   ;; Sessions and Cookies
   ;; --------------------
