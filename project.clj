@@ -20,7 +20,7 @@
                  [hiccup "1.0.5" :exclusions [org.clojure/clojure]]
                  [jarohen/chord "0.4.1" :exclusions [http-kit]]
 
-                 [org.clojure/clojurescript "0.0-2197"]
+                 [org.clojure/clojurescript "0.0-2234"]
 
                  [prismatic/dommy "0.1.2"]
                  [om "0.5.3"]
