@@ -21,7 +21,7 @@
   (GET "/auth" req (cont-site/auth req))
   (GET "/admin/item-store" [] (cont-site/item-store))
 
-  (GET "/" [] (response/redirect (str "/" (UUID/randomUUID))))
+  (GET "/" [] cont-site/new-session)
   (GET "/:basket-id" {session :session basket-id :basket-id} (cont-site/index session))
   (GET "/:basket-id/async" [basket-id] cont-site/ws-handler))
 

@@ -33,12 +33,11 @@
 
   (start [this]
     (log/info "Initialising basket store")
-    (basket-store/init)
+    (basket-store/init!)
     this)
 
   (stop [this]
-    this)
-  )
+    this))
 
 (defrecord ItemLibraryComponent [config]
   component/Lifecycle
@@ -49,8 +48,7 @@
     this)
 
   (stop [this]
-    this)
-  )
+    this))
 
 
 (defn bootstrap []

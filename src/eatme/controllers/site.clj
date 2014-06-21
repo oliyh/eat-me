@@ -1,11 +1,12 @@
 (ns eatme.controllers.site
-  (:use [clojure.core.async :only [chan timeout >!! <!! buffer alts!! thread
+  (:use [clojure.core.async :only [chan timeout >!! <!! >! buffer alts!! thread
                                    go-loop close! go tap sliding-buffer untap mult]])
   (:require [hiccup.page :as h]
             [cemerick.friend :as friend]
             [cemerick.friend.openid :as openid]
             [ring.util.response :as resp]
             [eatme.item-store :as items]
+            [eatme.basket-store :as basket]
             [clojure.tools.logging :as log]))
 
 (def responses (atom {}))
@@ -15,6 +16,10 @@
       (let [in (chan)
             r {:in in
                :out (mult in)}]
+        (go-loop []
+            (<! (timeout 15000))
+          (>! in {:_type :health :result "success" :report "Heartbeat recieved"})
+          (recur))
         (swap! responses assoc basket-id r)
         r)))
 
@@ -43,61 +48,43 @@
   (items/populate-from-library)
   (h/html5 [:p "complete"]))
 
-#_(thread
-  (loop []
-    (>!! responses (str "hello world" (System/currentTimeMillis)))
-    (<!! (timeout 1000))
-    (recur)))
-
-(def the-store (atom {"foo" {:id "abcdef"
-                             :type :basket
-                             :items [{:name "Kiwis" :qty 3}
-                                     {:name "Tin foil" :qty 1}]}}))
-
-(defn save-basket! [basket-id basket]
-  (println "Updating basket" basket-id "to" basket)
-  (swap! the-store (fn [old]
-                     (assoc old basket-id basket))))
-
-(defn update-basket [basket-id basket]
+(defn update-basket [user-chan basket-id basket]
   (thread
-    (save-basket! basket-id basket)
-    (let [resolved-items (for [item (:items basket)]
-                           (if-let [match (and (not (:item-id item))
-                                               (first (items/suggest-item (:name item))))]
-                             (do (println "the match!" match)
-                                 (assoc item
-                                   :item-id (:id match)
-                                   :price (:price match)
-                                   :name (:name match)))
-                             item))
-          updated-basket (assoc basket :items resolved-items)]
+    (let [new-items (remove :_id (:items basket))]
+      (doseq [item new-items]
+          (basket/add-item! basket-id item))
 
-      (save-basket! basket-id updated-basket)
-      (>!! (:in (get-or-create-responses-chan basket-id)) updated-basket)
+      #_(let [resolved-items (for [item (:items basket)]
+                             (if-let [match (and (not (:item-id item))
+                                                 (first (items/suggest-item (:name item))))]
+                               (do (println "the match!" match)
+                                   (assoc item
+                                     :item-id (:id match)
+                                     :price (:price match)
+                                     :name (:name match)))
+                               item))
+            updated-basket (assoc basket :items resolved-items)]
+
+        (save-basket! basket-id updated-basket)
+
+        )
+
+      (>!! user-chan (basket/load-basket basket-id))
       )))
 
-(defn create-basket! [id]
-  (let [basket {:id id
-                :type :basket
-                :items []}]
-    (swap! the-store (fn [old] (assoc old id basket)))
-    basket))
+(defn new-session [req]
+  (resp/redirect (str "/" (basket/create-basket!))))
 
-(defn load-or-create-basket [basket-id]
-  (or (@the-store basket-id)
-      (create-basket! basket-id)))
+(defmulti respond-to (fn [m & args] (:_type m)))
 
-(defmulti respond-to (fn [m & args] (:type m)))
-
-(defmethod respond-to :basket [basket _ basket-id]
-  (update-basket basket-id basket))
+(defmethod respond-to :basket [basket user-chan basket-id]
+  (update-basket user-chan basket-id basket))
 
 (defmethod respond-to :suggest [query user-chan & args]
   (let [q (:q query)]
     (when (and (not-empty q) (< 2 (count q)))
       (thread
-        (>!! user-chan {:type :suggest
+        (>!! user-chan {:_type :suggest
                         :q q
                         :matches (items/suggest-item q)})))))
 
@@ -106,7 +93,7 @@
         response-mult (:out (get-or-create-responses-chan basket-id))
         response-chan (tap response-mult (chan (sliding-buffer 10)))]
     (log/info "New subscriber to websocket" response-mult response-chan)
-    (>!! response-chan (load-or-create-basket basket-id))
+    (>!! response-chan (basket/load-basket basket-id))
     (go-loop []
       (let [[msg the-chan] (alts! [response-chan ws-channel])]
         (when msg
