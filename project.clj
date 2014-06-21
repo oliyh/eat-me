@@ -1,5 +1,5 @@
 (defproject eatme "0.0.2-SNAPSHOT"
-  :description "Eat what you buy and buy what you eat. An application built on Compojure and Shoreleave"
+  :description "Eat what you buy and buy what you eat. An application built on websockets and om"
   :url "https://github.com/oliyh/eat-me"
   :min-lein-version "2.0.0"
   :uberjar-name "eatme-standalone.jar"
@@ -29,7 +29,6 @@
                  [org.clojure/core.async "0.1.278.0-76b25b-alpha"]]
   :resource-paths ["resources"]
   :source-paths ["src"]
-
   :profiles {:dev {:source-paths ["dev"]
                    :dependencies [[org.clojure/tools.trace "0.7.6"]
                                   [org.clojure/tools.namespace "0.2.4"]]
@@ -37,8 +36,7 @@
   :repl-options {:init-ns user}
   :jvm-opts ["-Dlog.dir=logs"]
   :warn-on-reflection false
-  ;:run-aliases {}
-  :main eatme.server
+  :main eatme.main
   :cljsbuild {:builds [{:source-paths ["src-cljs"]
                         :compiler {:output-to "resources/public/js/eatme.js"
                                    :output-dir "resources/public/js/cljs"
