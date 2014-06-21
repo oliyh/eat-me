@@ -52,7 +52,7 @@
   (thread
     (let [new-items (remove :_id (:items basket))]
       (doseq [item new-items]
-          (basket/add-item! basket-id item))
+        (basket/upsert-item! basket-id item))
 
       #_(let [resolved-items (for [item (:items basket)]
                              (if-let [match (and (not (:item-id item))

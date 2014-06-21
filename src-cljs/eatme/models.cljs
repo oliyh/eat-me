@@ -34,14 +34,15 @@
 
 (defn suggest-item [suggest name-input]
   (let [q (dom/value name-input)]
-    (if (< 2 (count q))
-      (om/transact! suggest #(assoc % :q q))
-      (clear-suggestions! suggest))))
+    (cond
+     (< 2 (count q)) (om/transact! suggest #(assoc % :q q))
+     (not-empty (:matches @suggest)) (clear-suggestions! suggest)
+     :default nil)))
 
 (defn inc-qty! [e]
   (dom/set-value! (sel1 :#add-item-qty) (inc (read-qty)))
   (.preventDefault e))
 
 (defn dec-qty! [e]
-  (dom/set-value! (sel1 :#add-item-qty) (dec (read-qty)))
+  (dom/set-value! (sel1 :#add-item-qty) (max 1 (dec (read-qty))))
   (.preventDefault e))

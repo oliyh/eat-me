@@ -37,14 +37,20 @@
       (alts! [(ws-ch address {:format :edn})
               (timeout RECONNECT-TIMEOUT)])))))
 
-(defn assoc-msg!
-  "Assocs the passed message into the app state and clears any
-  existing monitoring health messages."
-  [state msg]
-  (swap! state assoc (:_type msg) msg :health health-success-msg))
+(defmulti assoc-msg! (fn [_ {:keys [_type]}] _type))
 
-(defn set-health-msg! [state msg]
+(defmethod assoc-msg! :item [state item]
+  (swap! state (fn [s]
+                 (update-in s [:basket :items]
+                            (fn [items]
+                              (conj (remove #(= (:_temp-id item) (:_temp-id %)) items)
+                                    (dissoc item :_temp-id)))))))
+
+(defmethod assoc-msg! :health [state msg]
   (swap! state assoc :health msg))
+
+(defmethod assoc-msg! :default [state msg]
+  (swap! state assoc (:_type msg) msg :health health-success-msg))
 
 (defn msg-channel
   "Wraps the passed web socket channel so that if messages don't
@@ -68,23 +74,21 @@
       (if-let [ws (<! (connect! address))]
         (do
           (pipe upload-chan ws)
-          (set-health-msg! checks-state health-success-msg)
+          (assoc-msg! checks-state health-success-msg)
           (loop []
             (let [msg (<! (msg-channel ws))]
               (condp = msg
                 ::timeout
                 (do
-                  (set-health-msg! checks-state health-warning-msg)
+                  (assoc-msg! checks-state health-warning-msg)
                   (recur))
                 ::disconnected
                 (do
-                  (set-health-msg! checks-state health-danger-msg)
-                  (log "stopped receiving messages from" address)) ;;don't recur into inner loop
+                  (assoc-msg! checks-state health-danger-msg)) ;;don't recur into inner loop
                 (do ;;default
                   (assoc-msg! checks-state (:message msg))
                   (utils/log @checks-state)
-                  (recur)))))
-          (recur))
+                  (recur))))))
         (do (log "ws connection to" address "failed, retrying...")
             (recur))))
     upload-chan))

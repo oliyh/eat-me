@@ -40,12 +40,12 @@
     (mc/insert "basket" {:_id id :_type :basket})
     (str id)))
 
-(defn add-item! [basket-id item]
-  (let [id (ObjectId.)]
-    (mc/insert "items" (merge {:_id id :_basket (to-object-id basket-id) :_type :item} item))
-    (str id)))
-
 (def item-updateable #{:name :qty})
+
+(defn upsert-item! [basket-id item]
+  (mc/save "items" (merge {:_basket (to-object-id basket-id) :_type :item}
+                          (select-keys item [:_id] item)
+                          (select-keys item item-updateable))))
 
 (defn update-item! [item]
   (mc/update-by-id "items" (to-object-id (:_id item)) {$set (select-keys item item-updateable)}))
