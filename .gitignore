@@ -1,5 +1,6 @@
 # Project related
 resources/public/js/cljs
+resources/public/js/eatme.js
 
 # Java related
 pom.xml
@@ -18,14 +19,9 @@ pom.xml
 /.lein-plugins
 .lein-repl-history
 repl-port
-
-# Python
-*.pyc
-*.pyo
-/__pycache__/
-
-# Ruby
-Gemfile.lock
+/out
+/repl/out
+/.env
 
 # Temp Files
 *.orig
@@ -35,17 +31,5 @@ Gemfile.lock
 *.tmp
 *.bak
 
-# OS X
-.DS_Store
-
 # Logging
 *.log
-
-# Docs
-/autodoc
-/docs
-
-# Project specific
-/out
-/repl/out
-/.env
