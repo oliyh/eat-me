@@ -39,14 +39,12 @@
   :main eatme.main
   :cljsbuild {:builds [{:source-paths ["src-cljs"]
                         :compiler {:output-to "resources/public/js/eatme.js"
-                                   :output-dir "resources/public/js/cljs"
+                                   :output-dir "target/cljs"
                                    :optimizations :none ;:simple ;:advanced ;:whitespace ;; only advanced works atm
                                    :source-map true
                                    :pretty-print false
                                    :preamble ["react/react.min.js"]
-                                   :externs ["react/externs/react.js"]
-
-                                   }}]}
+                                   :externs ["react/externs/react.js"]}}]}
 
   ;; :externs
   #_["externs/twitter-bootstrap.js"

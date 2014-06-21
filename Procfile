@@ -1,1 +1,1 @@
-web: lein do cljsbuild once, with-profile production trampoline run -m eatme.main prod
+web: java -jar target/eatme-standalone.jar prod
