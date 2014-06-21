@@ -27,7 +27,8 @@
      (:body (client/get tesco-api {:query-params (merge {:command (to-command command)
                                                          :sessionkey (:SessionKey @session)
                                                          :page 1} (app) params)
-                                   :as :json}))))
+                                   :as :json
+                                   :insecure? true}))))
 
 (defn login
   ([] (login user))
