@@ -1,1 +1,1 @@
-web: lein with-profile production trampoline run -m eatme.server prod
+web: lein do cljsbuild once, with-profile production trampoline run -m eatme.main prod

@@ -3,4 +3,4 @@
 
 (defn -main [& args]
   (require 'eatme.bootstrap)
-  ((resolve 'eatme.bootstrap/bootstrap)))
+  (apply (resolve 'eatme.bootstrap/bootstrap) args))

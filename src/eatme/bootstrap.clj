@@ -51,11 +51,13 @@
     this))
 
 
-(defn bootstrap []
-  (init-config)
-  (intern 'eatme.bootstrap 'system
-          (component/start
-           (component/system-map
-            :basket-store (BasketStoreComponent. config)
-            :item-library (ItemLibraryComponent. config)
-            :http-kit (HttpKitComponent. eatme.routes/app config)))))
+(defn bootstrap [& m]
+  (let [mode (keyword (or (first m) :dev))]
+    (println "Using" mode "config")
+    (init-config mode)
+    (intern 'eatme.bootstrap 'system
+            (component/start
+             (component/system-map
+              :basket-store (BasketStoreComponent. config)
+              :item-library (ItemLibraryComponent. config)
+              :http-kit (HttpKitComponent. eatme.routes/app config))))))
