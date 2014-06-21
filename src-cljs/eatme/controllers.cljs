@@ -101,6 +101,5 @@
 (defn connect-to-server [basket-id]
   (let [app-state (atom {:suggest {:_type :suggest}})
         upload-chan (start-monitoring-ws! app-state
-                                          (str "ws://" js/window.location.hostname ":"
-                                               js/window.location.port "/" basket-id "/async"))]
+                                          (str "ws://" js/window.location.host "/" basket-id "/async"))]
     [app-state (upload-fn upload-chan)]))
