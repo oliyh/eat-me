@@ -13,7 +13,7 @@
   component/Lifecycle
 
   (start [this]
-    (let [port (config :PORT)
+    (let [port (Integer/parseInt (str (config :PORT)))
           threads (or (config :threads) 4)
           server (run-server (app) {:port port :thread threads})]
       (log/info "Started Http-Kit Server on port" port)
