@@ -1,7 +1,7 @@
 (defproject eatme "0.0.2-SNAPSHOT"
   :description "Eat what you buy and buy what you eat. An application built on websockets and om"
   :url "https://github.com/oliyh/eat-me"
-  :min-lein-version "2.0.0"
+  :min-lein-version "2.4.2"
   :uberjar-name "eatme-standalone.jar"
   :dependencies [[org.clojure/clojure "1.6.0"]
 
