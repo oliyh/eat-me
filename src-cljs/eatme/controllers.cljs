@@ -87,7 +87,6 @@
                   (assoc-msg! checks-state health-danger-msg)) ;;don't recur into inner loop
                 (do ;;default
                   (assoc-msg! checks-state (:message msg))
-                  (utils/log @checks-state)
                   (recur))))))
         (do (log "ws connection to" address "failed, retrying...")
             (recur))))
@@ -102,5 +101,6 @@
 (defn connect-to-server [basket-id]
   (let [app-state (atom {:suggest {:_type :suggest}})
         upload-chan (start-monitoring-ws! app-state
-                                          (str "ws://" js/window.location.hostname ":8080/" basket-id "/async"))]
+                                          (str "ws://" js/window.location.hostname ":"
+                                               js/window.location.port "/" basket-id "/async"))]
     [app-state (upload-fn upload-chan)]))
