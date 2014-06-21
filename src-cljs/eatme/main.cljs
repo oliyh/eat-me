@@ -15,6 +15,8 @@
   (let [[list-state upload-fn] (ctrl/connect-to-server basket-id)]
     (om/root views/render-list list-state
              {:target (. js/document (getElementById "list"))})
+    (om/root views/render-health list-state
+             {:target (. js/document (getElementById "health"))})
     (om/root views/render-item-form list-state
              {:target (. js/document (getElementById "add-item-form"))
               :tx-listen (fn [tx-data root-cursor]

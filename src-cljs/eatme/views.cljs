@@ -70,3 +70,9 @@
                   :type "button"}
          "Add"]]]
       ))))
+
+(defn render-health [{:keys [health]}]
+  (om/component
+   (html
+    [:span {:class (str "alert alert-" (:result health))}
+     (:report health)])))

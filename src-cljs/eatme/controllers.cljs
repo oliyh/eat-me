@@ -9,25 +9,22 @@
 (def log (partial utils/log "monitoring:"))
 
 (def RECONNECT-TIMEOUT 5000)
-(def MESSAGE-WAIT-TIMEOUT 5000)
+(def MESSAGE-WAIT-TIMEOUT 20000)
 
-(def monitoring-server-failure-msg
-  {:type :monitoring-health
-   :result false
-   :name "Monitoring server"
-   :report "Connection to the monitoring server lost, trying to reconnect..."})
+(def health-danger-msg
+  {:_type :health
+   :result "danger"
+   :report "Connection to server lost, trying to reconnect..."})
 
-(def monitoring-server-waiting-msg
-  {:type :monitoring-health
-   :result true
-   :name "Monitoring server"
-   :report "Connected, waiting for messages..."})
+(def health-success-msg
+  {:_type :health
+   :result "success"
+   :report "Connected"})
 
-(def monitoring-server-late-messages-msg
-  {:type :monitoring-health
-   :result false
-   :name "Monitoring server"
-   :report "Messages are late."})
+(def health-warning-msg
+  {:_type :health
+   :result "warning"
+   :report "Messages are late"})
 
 (defn connect!
   "Attempts to connect, but can timeout after RECONNECT-TIMEOUT
@@ -44,14 +41,10 @@
   "Assocs the passed message into the app state and clears any
   existing monitoring health messages."
   [state msg]
-  (swap! state dissoc :monitoring-health)
-  (swap! state assoc (:type msg) msg))
+  (swap! state assoc (:_type msg) msg :health health-success-msg))
 
-(defn set-single-msg!
-  "Clears the state of checks and replaces it with a single
-  message (msg)."
-  [state msg]
-  (swap! state assoc (:type msg) msg))
+(defn set-health-msg! [state msg]
+  (swap! state assoc :health msg))
 
 (defn msg-channel
   "Wraps the passed web socket channel so that if messages don't
@@ -75,17 +68,17 @@
       (if-let [ws (<! (connect! address))]
         (do
           (pipe upload-chan ws)
-          (set-single-msg! checks-state monitoring-server-waiting-msg)
+          (set-health-msg! checks-state health-success-msg)
           (loop []
             (let [msg (<! (msg-channel ws))]
               (condp = msg
                 ::timeout
                 (do
-                  (assoc-msg! checks-state monitoring-server-late-messages-msg)
+                  (set-health-msg! checks-state health-warning-msg)
                   (recur))
                 ::disconnected
                 (do
-                  (set-single-msg! checks-state monitoring-server-failure-msg)
+                  (set-health-msg! checks-state health-danger-msg)
                   (log "stopped receiving messages from" address)) ;;don't recur into inner loop
                 (do ;;default
                   (assoc-msg! checks-state (:message msg))
@@ -103,7 +96,7 @@
       (>! upload-chan msg))))
 
 (defn connect-to-server [basket-id]
-  (let [app-state (atom {:suggest {:type :suggest}})
+  (let [app-state (atom {:suggest {:_type :suggest}})
         upload-chan (start-monitoring-ws! app-state
                                           (str "ws://" js/window.location.hostname ":8080/" basket-id "/async"))]
     [app-state (upload-fn upload-chan)]))
