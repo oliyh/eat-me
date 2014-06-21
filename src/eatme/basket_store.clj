@@ -40,15 +40,14 @@
     (mc/insert "basket" {:_id id :_type :basket})
     (str id)))
 
-(def item-updateable #{:name :qty})
+(def item-updateable #{:name :qty :price :best-match :alternatives :category :product-id})
 
 (defn upsert-item! [basket-id item]
-  (mc/save "items" (merge {:_basket (to-object-id basket-id) :_type :item}
-                          (select-keys item [:_id] item)
-                          (select-keys item item-updateable))))
-
-(defn update-item! [item]
-  (mc/update-by-id "items" (to-object-id (:_id item)) {$set (select-keys item item-updateable)}))
+  (let [item-id (to-object-id (or (:_id item) (ObjectId.)))]
+    (mc/save "items" (merge (select-keys item item-updateable)
+                            {:_basket (to-object-id basket-id)
+                             :_type :item
+                             :_id item-id}))))
 
 (defn delete-item! [item-id]
   (mc/remove-by-id "items" (to-object-id item-id)))

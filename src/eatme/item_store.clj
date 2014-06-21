@@ -16,22 +16,19 @@
   (m/connect-via-uri! (config :MONGOLAB_URI))
   (m/set-db! (m/get-db))) ;; db name is in the uri
 
-(defn add-item [category item]
+(defn add-item [cat item]
   (mc/update "item"
              {:product-id (:product-id item)}
-             (assoc item :category category)
+             (assoc item :category [(get-in cat [:dept :name])
+                                    (get-in cat [:aisle :name])
+                                    (get-in cat [:shelf :name])])
              :upsert true))
 
-(defn- replace-_id [i]
-  (let [id (str (:_id i))]
-    (assoc (dissoc i :_id) :id id)))
-
 (defn suggest-item [q]
-  (sort-by #(count (:name %))
-           (map replace-_id
+  (map #(update-in % [:_id] str)
+       (sort-by #(count (:name %))
                 (mq/with-collection "item"
                   (mq/find {:name {$regex (str ".*" q ".*") $options "i"}})
-                  (mq/fields [:name :price])
                   (mq/limit 10)))))
 
 (defn populate-from-library []
@@ -41,7 +38,7 @@
       (add-item category p))))
 
 #_(defn empty-store []
-  (m/drop-db "item"))
+  (mc/remove "item"))
 
 (defn count-items []
   (mc/count "item"))

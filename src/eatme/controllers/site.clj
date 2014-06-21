@@ -50,27 +50,24 @@
 
 (defn update-basket [user-chan basket-id basket]
   (thread
-    (let [new-items (remove :_id (:items basket))]
-      (doseq [item new-items]
-        (basket/upsert-item! basket-id item))
+    (doseq [item (:items basket)]
+      (basket/upsert-item! basket-id item))
 
-      #_(let [resolved-items (for [item (:items basket)]
-                             (if-let [match (and (not (:item-id item))
-                                                 (first (items/suggest-item (:name item))))]
-                               (do (println "the match!" match)
-                                   (assoc item
-                                     :item-id (:id match)
-                                     :price (:price match)
-                                     :name (:name match)))
-                               item))
-            updated-basket (assoc basket :items resolved-items)]
+    (let [persisted-basket (basket/load-basket basket-id)]
+      ;; push out the new ids as soon as possible
+      (>!! user-chan persisted-basket)
 
-        (save-basket! basket-id updated-basket)
+      (doall (for [item (:items persisted-basket)
+                   :when (not (:category item))
+                   :let [matches (items/suggest-item (:name item))]]
+               (basket/upsert-item!
+                basket-id (assoc item
+                            :best-match (first matches)
+                            :alternatives (rest matches)
+                            :price (:price (first matches))
+                            :category (:category (first matches)))))))
 
-        )
-
-      (>!! user-chan (basket/load-basket basket-id))
-      )))
+    (>!! user-chan (basket/load-basket basket-id))))
 
 (defn new-session [req]
   (resp/redirect (str "/" (basket/create-basket!))))
