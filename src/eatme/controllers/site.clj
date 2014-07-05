@@ -18,7 +18,7 @@
                :out (mult in)}]
         (go-loop []
             (<! (timeout 15000))
-          (>! in {:_type :health :result "success" :report "Heartbeat recieved"})
+          (>! in (basket/load-basket basket-id))
           (recur))
         (swap! responses assoc basket-id r)
         r)))

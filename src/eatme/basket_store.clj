@@ -42,8 +42,7 @@
     (str id)))
 
 (defn touch-basket! [basket-id]
-  (mc/save "basket" {:_updated (System/currentTimeMillis)
-                     :_id basket-id}))
+  (mc/update-by-id "basket" (ObjectId. basket-id) {$set {:_updated (System/currentTimeMillis)}}))
 
 (def item-updateable #{:name :qty :price :best-match :alternatives :category :product-id})
 

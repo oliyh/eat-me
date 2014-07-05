@@ -63,6 +63,12 @@ footer {
 	color: darkgray;
 }
 
+/* basket meta */
+
+#basket-meta span.datum {
+    display: block;
+    width: 100%;
+}
 
 /* the user context */
 
