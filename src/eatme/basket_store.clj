@@ -31,7 +31,7 @@
 
 (defn user-baskets [owner-id]
   (when owner-id
-    (reverse (sort-by :timestamp
+    (reverse (sort-by :_created
                       (map coerce-to-edn
                            (mc/find-maps "basket" {:_owner (to-object-id owner-id)}))))))
 

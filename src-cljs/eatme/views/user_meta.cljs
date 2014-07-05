@@ -11,15 +11,14 @@
   (om/component
    (html
     [:div#user.detail-panel
-     [:strong "You"]
-     (for [{:keys [name url icon]} providers
-          :let [base-login-url (str "/login?identifier=" url)
-                dom-id (str (gensym))]]
-      [:form {:method "POST" :action "login"}
-       [:input {:type "hidden" :name "identifier" :value url :id dom-id}]
-       [:div.btn-group
-        [:button.btn [:i {:class (str "icon-social " icon)}]]
-        [:button.btn {:type "submit"} name]]])])))
+     [:strong "Sign in"]
+     [:div.social
+      (for [{:keys [name url icon]} providers
+            :let [base-login-url (str "/login?identifier=" url)
+                  dom-id (str (gensym))]]
+        [:form {:method "POST" :action "login"}
+         [:input {:type "hidden" :name "identifier" :value url :id dom-id}]
+         [:button {:class (str "btn " icon)}]])]])))
 
 
 (defn render-basket-link [{:keys [_id _created] :as basket}]
