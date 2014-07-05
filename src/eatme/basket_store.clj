@@ -36,9 +36,14 @@
   (nil? (load-basket id)))
 
 (defn create-basket! []
-  (let [id (ObjectId.)]
-    (mc/insert "basket" {:_id id :_type :basket})
+  (let [id (ObjectId.)
+        now (System/currentTimeMillis)]
+    (mc/insert "basket" {:_id id :_type :basket :_created now :_updated now})
     (str id)))
+
+(defn touch-basket! [basket-id]
+  (mc/save "basket" {:_updated (System/currentTimeMillis)
+                     :_id basket-id}))
 
 (def item-updateable #{:name :qty :price :best-match :alternatives :category :product-id})
 
@@ -47,7 +52,8 @@
     (mc/save "items" (merge (select-keys item item-updateable)
                             {:_basket (to-object-id basket-id)
                              :_type :item
-                             :_id item-id}))))
+                             :_id item-id}))
+    (touch-basket! basket-id)))
 
 (defn delete-item! [item-id]
   (mc/remove-by-id "items" (to-object-id item-id)))
