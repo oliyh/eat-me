@@ -1,6 +1,6 @@
 (ns eatme.test.basket-store
   (:use [clojure.test])
-  (:require [eatme.basket-store :as bs]))
+  (:require [eatme.models.basket-store :as bs]))
 
 (defn basket-with [& qty-items]
   {:items

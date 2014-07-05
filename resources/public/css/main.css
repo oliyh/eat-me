@@ -100,6 +100,7 @@ footer {
 .search input:focus + .search-ac {
     display: block;
 }
+
 .search-ac {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
@@ -123,36 +124,18 @@ footer {
     overflow-y: scroll;
     overflow-x: hidden;
 }
-.search-ac:hover {
+
+.search-ac:focus, .search-ac:hover {
     display: block;
 }
+
 .search-ac li {
     display: block;
 }
 .search-ac li:first-child {
     margin-top: -1px;
 }
-.search-ac li:first-child:before, .search-ac li:first-child:after {
-    border: 5px outset rgba(0, 0, 0, 0);
-    content: "";
-    display: block;
-    height: 0;
-    left: 50%;
-    margin-left: -5px;
-    position: absolute;
-    width: 0;
-}
-.search-ac li:first-child:before {
-    border-bottom: 5px solid #C4C7D7;
-    top: -11px;
-}
-.search-ac li:first-child:after {
-    border-bottom: 5px solid #FDFDFD;
-    top: -10px;
-}
-.search-ac li:first-child:hover:before, .search-ac li:first-child:hover:after {
-    display: none;
-}
+
 .search-ac li:last-child {
     margin-bottom: -1px;
 }
@@ -171,17 +154,8 @@ footer {
 .search-ac a span {
     font-weight: 200;
 }
-.search-ac a:before {
-    background: url("../img/arrow.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
-    content: "";
-    height: 18px;
-    margin-top: -9px;
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    width: 18px;
-}
-.search-ac a:hover {
+
+.search-ac a:hover, .search-ac a.highlighted, search-ac a:focus, search-ac a.active {
     background: linear-gradient(to bottom, #59AAF4, #338CDF) repeat scroll 0 0 #338CDF;
     border-color: #2380DD #2179D5 #1A60AA;
     box-shadow: 0 1px rgba(255, 255, 255, 0.2) inset, 0 1px rgba(0, 0, 0, 0.08);
@@ -195,9 +169,6 @@ footer {
 .lt-ie9 .search input {
     line-height: 26px;
 }
-
-
-
 
 /* social media providers */
 
