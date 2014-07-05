@@ -20,7 +20,7 @@
 
   (friend/logout (ANY "/logout" request (response/redirect "/")))
 
-  (GET "/admin/item-store" [] (cont-site/item-store))
+  (GET "/admin/item-store" [] (cont-site/load-item-store))
 
   (GET "/" [] cont-site/new-session)
   (GET "/:basket-id" {session :session basket-id :basket-id} (cont-site/index session))

@@ -5,8 +5,8 @@
             [cemerick.friend :as friend]
             [cemerick.friend.openid :as openid]
             [ring.util.response :as resp]
-            [eatme.item-store :as items]
-            [eatme.basket-store :as basket]
+            [eatme.models.item-store :as items]
+            [eatme.models.basket-store :as basket]
             [clojure.tools.logging :as log]))
 
 (def responses (atom {}))
@@ -26,7 +26,7 @@
 (defn index [session]
   (clojure.java.io/resource "public/html/index.html"))
 
-(defn item-store []
+(defn load-item-store []
   (items/populate-from-library)
   (h/html5 [:p "complete"]))
 

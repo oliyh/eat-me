@@ -1,8 +1,8 @@
 (ns eatme.bootstrap
   (:require [eatme.config :refer [init-config config]]
             [eatme.routes]
-            [eatme.basket-store :as basket-store]
-            [eatme.item-library :as item-lib]
+            [eatme.models.basket-store :as basket-store]
+            [eatme.models.item-library :as item-lib]
             [clojure.tools.logging :as log]
             [com.stuartsierra.component :as component]
             [org.httpkit.server :refer [run-server]]))
