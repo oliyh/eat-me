@@ -4,6 +4,7 @@
             [om.core :as om :include-macros true]
             [eatme.views :as views]
             [eatme.views.list-meta :refer [render-basket-meta]]
+            [eatme.views.user-meta :refer [render-user-meta]]
             [eatme.models :as models]
             [eatme.controllers :as ctrl]
             [eatme.utils :as utils]))
@@ -14,6 +15,8 @@
              {:target (. js/document (getElementById "list"))})
     (om/root render-basket-meta list-state
              {:target (. js/document (getElementById "basket-meta"))})
+    (om/root render-user-meta list-state
+             {:target (. js/document (getElementById "user-meta"))})
     (om/root views/render-health list-state
              {:target (. js/document (getElementById "health"))})
     (om/root views/render-item-form list-state

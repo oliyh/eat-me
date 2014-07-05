@@ -13,12 +13,13 @@
             [ring.util.response :as response]
             [eatme.controllers.site :as cont-site]
             [chord.http-kit :refer [wrap-websocket-handler]]
-            )
+            [eatme.models.users :as users])
   (:import [java.util UUID]))
 
 (defroutes site
-  (GET "/logout" req (cont-site/logout req))
-  (GET "/auth" req (cont-site/auth req))
+
+  (friend/logout (ANY "/logout" request (response/redirect "/")))
+
   (GET "/admin/item-store" [] (cont-site/item-store))
 
   (GET "/" [] cont-site/new-session)
@@ -29,9 +30,17 @@
   (c-route/resources "/")
   (c-route/not-found "404 Page not found."))
 
-(defn wrap-friend [app]
+(defn wrap-user [handler]
+  (fn [req]
+    (if-let [auth (friend/current-authentication req)]
+      (handler (assoc req :user
+                      (merge auth
+                             (users/get-user-by-email (:email auth)))))
+      (handler req))))
+
+(defn wrap-friend [handler]
   (friend/authenticate
-   app
+   handler
    {:allow-anon? true
     :default-landing-uri "/"
     :workflows [(openid/workflow
@@ -43,8 +52,9 @@
 (defn app []
   (->
    (c-core/routes site app-routes)
+   wrap-friend
+   wrap-user
    wrap-params
    wrap-session
    wrap-keyword-params
-   (wrap-websocket-handler {:format :edn})
-   wrap-friend))
+   (wrap-websocket-handler {:format :edn})))

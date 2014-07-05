@@ -18,7 +18,7 @@
 (defn coerce-to-edn [b]
   (let [id-swap #(merge (-> %
                             (update-in [:_type] keyword))
-                        (let [rs (select-keys % [:_id :_basket])]
+                        (let [rs (select-keys % [:_id :_basket :_owner])]
                           (zipmap (keys rs) (map str (vals rs)))))]
     (-> b
         id-swap
@@ -29,16 +29,20 @@
     (coerce-to-edn (assoc (mc/find-map-by-id "basket" basket-id)
                      :items (mc/find-maps "items" {:_basket basket-id})))))
 
-(defn user-baskets [owner]
-  (reverse (sort-by :timestamp (mc/find-maps "basket" {:owner owner}))))
+(defn user-baskets [owner-id]
+  (when owner-id
+    (reverse (sort-by :timestamp
+                      (map coerce-to-edn
+                           (mc/find-maps "basket" {:_owner (to-object-id owner-id)}))))))
 
 (defn basket-exists? [id]
   (nil? (load-basket id)))
 
-(defn create-basket! []
+(defn create-basket! [owner-id]
   (let [id (ObjectId.)
-        now (System/currentTimeMillis)]
-    (mc/insert "basket" {:_id id :_type :basket :_created now :_updated now})
+        now (System/currentTimeMillis)
+        owner-id (when owner-id (ObjectId. owner-id))]
+    (mc/insert "basket" {:_id id :_type :basket :_created now :_updated now :_owner owner-id})
     (str id)))
 
 (defn touch-basket! [basket-id]

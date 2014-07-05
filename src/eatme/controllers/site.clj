@@ -26,24 +26,6 @@
 (defn index [session]
   (clojure.java.io/resource "public/html/index.html"))
 
-(def providers [{:name "Google" :url "https://www.google.com/accounts/o8/id" :icon "google"}
-                {:name "Yahoo" :url "http://me.yahoo.com/" :icon "yahoo"}])
-
-(defn logout [req]
-  (friend/logout* (resp/redirect (str (:context req) "/"))))
-
-(defn auth [req]
-  (h/html5
-   [:div
-    (for [{:keys [name url icon]} providers
-          :let [base-login-url (str "/login?identifier=" url)
-                dom-id (str (gensym))]]
-      [:form {:method "POST" :action "login"}
-       [:input {:type "hidden" :name "identifier" :value url :id dom-id}]
-       [:div.btn-group
-        [:button.btn [:i {:class (str "icon-social " icon)}]]
-        [:button.btn {:type "submit"} (str "Sign in with " name)]]])]))
-
 (defn item-store []
   (items/populate-from-library)
   (h/html5 [:p "complete"]))
@@ -69,8 +51,9 @@
 
     (>!! user-chan (basket/load-basket basket-id))))
 
-(defn new-session [req]
-  (resp/redirect (str "/" (basket/create-basket!))))
+(defn new-session [{:keys [user] :as req}]
+  (log/info "Creating basket! user is" user)
+  (resp/redirect (str "/" (basket/create-basket! (:_id user)))))
 
 (defmulti respond-to (fn [m & args] (:_type m)))
 
@@ -85,12 +68,21 @@
                         :q q
                         :matches (items/suggest-item q)})))))
 
-(defn ws-handler [{:keys [ws-channel params] :as req}]
+(defn client-init [response-chan basket-id user]
+  (>!! response-chan (basket/load-basket basket-id))
+  (when user
+    (>!! response-chan (merge user
+                              {:_type :user
+                               :baskets (basket/user-baskets (:_id user))
+                               }))))
+
+(defn ws-handler [{:keys [ws-channel params user] :as req}]
   (let [basket-id (:basket-id params)
         response-mult (:out (get-or-create-responses-chan basket-id))
         response-chan (tap response-mult (chan (sliding-buffer 10)))]
+    (log/info "user is" user)
     (log/info "New subscriber to websocket" response-mult response-chan)
-    (>!! response-chan (basket/load-basket basket-id))
+    (client-init response-chan basket-id user)
     (go-loop []
       (let [[msg the-chan] (alts! [response-chan ws-channel])]
         (when msg

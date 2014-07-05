@@ -14,7 +14,7 @@
   (.toLocaleString (js/Date. timestamp)))
 
 (defn friendly-age [timestamp]
-  (let [seconds (/ (- (js/Date.) (js/Date. timestamp)) 1000)
+  (let [seconds (/ (- (int (js/Date.)) (int (js/Date. timestamp))) 1000)
         minutes (/ seconds 60)
         hours (/ minutes 60)
         days (/ hours 24)

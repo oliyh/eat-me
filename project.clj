@@ -16,7 +16,7 @@
                  [org.clojure/data.json "0.2.3"]
                  [ring/ring-core "1.2.0" :exclusions [[org.clojure/tools.reader]]]
                  [liberator "0.11.0" :exclusions [org.clojure/tools.logging]]
-                 [com.cemerick/friend "0.1.5"]
+                 [com.cemerick/friend "0.2.1"]
                  [hiccup "1.0.5" :exclusions [org.clojure/clojure]]
                  [jarohen/chord "0.4.1" :exclusions [http-kit]]
 
